@@ -4,7 +4,7 @@
  * Generates a prompt for coloring pages image generation, by using the specified topic
  */
 function generateTextPrompt($image_url) {
-    return "Scrivi una descrizione e un titolo per il disegno da colorare fornito. Il formato della risposta deve rigorosamente essere un json valido, senza nient'altro, nel seguente formato:\n{\"title\": \"Titolo disegno da colorare\";\"description\":\"Descrizione del disegno da colorare adatto ad un sito con disegni da colorare per bambini\"}";
+    return "Scrivi una descrizione ricca da 200 parole e un titolo per il disegno da colorare fornito. Il testo deve essere ottimizzato per il SEO, con parole come \"disegni da colorare\" incluse le parole chiave inerenti al disegno nello specifico. Anche il titolo deve contenere la parola \"disegno da colorare\" unita al tipo di disegno specifico. Le parole chiave importanti racchiudile con il tag <strong></strong>. Il formato della risposta deve rigorosamente essere un json valido, senza backticks ne altra formattazione, e con i campi title e description che indicano rispettivamente il titolo e la descrizione del disegno.";
 }
 
 /**
@@ -52,17 +52,21 @@ function generateText($image_url) {
     );
 
     echo "<p>Generating text completion with prompt: " . $prompt . "</p>";
+    echo "<p>Image URL for vision analysis: " . $image_url . "</p>";
 
     $response = wp_remote_get('https://api.openai.com/v1/chat/completions', $args);
 
     if(is_wp_error($response)) {
-        echo "<p>OpenAI api call failed</p>";
+        echo "<p>OpenAI api call failed: " . $response->get_error_message() . "</p>";
         return null;
     }
 
     $apiCallError = is_openai_response_error($response);
     if(isset($apiCallError)) {
         echo "<p>OpenAI api call for text completion failed: " . $apiCallError . "</p>";
+        echo "<textarea cols='50' rows='50'>";
+        print_r($response);
+        echo "</textarea>";
         return null;
     }
 

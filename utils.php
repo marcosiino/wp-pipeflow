@@ -80,3 +80,25 @@ function is_openai_response_error($response) {
         return null;
     }
 }
+
+function insert_post($title, $content, $thumbnail_image_id, $status = 'publish') {
+    // Prepara i dati del post
+    $post_data = array(
+        'post_title'    => $title, // Titolo dell'articolo
+        'post_content'  => $content, // Contenuto dell'articolo
+        'post_status'   => $status, // Stato del post. Usa 'draft' per un bozza o 'publish' per pubblicarlo immediatamente.
+        'post_type'     => 'post', // Tipo di post. Usa 'post' per un articolo standard o 'page' per una pagina.
+    );
+
+    // Inserisce il post e ottiene l'ID del post inserito
+    $post_id = wp_insert_post($post_data);
+
+    // Controlla se l'inserimento ha avuto successo e imposta l'immagine in evidenza
+    if (!is_wp_error($post_id)) {
+        set_post_thumbnail($post_id, $thumbnail_image_id);
+        return $post_id;
+    } else {
+        // Gestisce l'errore
+        return $post_id->get_error_message();
+    }
+}

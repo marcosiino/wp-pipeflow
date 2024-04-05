@@ -126,20 +126,25 @@ function paginedacolorare_ai_settings_page()
 function paginedacolorare_ai_content_dashboard_page() {
     echo '<div class="wrap"><h2>PagineDaColorare.it AI Bot</h2>';
 
-
     // Se il pulsante di generazione è stato premuto
     if (isset($_POST['action']) && $_POST['action'] == 'generate') {
         $topic = $_POST['topic'];
-        $generatedImage = generateImage($topic);
-        $imageUrl = $generatedImage['image_url'];
-        $generatedData = generateText($imageUrl);
+        $generatedImageData = generateImage($topic);
+        $generatedData = generateText($generatedImageData['image_url']);
 
-        echo '<textarea rows="10" cols="50">TODO: generare il disegno e la descrizione, mostrarli qui e poi salvare l\'articolo come bozza</textarea>';
+        if (isset($generatedImageData) && isset($generatedData)) {
+            insert_post($generatedData['title'], $generatedData['description'], $generatedImageData['image_id'], 'draft');
+            echo "<p><strong>Post generated successful!</strong></p>";
+        }
+        else {
+            echo "<p><strong>Article generation failed.</strong></p>";
+        }
     }
 
     // Pulsante di generazione
     echo '<form method="post">';
-    echo '<input name="topic">';
+    echo '<label for=\"topic\">Coloring Page Topic:</label><br/>';
+    echo '<textarea name="topic" rows="5" cols="50"></textarea>';
     echo '<input type="hidden" name="action" value="generate">';
     submit_button('Genera Disegno');
     echo '</form>';
