@@ -166,7 +166,7 @@ function generateNewArticle($topic) {
     $generatedData = generateText($generatedImageData['image_url']);
 
     if (isset($generatedImageData) && isset($generatedData)) {
-        insert_post($generatedData['title'], $generatedData['description'], $generatedData['category_ids'], $generatedData['tag_ids'], $generatedImageData['image_id'], 'draft');
+        insert_post($generatedData['title'], $generatedData['description'], $generatedData['category_ids'], $generatedData['tag_ids'], $generatedImageData['image_id'], 'publish');
         echo "<p><strong>Post generated successful!</strong></p>";
     }
     else {
