@@ -18,8 +18,8 @@ defined('ABSPATH') or die('Accesso non permesso.');
 // Setting a custom timeout value for cURL. Using a high value for priority to ensure the function runs after any other added to the same action hook.
 add_action('http_api_curl', 'sar_custom_curl_timeout', 9999, 1);
 function sar_custom_curl_timeout( $handle ){
-    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 30 ); // 30 seconds.
-    curl_setopt( $handle, CURLOPT_TIMEOUT, 30 ); // 30 seconds.
+    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 60 );
+    curl_setopt( $handle, CURLOPT_TIMEOUT, 60 );
 }
 
 // Setting custom timeout for the HTTP request
@@ -31,15 +31,31 @@ function sar_custom_http_request_timeout( $timeout_value ) {
 // Setting custom timeout in HTTP request args
 add_filter('http_request_args', 'sar_custom_http_request_args', 9999, 1);
 function sar_custom_http_request_args( $r ){
-    $r['timeout'] = 30; // 30 seconds.
+    $r['timeout'] = 60;
     return $r;
+}
+
+function cron_exec() {
+    generateNewArticle("");
+}
+add_action( 'pdc_ai_cron_hook', 'cron_exec' );
+
+add_filter( 'cron_schedules', 'cron_interval' );
+function cron_interval( $schedules ) {
+    $schedules['generate_content_interval'] = array(
+        'interval' => 60,
+        'display'  => esc_html__( 'Every 60 Seconds' ), );
+    return $schedules;
 }
 
 /**
  * Attivazione del Plugin.
  */
 function paginedacolorare_ai_attivazione() {
-    // Azioni da eseguire al momento dell'attivazione del plugin.
+    // Schedule the cronjob
+    if ( ! wp_next_scheduled( 'pdc_ai_cron_hook' ) ) {
+        wp_schedule_event( time(), 'generate_content_interval', 'pdc_ai_cron_hook' );
+    }
 }
 register_activation_hook(__FILE__, 'paginedacolorare_ai_attivazione');
 
@@ -47,7 +63,9 @@ register_activation_hook(__FILE__, 'paginedacolorare_ai_attivazione');
  * Disattivazione del Plugin.
  */
 function paginedacolorare_ai_disattivazione() {
-    // Azioni da eseguire al momento della disattivazione del plugin.
+    //Unschedule the wp cron
+    $timestamp = wp_next_scheduled( 'pdc_ai_cron_hook' );
+    wp_unschedule_event( $timestamp, 'pdc_ai_cron_hook' );
 }
 register_deactivation_hook(__FILE__, 'paginedacolorare_ai_disattivazione');
 
@@ -129,16 +147,7 @@ function paginedacolorare_ai_content_dashboard_page() {
     // Se il pulsante di generazione è stato premuto
     if (isset($_POST['action']) && $_POST['action'] == 'generate') {
         $topic = $_POST['topic'];
-        $generatedImageData = generateImage($topic);
-        $generatedData = generateText($generatedImageData['image_url']);
-
-        if (isset($generatedImageData) && isset($generatedData)) {
-            insert_post($generatedData['title'], $generatedData['description'], $generatedImageData['image_id'], 'draft');
-            echo "<p><strong>Post generated successful!</strong></p>";
-        }
-        else {
-            echo "<p><strong>Article generation failed.</strong></p>";
-        }
+        generateNewArticle($topic);
     }
 
     // Pulsante di generazione
@@ -150,4 +159,17 @@ function paginedacolorare_ai_content_dashboard_page() {
     echo '</form>';
 
     echo '</div>';
+}
+
+function generateNewArticle($topic) {
+    $generatedImageData = generateImage($topic);
+    $generatedData = generateText($generatedImageData['image_url']);
+
+    if (isset($generatedImageData) && isset($generatedData)) {
+        insert_post($generatedData['title'], $generatedData['description'], $generatedData['category_ids'], $generatedData['tag_ids'], $generatedImageData['image_id'], 'draft');
+        echo "<p><strong>Post generated successful!</strong></p>";
+    }
+    else {
+        echo "<p><strong>Article generation failed.</strong></p>";
+    }
 }
