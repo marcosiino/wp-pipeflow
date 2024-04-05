@@ -55,21 +55,28 @@ function download_image($image_url, $image_description) {
     return $id;
 }
 
-function get_image_url_from_response($response) {
-
+/**
+ * @param $response
+ * @return Returns the error description contained in response if the response contains an error, otherwise returns null
+ */
+function is_openai_response_error($response) {
     $response_body = wp_remote_retrieve_body($response);
 
-    // Decodifica il JSON
     $data = json_decode($response_body, true); // true converte l'oggetto in un array associativo
 
-    // Verifica se la decodifica è riuscita e se l'elemento 'data' esiste
-    if ($data && isset($data['data'][0]['url'])) {
-        $image_url = $data['data'][0]['url'];
+    // Returns the error if any
+    if ($data && isset($data['error']['message'])) {
+        return $data['error']['message'];
+    }
+    else if(isset($response['response']['code']) && isset($response['response']['message'])) {
+        $code = $response['response']['code'];
+        if($code >= 200 && $code <= 299) {
+            return null;
+        }
 
-        // Ora hai l'URL dell'immagine e puoi procedere con il download o altre operazioni
-        return $image_url;
-    } else {
-        // Gestisci l'errore se la struttura dei dati non è quella prevista o se la decodifica fallisce
+        return $response['response']['code'] . " - " . $response['response']['message'];
+    }
+    else {
         return null;
     }
 }

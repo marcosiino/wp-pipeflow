@@ -10,6 +10,7 @@
 
 require_once('utils.php');
 require_once('image-generation.php');
+require_once('text-generation.php');
 
 // Prevenire l'accesso diretto al file del plugin.
 defined('ABSPATH') or die('Accesso non permesso.');
@@ -129,9 +130,9 @@ function paginedacolorare_ai_content_dashboard_page() {
     // Se il pulsante di generazione è stato premuto
     if (isset($_POST['action']) && $_POST['action'] == 'generate') {
         $topic = $_POST['topic'];
-        echo "<pre>";
-        print_r(generateImage($topic));
-        echo "</pre>";
+        $generatedImage = generateImage($topic);
+        $imageUrl = $generatedImage['image_url'];
+        $generatedData = generateText($imageUrl);
 
         echo '<textarea rows="10" cols="50">TODO: generare il disegno e la descrizione, mostrarli qui e poi salvare l\'articolo come bozza</textarea>';
     }
