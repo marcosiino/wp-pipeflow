@@ -8,10 +8,11 @@ function generateTextPrompt($image_url) {
     $categories = json_encode(get_available_categories());
     $tags = json_encode(get_available_tags());
 
-    $prompt = "Scrivi una descrizione ricca da 200 parole e un titolo per il disegno da colorare fornito. Il testo deve essere ottimizzato per il SEO, con parole come \"disegni da colorare\" incluse le parole chiave inerenti al disegno nello specifico. Anche il titolo deve contenere la parola \"disegno da colorare\" unita al tipo di disegno specifico. Le parole chiave importanti racchiudile con il tag <strong></strong>. Il formato della risposta deve rigorosamente essere un json valido, senza backticks ne altra formattazione, e con i campi title e description che indicano rispettivamente il titolo e la descrizione del disegno.";
-    $prompt .= "Inoltre scegli una categoria tra quella più appropriata e uno o più tag tra quelli più appropriati. La categoria e i tag scelti scelti devi metterli nel campo categories e tags del json ritornato, mettendo solo gli id come array json.";
-    $prompt .= "Di seguito le categorie disponibili, elencate come json con id e nome di ogni categoria:\n " . $categories . "\n\n";
-    $prompt .= "Di seguito i tag disponibili, elencati come json con id e nome di ogni tag:\n " . $tags . "\n\n";
+    $prompt = "Scrivi una descrizione ricca da 200 parole e un titolo per il disegno da colorare caricato come url. Il testo deve essere ottimizzato per il SEO, con parole come \"disegni da colorare\" incluse le parole chiave inerenti al disegno nello specifico. Anche il titolo deve essere ottimizzato per il SEO contenendo parole chiavi inerenti. Le parole chiave importanti racchiudile con il tag <strong></strong>. Il formato della risposta deve rigorosamente essere un json valido, senza backticks ne altra formattazione, e con i campi title e description che indicano rispettivamente il titolo e la descrizione del disegno.";
+    $prompt .= "Di seguito ti darò ulteriori istruzioni per le categorie e i tag da assegnare alla descrizione che generi. Mi raccomando, non farti influenzare da queste categorie e tag per generare la descrizione del disegno. Questo significa che devi usare le seguenti informazioni sulle categorie solo ed esclusivamente per assegnare una categoria e dei tag appropriati e non per generare la descrizione del disegno da colorare fornito.";
+    $prompt .= "Scegli una sola categoria tra quella più appropriata e uno o più tag tra quelli più appropriati. La categoria e i tag scelti scelti devi metterli nel campo categories e tags del json ritornato, mettendo solo gli id come array json. Se non trovi tag o categorie applicate, lascia il campo della categoria o del tag come array vuoto.";
+    $prompt .= "Di seguito le categorie disponibili tra cui scegliere quale categoria assegnare, elencate come json con id e nome di ogni categoria:\n " . $categories . "\n\n";
+    $prompt .= "Di seguito i tag disponibili tra cui scegliere quali assegnare, elencati come json con id e nome di ogni tag:\n " . $tags . "\n\n";
     return $prompt;
 }
 
