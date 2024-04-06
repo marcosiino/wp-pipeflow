@@ -43,8 +43,8 @@ add_action( 'pdc_ai_cron_hook', 'cron_exec' );
 add_filter( 'cron_schedules', 'cron_interval' );
 function cron_interval( $schedules ) {
     $schedules['generate_content_interval'] = array(
-        'interval' => 3613,
-        'display'  => esc_html__( 'Every 3613 Seconds' ), );
+        'interval' => 3963,
+        'display'  => esc_html__( 'Every 3963 Seconds' ), );
     return $schedules;
 }
 
