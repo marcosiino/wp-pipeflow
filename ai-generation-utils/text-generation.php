@@ -1,18 +1,18 @@
 <?php
+require_once(PLUGIN_PATH . "utils/defaults.php");
 
 /**
  * Generates a prompt for coloring pages image generation, by using the specified topic
  */
-function generateTextPrompt($image_url) {
+function generateTextPrompt() {
 
     $categories = json_encode(get_available_categories());
     $tags = json_encode(get_available_tags());
 
-    $prompt = "Scrivi una descrizione ricca da 200 parole e un titolo per il disegno da colorare caricato come url. Il testo deve essere ottimizzato per il SEO, con parole come \"disegni da colorare\" incluse le parole chiave inerenti al disegno nello specifico. Anche il titolo deve essere ottimizzato per il SEO contenendo parole chiavi inerenti. Le parole chiave importanti racchiudile con il tag <strong></strong>. Il formato della risposta deve rigorosamente essere un json valido, senza backticks ne altra formattazione, e con i campi title e description che indicano rispettivamente il titolo e la descrizione del disegno.";
-    $prompt .= "Di seguito ti darò ulteriori istruzioni per le categorie e i tag da assegnare alla descrizione che generi. Mi raccomando, non farti influenzare da queste categorie e tag per generare la descrizione del disegno. Questo significa che devi usare le seguenti informazioni sulle categorie solo ed esclusivamente per assegnare una categoria e dei tag appropriati e non per generare la descrizione del disegno da colorare fornito.";
-    $prompt .= "Scegli una sola categoria tra quella più appropriata e uno o più tag tra quelli più appropriati. La categoria e i tag scelti scelti devi metterli nel campo categories e tags del json ritornato, mettendo solo gli id come array json. Se non trovi tag o categorie applicate, lascia il campo della categoria o del tag come array vuoto.";
-    $prompt .= "Di seguito le categorie disponibili tra cui scegliere quale categoria assegnare, elencate come json con id e nome di ogni categoria:\n " . $categories . "\n\n";
-    $prompt .= "Di seguito i tag disponibili tra cui scegliere quali assegnare, elencati come json con id e nome di ogni tag:\n " . $tags . "\n\n";
+    $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT);
+    $prompt = str_replace("%CATEGORIES%", $categories, $prompt);
+    $prompt = str_replace("%TAGS%", $tags, $prompt);
+
     return $prompt;
 }
 
@@ -26,7 +26,7 @@ function generateTextPrompt($image_url) {
 
 function generateText($image_url) {
 
-    $prompt = generateTextPrompt($image_url);
+    $prompt = generateTextPrompt();
 
     $body = array(
         "model" => "gpt-4-vision-preview",

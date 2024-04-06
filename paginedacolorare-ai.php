@@ -17,6 +17,7 @@ require_once(PLUGIN_PATH . 'utils/cronjobs.php');
 require_once(PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
 
 require_once(PLUGIN_PATH . 'admin-pages/general-settings.php');
+require_once(PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
 require_once(PLUGIN_PATH . 'admin-pages/manual-generation.php');
 
 setup_http_requests();
@@ -53,7 +54,8 @@ add_action('init', 'init');
  * Register the plugin settings
  */
 function register_plugin_settings() {
-    register_setting('paginedacolorare_ai_options_group', 'paginedacolorare_ai_openai_api_key');
+    register_general_settings();
+    register_content_generation_settings();
 }
 add_action('admin_init', 'register_plugin_settings');
 
@@ -61,19 +63,30 @@ add_action('admin_init', 'register_plugin_settings');
  * Setups the plugin admin menu
  */
 function setup_admin_menu() {
+    // Main Menu / General Settings
     add_menu_page(
         'General Settings', // Titolo della pagina
         'AI Bot', // Titolo del menu
         'manage_options', // Capability
-        'paginedacolorare-ai-general-settings', // Slug del menu
+        'paginedacolorare-ai', // Slug del menu
         'general_plugin_settings', // Funzione per visualizzare la pagina di impostazioni
         'dashicons-admin-customizer', // Icona del menu
         6 // Posizione nel menu
     );
 
-    // Aggiunge la stessa pagina del menu principale come sottovoce
+    // Content Generation Settings Menu Item
     add_submenu_page(
-        'paginedacolorare-ai-general-settings', // Slug del menu principale
+        'paginedacolorare-ai', // Slug del menu principale
+        'Content Generation Settings', // Titolo della pagina
+        'Content Generation Settings', // Titolo del menu
+        'manage_options', // Capability
+        'paginedacolorare-ai-content-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'content_generation_settings_page' // Funzione per il contenuto della pagina
+    );
+
+    // Manual Content Generation Menu Item
+    add_submenu_page(
+        'paginedacolorare-ai', // Slug del menu principale
         'Generate', // Titolo della pagina
         'Generate', // Titolo del menu
         'manage_options', // Capability

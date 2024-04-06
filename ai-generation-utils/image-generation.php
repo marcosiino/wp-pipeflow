@@ -3,7 +3,10 @@
  * Generates a prompt for coloring pages image generation, by using the specified topic
  */
 function generatePrompt($image_topic) {
-    return "Genera un disegno da colorare per bambini su argomento: " . $image_topic . ". Il disegno deve essere minimale, con un solo soggetto e pochi dettagli, poco confusionario, semplice, moderno, tenero e in bianco e nero e con sole linee. Non deve contenere testo, lettere o numeri. ";
+    $prompt_template = get_option('image_generation_prompt'); // Get the image generation prompt set by the user
+
+    $result = str_replace("%TOPIC%", $image_topic, $prompt_template);
+    return $result;
 }
 
 /**
