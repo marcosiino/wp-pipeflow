@@ -18,6 +18,7 @@ require_once(PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
 
 require_once(PLUGIN_PATH . 'admin-pages/general-settings.php');
 require_once(PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
+require_once(PLUGIN_PATH . 'admin-pages/automatic-generation-settings.php');
 require_once(PLUGIN_PATH . 'admin-pages/manual-generation.php');
 
 setup_http_requests();
@@ -82,6 +83,16 @@ function setup_admin_menu() {
         'manage_options', // Capability
         'paginedacolorare-ai-content-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
         'content_generation_settings_page' // Funzione per il contenuto della pagina
+    );
+
+    // Automatic Generation Settings Menu Item
+    add_submenu_page(
+        'paginedacolorare-ai', // Slug del menu principale
+        'Auto Generation Settings', // Titolo della pagina
+        'Auto Generation Settings', // Titolo del menu
+        'manage_options', // Capability
+        'paginedacolorare-ai-auto-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'automatic_generation_settings_page' // Funzione per il contenuto della pagina
     );
 
     // Manual Content Generation Menu Item

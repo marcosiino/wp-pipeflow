@@ -7,7 +7,7 @@ function register_content_generation_settings() {
 }
 
 function content_generation_settings_page() {
-    ?>global$image_default_prompt;
+    ?>
     <div class="wrap">
         <h2>Content Generation Settings</h2>
 
