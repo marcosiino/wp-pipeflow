@@ -20,8 +20,8 @@ function schedule_cronjobs() {
 }
 
 function unschedule_cronjobs() {
-    $timestamp = wp_next_scheduled( 'pdc_ai_cron_hook' );
-    wp_unschedule_event( $timestamp, 'pdc_ai_cron_hook' );
+    $timestamp = wp_next_scheduled( 'paginedacolorare_ai_cron_hook' );
+    wp_unschedule_event( $timestamp, 'paginedacolorare_ai_cron_hook' );
 }
 
 function setup_cronjobs() {
