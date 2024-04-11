@@ -8,8 +8,8 @@ function cron_exec() {
 
 function cron_interval( $schedules ) {
     $schedules['generate_content_interval'] = array(
-        'interval' => 3963,
-        'display'  => esc_html__( 'Every 3963 Seconds' ), );
+        'interval' => get_option('auto_generation_interval_secs', 3963),
+        'display'  => esc_html__( 'Every ' . get_option('auto_generation_interval_secs', 3963) . ' Seconds' ), );
     return $schedules;
 }
 

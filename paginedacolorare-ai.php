@@ -57,6 +57,7 @@ add_action('init', 'init');
 function register_plugin_settings() {
     register_general_settings();
     register_content_generation_settings();
+    register_automatic_generation_settings();
 }
 add_action('admin_init', 'register_plugin_settings');
 
