@@ -47,8 +47,11 @@ function content_generation_settings_page() {
             ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row">Image First Mode (If checked, an image is generated about a topic, then a description on that image. Otherwise, a description is generated about a topic, then an image is generated on that generated description)</th>
-                    <td><input type="checkbox" name="image_first_flow" value="1" <?php checked("1", esc_attr(get_option("image_first_flow"), true)); ?> /></td>
+                    <th scope="row">Image First Mode*</th>
+                    <td>
+                        <input type="checkbox" name="image_first_flow" value="1" <?php checked("1", esc_attr(get_option("image_first_flow"), true)); ?> />
+                        <em>* (Image First mode means that an image is generated firstly, then a description is generated based on that image. If this mode is disabled, firstly a description is generated about the topic, then an image is generated based on the description generated in the first step).</em>
+                    </td>
                 </tr>
 
                 <?php
