@@ -1,17 +1,31 @@
 <?php
 require_once(PLUGIN_PATH . "utils/defaults.php");
+require_once(PLUGIN_PATH . "utils/utils.php");
 
 /**
- * Generates a prompt for coloring pages image generation, by using the specified topic
+ * Gets the prompt for text generation from settings and adds input parameters
  */
-function generateTextPrompt() {
-
-    $categories = json_encode(get_available_categories());
-    $tags = json_encode(get_available_tags());
-
+function generateTextPrompt($input_params) {
     $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT);
-    $prompt = str_replace("%CATEGORIES%", $categories, $prompt);
-    $prompt = str_replace("%TAGS%", $tags, $prompt);
+
+    $final_params = array(
+        array(
+            "key" => "CATEGORIES",
+            "value" => json_encode(get_available_categories())
+        ),
+        array(
+            "key" => "TAGS",
+            "value" => json_encode(get_available_tags())
+        ),
+    );
+
+    if(isset($input_params)) {
+        foreach ($input_params as $param) {
+            array_push($final_params, $param);
+        }
+    }
+
+    $prompt = prompt_with_inputs($prompt, $final_params);
 
     return $prompt;
 }
@@ -24,25 +38,34 @@ function generateTextPrompt() {
  * or null on failure
  */
 
-function generateText($image_url) {
+function generate_text($input_params = array(), $attached_image_url) {
 
-    $prompt = generateTextPrompt();
+    $prompt = generateTextPrompt($input_params);
+
+    $model = "gpt-4-turbo";
+
+    $content = array();
+    $content[] = array(
+        "type" => "text",
+        "text" => $prompt,
+    );
+
+    // Adds the image url to the content and switch to "vision"
+    if(isset($attached_image_url)) {
+        $content[] = array(
+            "type" => "image_url",
+            "image_url" => array(
+                "url" => $attached_image_url,
+            )
+        );
+    }
 
     $body = array(
-        "model" => "gpt-4-vision-preview",
+        "model" => $model,
         "messages" => [
             array(
                 "role" => "user",
-                "content" => [
-                    array(
-                        "type" => "text",
-                        "text" => $prompt,
-                    ),
-                    array(
-                        "type" => "image_url",
-                        "image_url" => $image_url,
-                    )
-                ],
+                "content" => $content,
             )
         ],
         "temperature" => 0.7,
@@ -59,7 +82,7 @@ function generateText($image_url) {
     );
 
     echo "<p>Generating text completion with prompt: " . $prompt . "</p>";
-    echo "<p>Image URL for vision analysis: " . $image_url . "</p>";
+    echo "<p>Image URL for vision analysis: " . $attached_image_url . "</p>";
 
     $response = wp_remote_get('https://api.openai.com/v1/chat/completions', $args);
 
@@ -72,6 +95,9 @@ function generateText($image_url) {
     $apiCallError = is_openai_response_error($response);
     if(isset($apiCallError)) {
         echo "<p>OpenAI api call for text completion failed: " . $apiCallError . "</p>";
+        echo "<textarea cols='50' rows='50'>";
+        print_r($body);
+        echo "</textarea>";
         echo "<textarea cols='50' rows='50'>";
         print_r($response);
         echo "</textarea>";

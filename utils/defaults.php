@@ -9,3 +9,5 @@ $text_default_prompt .= "Di seguito i tag disponibili tra cui scegliere quali as
 
 define('TEXT_DEFAULT_PROMPT', $text_default_prompt);
 define('DEFAULT_AUTO_GENERATION_INTERVAL', 3963);
+
+define('IMAGE_FIRST_DEFAULT', false);

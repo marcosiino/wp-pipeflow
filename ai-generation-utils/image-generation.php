@@ -1,4 +1,6 @@
 <?php
+require_once(PLUGIN_PATH . "utils/utils.php");
+
 /**
  * Generates a prompt for coloring pages image generation, by using the specified topic
  */
@@ -10,19 +12,32 @@ function generatePrompt($image_topic) {
 }
 
 /**
- * Coloring page Image Generation with DALL-E
+ * Image Generation with input prompt parameters
  *
- * @param $topic: the coloring page image topic
+ * @param $input_params: an array of dictionaries of type "key" => "value" which contains the parameters and their values to be replaced into the prompt. For example by passing this dictionary: "topic" => "A topic", each occurrence of %TOPIC% in the prompt is replaced with the param value ("A topic" in the example).
  * @return a dictionary containing:
  *      - image_id: the generated image url
  *      - image_url: the id of the image saved to wordpress library
  * or null on failure
  */
 
-function generateImage($topic) {
+function generate_image($input_params = array()) {
+    $prompt = get_option('image_generation_prompt'); // Get the image generation prompt set by the user
+    $prompt = prompt_with_inputs($prompt, $input_params);
 
-    $prompt = generatePrompt($topic);
+    return generate_image_with_prompt($prompt);
+}
 
+/**
+ * Image Generation with DALL-E with a prompt
+ *
+ * @param $prompt: the prompt
+ * @return a dictionary containing:
+ *      - image_id: the generated image url
+ *      - image_url: the id of the image saved to wordpress library
+ * or null on failure
+ */
+function generate_image_with_prompt($prompt) {
     $body = array(
         "model" => "dall-e-3",
         "prompt" => $prompt,
@@ -60,7 +75,7 @@ function generateImage($topic) {
 
     $generated_image_data = get_image_data_from_response($response);
     if(isset($generated_image_data)) {
-        $saved_image_id = download_image($generated_image_data['image_url'], $topic);
+        $saved_image_id = download_image($generated_image_data['image_url']);
         $image_url = $generated_image_data['image_url'];
 
         if(is_wp_error($saved_image_id)) {

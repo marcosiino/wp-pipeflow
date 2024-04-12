@@ -1,13 +1,30 @@
 <?php
 
 /**
+ * Returns the prompt with the occurrencies of the input parameters replaced with their values into the prompt text
+ * $input_params is an array of dictionaries with key (the parameter name, i.e. "TOPIC"), and value (the parameter value, i.e. "A topic"). In this case all the occurrencies of %TOPIC% in the prompt are replaced with the parameter value: "A topic")
+ */
+function prompt_with_inputs($prompt, $input_params) {
+
+    //Replaces the parameters in the prompt with the input parameters values provided
+    if(isset($input_params)) {
+        foreach($input_params as $param) {
+            $prompt = str_replace("%" . strtoupper($param['key']) . "%", $param['value'], $prompt);
+        }
+    }
+
+    return $prompt;
+}
+
+
+/**
  * Download and save an image to the media library and eventually associate it to a post if post_id != 0
  *
  * @param $image_url
  * @param $post_id
  * @return mixed
  */
-function download_image($image_url, $image_description) {
+function download_image($image_url) {
     require_once(ABSPATH . 'wp-admin/includes/image.php');
     require_once(ABSPATH . 'wp-admin/includes/file.php');
     require_once(ABSPATH . 'wp-admin/includes/media.php');

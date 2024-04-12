@@ -21,9 +21,17 @@ function generateRandomTopicArticle() {
 }
 function generateNewArticle($topic) {
     echo "<p style='color: blue;'>Generating an image about: $topic...</p>";
-    $generatedImageData = generateImage($topic);
+
+    $input_params = array(
+        array(
+            "key" => "TOPIC",
+            "value" => $topic,
+        )
+    );
+    $generatedImageData = generate_image($input_params);
+
     echo "<p style='color: blue;'>Generating the text description for the image...</p>";
-    $generatedData = generateText($generatedImageData['image_url']);
+    $generatedData = generate_text(array(), $generatedImageData['image_url']);
 
     if (isset($generatedImageData) && isset($generatedData)) {
         echo "<p style='color: blue;'>Inserting the new post...</p>";
