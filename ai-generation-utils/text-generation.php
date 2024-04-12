@@ -2,21 +2,23 @@
 require_once(PLUGIN_PATH . "utils/defaults.php");
 require_once(PLUGIN_PATH . "utils/utils.php");
 
+
 /**
  * Gets the prompt for text generation from settings and adds input parameters
  */
 function generateTextPrompt($input_params) {
     $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT);
+    $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS;
 
     $final_params = array(
-        array(
+    /*    array(
             "key" => "CATEGORIES",
             "value" => json_encode(get_available_categories())
         ),
         array(
             "key" => "TAGS",
             "value" => json_encode(get_available_tags())
-        ),
+        ),*/
     );
 
     if(isset($input_params)) {
@@ -26,7 +28,6 @@ function generateTextPrompt($input_params) {
     }
 
     $prompt = prompt_with_inputs($prompt, $final_params);
-
     return $prompt;
 }
 
@@ -133,8 +134,6 @@ function get_text_completion_data_from_response($response) {
         $decoded_content = json_decode($completion_message['content'], true);
         $title = $decoded_content['title'];
         $description = $decoded_content['description'];
-        $categories = $decoded_content['categories'];
-        $tags = $decoded_content['tags'];
 
         if(isset($decoded_content) && isset($title) && isset($description)) {
             echo "<p>The returned completion is formed correctly as json and has been decoded. The title is: \"" . $title . "\"</p>";
@@ -142,14 +141,6 @@ function get_text_completion_data_from_response($response) {
                 "title" => $title,
                 "description" => $description,
             );
-
-            if(isset($categories)) {
-                $result['category_ids'] = $categories;
-            }
-
-            if(isset($tags)) {
-                $result['tag_ids'] = $tags;
-            }
 
             return $result;
         }

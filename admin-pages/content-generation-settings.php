@@ -5,6 +5,7 @@ function register_content_generation_settings() {
     register_setting('paginedacolorare_ai_content_options_group', 'image_generation_prompt');
     register_setting('paginedacolorare_ai_content_options_group', 'article_generation_prompt');
     register_setting('paginedacolorare_ai_content_options_group', 'image_first_flow');
+    register_setting('paginedacolorare_ai_content_options_group', 'automatic_categories_and_tags');
 }
 function print_placeholders() {
     $imageFirst = get_option('image_first_flow', IMAGE_FIRST_DEFAULT);
@@ -49,8 +50,16 @@ function content_generation_settings_page() {
                 <tr valign="top">
                     <th scope="row">Image First Mode*</th>
                     <td>
-                        <input type="checkbox" name="image_first_flow" value="1" <?php checked("1", esc_attr(get_option("image_first_flow"), true)); ?> />
+                        <input type="checkbox" name="image_first_flow" value="1" <?php checked("1", esc_attr(get_option("image_first_flow"), IMAGE_FIRST_DEFAULT)); ?> />
                         <em>* (Image First mode means that an image is generated firstly, then a description is generated based on that image. If this mode is disabled, firstly a description is generated about the topic, then an image is generated based on the description generated in the first step).</em>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Automatic Assign Categories and Tags *</th>
+                    <td>
+                        <input type="checkbox" name="automatic_categories_and_tags" value="1" <?php checked("1", esc_attr(get_option("automatic_categories_and_tags"), AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT)); ?> />
+                        <em>* If selected, a separated AI completion is performed to ask the AI to choose which category and tags to associate to the generated article, by choosing from the categories and tags already available in this website.</em>
                     </td>
                 </tr>
 
