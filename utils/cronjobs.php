@@ -3,13 +3,13 @@
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    generateNewArticle("");
+    generateRandomTopicArticle();
 }
 
 function cron_interval( $schedules ) {
     $schedules['generate_content_interval'] = array(
-        'interval' => get_option('auto_generation_interval_secs', 3963),
-        'display'  => esc_html__( 'Every ' . get_option('auto_generation_interval_secs', 3963) . ' Seconds' ), );
+        'interval' => get_option('auto_generation_interval_secs', DEFAULT_AUTO_GENERATION_INTERVAL),
+        'display'  => esc_html__( 'Every ' . get_option('auto_generation_interval_secs', DEFAULT_AUTO_GENERATION_INTERVAL) . ' Seconds' ), );
     return $schedules;
 }
 

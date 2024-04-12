@@ -6,4 +6,6 @@ $text_default_prompt .= "Di seguito ti darò ulteriori istruzioni per le categor
 $text_default_prompt .= "Scegli una sola categoria tra quella più appropriata e uno o più tag tra quelli più appropriati. La categoria e i tag scelti scelti devi metterli nel campo categories e tags del json ritornato, mettendo solo gli id come array json. Se non trovi tag o categorie applicate, lascia il campo della categoria o del tag come array vuoto.";
 $text_default_prompt .= "Di seguito le categorie disponibili tra cui scegliere quale categoria assegnare, elencate come json con id e nome di ogni categoria:\n %CATEGORIES%\n\n";
 $text_default_prompt .= "Di seguito i tag disponibili tra cui scegliere quali assegnare, elencati come json con id e nome di ogni tag:\n %TAGS\n\n";
+
 define('TEXT_DEFAULT_PROMPT', $text_default_prompt);
+define('DEFAULT_AUTO_GENERATION_INTERVAL', 3963);

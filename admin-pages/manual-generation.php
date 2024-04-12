@@ -16,7 +16,7 @@ function manual_generation_admin_page() {
     // Pulsante di generazione
     echo '<form method="post">';
     echo '<label for=\"topic\">Coloring Page Topic:</label><br/>';
-    echo '<textarea name="topic" rows="5" cols="50"></textarea>';
+    echo '<textarea name="topic" rows="5" cols="50">' . getRandomTopic() . '</textarea>';
     echo '<input type="hidden" name="action" value="generate">';
     submit_button('Generate');
     echo '</form>';
