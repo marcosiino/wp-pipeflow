@@ -39,9 +39,20 @@ class ArticleGenerator {
         $generatedArticle = $result['generatedArticle'];
 
         if (isset($generatedImageData) && isset($generatedArticle)) {
-            echo "<p style='color: blue;'>Inserting the new post...</p>";
-            $category_ids = array(); //TODO
+            $category_ids = array();
             $tag_ids = array();
+
+            $auto_categories_and_tags = get_option('automatic_categories_and_tags', AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT);
+            if($auto_categories_and_tags) {
+                echo "<p style='color: blue;'>Detecting most appropriates categories and tags for the generated article...</p>";
+                $result = $this->get_categories_and_tags($generatedArticle);
+                if(isset($result)) {
+                    $category_ids = $result['categoryIds'];
+                    $tag_ids = $result['categoryIds'];
+                }
+            }
+
+            echo "<p style='color: blue;'>Inserting the new post...</p>";
             insert_post($generatedArticle->title, $generatedArticle->description, $category_ids, $tag_ids, $generatedImageData->savedImageId, 'publish');
             echo "<p><strong>Post generated successful!</strong></p>";
         }
@@ -103,7 +114,6 @@ class ArticleGenerator {
 
         return $prompt;
     }
-
 
     /**
      * Generate an article with AI and returns it
@@ -180,6 +190,15 @@ class ArticleGenerator {
             print_r($e->response);
             echo "</textarea>";
         }
+    }
+
+    private function get_categories_and_tags(GeneratedArticle $generatedArticle) {
+        //TODO: Ask the AI to return the most appropriate category (1?) and tags (1-2?) for the generated article passed as argument
+
+        return array(
+            "categoryIds" => array(), //array of appropriate category ids for the generated article
+            "tagIds" => array(),  //array of appropriate tags ids for the generated article
+        );
     }
 }
 
