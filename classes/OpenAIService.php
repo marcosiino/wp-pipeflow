@@ -5,19 +5,25 @@ require_once(PLUGIN_PATH . "classes/AICompletionServiceInterface.php");
 /**
  * OpenAI Client
  */
-class OpenAIService implements AICompletionServiceInterface
+class OpenAIService implements AITextCompletionServiceInterface, AIImageCompletionServiceInterface
 {
     private $apiKey;
     private $textCompletionsModel;
+    private $imageCompletionsModel;
+    private $imageCompletionSize;
+    private $imageCompletionHDQuality;
 
-    public function __construct(string $apiKey, string $textCompletionsModel = "gpt-4-turbo")
+    public function __construct(string $apiKey, string $textCompletionsModel = "gpt-4-turbo", string $imageCompletionsModel = "dall-e-3", string $imageCompletionSize = "1024x1024", bool $imageCompletionHDQuality = false)
     {
         $this->apiKey = $apiKey;
         $this->textCompletionsModel = $textCompletionsModel;
+        $this->imageCompletionsModel = $imageCompletionsModel;
+        $this->imageCompletionSize = $imageCompletionSize;
+        $this->imageCompletionHDQuality = $imageCompletionHDQuality;
     }
 
     /**
-     * Performs a text completion, with an optional image attachment url
+     * Performs a text generation request to the AI, with an optional image attachment url
      * @throws AICompletionException
      */
     public function perform_text_completion(string $prompt, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
@@ -70,7 +76,7 @@ class OpenAIService implements AICompletionServiceInterface
             throw new AICompletionException($response->get_error_message());
         }
 
-        $apiCallError = is_openai_response_error($response);
+        $apiCallError = $this->openai_response_error($response);
         if(isset($apiCallError)) {
             throw new AICompletionException($apiCallError, $body, $response);
         }
@@ -87,9 +93,51 @@ class OpenAIService implements AICompletionServiceInterface
         }
     }
 
+    /**
+     * Performs an image generation request to the AI
+     * @throws AICompletionException
+     */
     public function perform_image_completion(string $prompt)
     {
-        // TODO: Implement performImageCompletion() method.
+        $body = array(
+            "model" => $this->imageCompletionsModel,
+            "prompt" => $prompt,
+            "n" => 1,
+            "size" => $this->imageCompletionSize,
+        );
+
+        if($this->imageCompletionHDQuality) {
+            $body["quality"] = "hd";
+        }
+
+        $args = array(
+            'headers' => array(
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $this->apiKey,
+            ),
+            'method' => 'POST',
+            'body' => json_encode($body)
+        );
+
+        $response = wp_remote_get('https://api.openai.com/v1/images/generations', $args);
+
+        if(is_wp_error($response)) {
+            throw new AICompletionException($response->get_error_message());
+        }
+
+        $apiCallError = $this->openai_response_error($response);
+        if(isset($apiCallError)) {
+            throw new AICompletionException($apiCallError, $body, $response);
+        }
+
+        $response_body = wp_remote_retrieve_body($response);
+
+        $data = json_decode($response_body, true); // true converte l'oggetto in un array associativo
+        if (isset($data['data'][0]['url'])) {
+            return $data['data'][0]['url'];
+        } else {
+            throw new AICompletionException("Error decoding response from OpenAI api call");
+        }
     }
 
 

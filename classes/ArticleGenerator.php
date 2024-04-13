@@ -1,36 +1,32 @@
 <?php
 require_once(PLUGIN_PATH . "utils/defaults.php");
-require_once(PLUGIN_PATH . "utils/utils.php");
 require_once(PLUGIN_PATH . "classes/OpenAIService.php");
 
 class ArticleGenerator {
+
+    private $aiService;
+
+    public function __construct()
+    {
+        $this->aiService = new OpenAIService(get_option('openai_api_key'), "gpt-4-turbo", "dall-e-3", "1024x1024", true);
+    }
+
     /**
-     * Gets the prompt for text generation from settings and adds input parameters
+     * Returns the prompt with the occurrencies of the input parameters replaced with their values into the prompt text
+     * $input_params is an array of dictionaries with key (the parameter name, i.e. "TOPIC"), and value (the parameter value, i.e. "A topic"). In this case all the occurrencies of %TOPIC% in the prompt are replaced with the parameter value: "A topic")
      */
-    private function generate_prompt($input_params) {
-        $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT);
-        $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS;
+    function prompt_with_inputs($prompt, $input_params) {
 
-        $final_params = array(
-            /*    array(
-                    "key" => "CATEGORIES",
-                    "value" => json_encode(get_available_categories())
-                ),
-                array(
-                    "key" => "TAGS",
-                    "value" => json_encode(get_available_tags())
-                ),*/
-        );
-
+        //Replaces the parameters in the prompt with the input parameters values provided
         if(isset($input_params)) {
-            foreach ($input_params as $param) {
-                array_push($final_params, $param);
+            foreach($input_params as $param) {
+                $prompt = str_replace("%" . strtoupper($param['key']) . "%", $param['value'], $prompt);
             }
         }
 
-        $prompt = prompt_with_inputs($prompt, $final_params);
         return $prompt;
     }
+
 
     /**
      * Generate an article with AI and returns it
@@ -41,15 +37,17 @@ class ArticleGenerator {
 
     function generate_article($input_params = array(), $attached_image_url) {
 
-        $prompt = $this->generate_prompt($input_params);
-        $model = "gpt-4-turbo";
-        $aiService = new OpenAIService(get_option('openai_api_key'), $model);
+        $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT); // Gets the prompt template from the plugin settings
+        $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS; // Adds the structured json completion format instructions
+        $prompt = $this->prompt_with_inputs($prompt, $input_params); // replaces the input_parameters in the prompt template
 
         echo "<p>Generating text completion with prompt: " . $prompt . "</p>";
-        echo "<p>Image URL for vision analysis: " . $attached_image_url . "</p>";
+        if(isset($attached_image_url)) {
+            echo "<p>Provided Image URL attachment: " . $attached_image_url . "</p>";
+        }
 
         try {
-            $structured_completion = $aiService->perform_text_completion($prompt, $attached_image_url);
+            $structured_completion = $this->aiService->perform_text_completion($prompt, $attached_image_url);
 
             $decoded_completion = json_decode($structured_completion, true);
             $article_title = $decoded_completion['title'];
@@ -65,19 +63,45 @@ class ArticleGenerator {
             }
         }
         catch (AICompletionException $e) {
-            echo "<p>OpenAI api call failed: " . $e->getMessage() . "</p>";
-            if(isset($e->request)) { //If the ai completion request object is provided in the exception, show it
-                echo "<textarea cols='50' rows='50'>";
-                print_r($e->request);
-                echo "</textarea>";
-            }
-            if(isset($e->response)) { //If the ai completion response object is provided in the exception, show it
-                echo "<textarea cols='50' rows='50'>";
-                print_r($e->response);
-                echo "</textarea>";
+            $this->print_ai_exception_details($e);
+            return null;
+        }
+    }
+
+    function generate_and_save_image($input_params = array()) {
+        $prompt = get_option('image_generation_prompt'); // Get the image generation prompt set by the user
+        $prompt = $this->prompt_with_inputs($prompt, $input_params);
+
+        echo "<p>Generating image with prompt: " . $prompt . "</p>";
+
+        try {
+            $generated_image_url = $this->aiService->perform_image_completion($prompt);
+            $imageDownloader = new ImageDownloader($generated_image_url);
+            $saved_image_id = $imageDownloader->download_and_save();
+
+            if(!isset($saved_image_id)) {
+                return null;
             }
 
+            return new GeneratedImage($saved_image_id, $generated_image_url);
+        }
+        catch (AICompletionException $e) {
+            $this->print_ai_exception_details($e);
             return null;
+        }
+    }
+
+    private function print_ai_exception_details(AICompletionException $e) {
+        echo "<p>OpenAI api call failed: " . $e->getMessage() . "</p>";
+        if(isset($e->request)) { //If the ai completion request object is provided in the exception, show it
+            echo "<textarea cols='50' rows='50'>";
+            print_r($e->request);
+            echo "</textarea>";
+        }
+        if(isset($e->response)) { //If the ai completion response object is provided in the exception, show it
+            echo "<textarea cols='50' rows='50'>";
+            print_r($e->response);
+            echo "</textarea>";
         }
     }
 }
@@ -91,4 +115,84 @@ class GeneratedArticle {
 
     public $title;
     public $description;
+}
+
+class GeneratedImage {
+    public function __construct($savedImageId, string $generatedImageExternalURL)
+    {
+        $this->savedImageId = $savedImageId;
+        $this->generatedImageExternalURL = $generatedImageExternalURL;
+    }
+
+    public $savedImageId;
+    public $generatedImageExternalURL;
+}
+
+class ImageDownloader {
+
+    public function __construct($imageURL)
+    {
+        $this->externalImageURL = $imageURL;
+    }
+
+    public function download_and_save() {
+        $saved_image_id = $this->download_image($this->externalImageURL);
+        if(isset($saved_image_id)) {
+            return $saved_image_id;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public $externalImageURL;
+
+    /**
+     * Download and save an image to the media library
+     *
+     * @param $image_url
+     * @return mixed
+     */
+    private function download_image($image_url) {
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+        // Scarica l'immagine
+        $temp_file = download_url($image_url);
+
+        // Estrai l'estensione dell'URL dell'immagine
+        $image_ext = pathinfo(parse_url($image_url, PHP_URL_PATH), PATHINFO_EXTENSION);
+
+        // Se l'estensione è stata trovata, rinomina il file temporaneo
+        if ($image_ext) {
+            $new_file_path = $temp_file . '.' . $image_ext;
+            rename($temp_file, $new_file_path);
+            $temp_file = $new_file_path;
+        }
+        else {
+            return null;
+        }
+
+        if (is_wp_error($temp_file)) {
+            return null;
+        }
+
+        // Imposta il nome del file e l'array per `media_handle_sideload()`
+        $file = array(
+            'name' => basename($temp_file), // Usa il nome originale dell'immagine
+            'tmp_name' => $temp_file, // Percorso al file temporaneo
+        );
+
+        // Upload the image in wp media
+        $id = media_handle_sideload($file);
+
+        if (is_wp_error($id)) {
+            @unlink($file['tmp_name']); // Cancella il file temporaneo in caso di errore
+            return null;
+        }
+
+        // returns the id of the image
+        return $id;
+    }
 }

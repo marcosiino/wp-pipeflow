@@ -1,6 +1,5 @@
 <?php
 require_once(PLUGIN_PATH . 'classes/ArticleGenerator.php');
-require_once(PLUGIN_PATH . 'ai-generation-utils/image-generation.php');
 require_once(PLUGIN_PATH . 'utils/utils.php');
 require_once(PLUGIN_PATH . 'utils/defaults.php');
 
@@ -36,7 +35,7 @@ function generateNewArticle($topic) {
         echo "<p style='color: blue;'>Inserting the new post...</p>";
         $category_ids = array(); //TODO
         $tag_ids = array();
-        insert_post($generatedArticle->title, $generatedArticle->description, $category_ids, $tag_ids, $generatedImageData['image_id'], 'publish');
+        insert_post($generatedArticle->title, $generatedArticle->description, $category_ids, $tag_ids, $generatedImageData->savedImageId, 'publish');
         echo "<p><strong>Post generated successful!</strong></p>";
     }
     else {
@@ -48,9 +47,9 @@ function generate_with_mode($image_first_mode, $input_params) {
     $articleGenerator = new ArticleGenerator();
     if($image_first_mode) {
         echo "<p style='color: blue;'>Generating the image (image first mode = true)...</p>";
-        $generatedImageData = generate_image($input_params);
+        $generatedImageData = $articleGenerator->generate_and_save_image($input_params);
         echo "<p style='color: blue;'>Generating the text description for the image...</p>";
-        $generatedArticle = $articleGenerator->generate_article(array(), $generatedImageData['image_url']);
+        $generatedArticle = $articleGenerator->generate_article(array(), $generatedImageData->generatedImageExternalURL);
 
         return array(
             "generatedArticle" => $generatedArticle,
@@ -74,8 +73,7 @@ function generate_with_mode($image_first_mode, $input_params) {
             ),
         );
 
-        $generatedImageData = generate_image($image_generation_inputs);
-
+        $generatedImageData = $articleGenerator->generate_and_save_image($image_generation_inputs);
 
         return array(
             "generatedArticle" => $generatedArticle,
