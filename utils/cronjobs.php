@@ -1,9 +1,12 @@
 <?php
+require_once(PLUGIN_PATH . "classes/ArticleGenerator.php");
+
 /**
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    generateRandomTopicArticle();
+    $articleGenerator = new ArticleGenerator();
+    $articleGenerator->generate_new_article(); //generate a random topic article
 }
 
 function cron_interval( $schedules ) {

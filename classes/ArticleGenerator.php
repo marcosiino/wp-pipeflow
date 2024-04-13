@@ -11,11 +11,88 @@ class ArticleGenerator {
         $this->aiService = new OpenAIService(get_option('openai_api_key'), "gpt-4-turbo", "dall-e-3", "1024x1024", true);
     }
 
+    static function get_random_topic() {
+        $topics_str = get_option('coloring_page_topics');
+        if(isset($topics_str) AND empty($topics_str) == false) {
+            $topics_array = explode("\n", $topics_str);
+            $random_index = random_int(0,count($topics_array)-1);
+            return $topics_array[$random_index];
+        }
+        else {
+            return "";
+        }
+    }
+    public function generate_new_article($topic = null) {
+        if(!isset($topic)) {
+            $topic = ArticleGenerator::get_random_topic();
+        }
+
+        $input_params = array(
+            array(
+                "key" => "TOPIC",
+                "value" => $topic,
+            )
+        );
+
+        $result = $this->generate_with_mode(get_option('image_first_flow', IMAGE_FIRST_DEFAULT), $input_params);
+        $generatedImageData = $result['generatedImage'];
+        $generatedArticle = $result['generatedArticle'];
+
+        if (isset($generatedImageData) && isset($generatedArticle)) {
+            echo "<p style='color: blue;'>Inserting the new post...</p>";
+            $category_ids = array(); //TODO
+            $tag_ids = array();
+            insert_post($generatedArticle->title, $generatedArticle->description, $category_ids, $tag_ids, $generatedImageData->savedImageId, 'publish');
+            echo "<p><strong>Post generated successful!</strong></p>";
+        }
+        else {
+            echo "<p style='color: red;'><strong>Article generation failed.</strong></p>";
+        }
+    }
+
+    private function generate_with_mode($image_first_mode, $input_params) {
+        if($image_first_mode) {
+            echo "<p style='color: blue;'>Generating the image (image first mode = true)...</p>";
+            $generatedImageData = $this->generate_and_save_image($input_params);
+            echo "<p style='color: blue;'>Generating the text description for the image...</p>";
+            $generatedArticle = $this->generate_article(array(), $generatedImageData->generatedImageExternalURL);
+
+            return array(
+                "generatedArticle" => $generatedArticle,
+                "generatedImage" => $generatedImageData,
+            );
+        }
+        else {
+            echo "<p style='color: blue;'>Generating the text description (image first mode = false)...</p>";
+            $generatedArticle = $this->generate_article($input_params, null);
+
+            echo "<p style='color: blue;'>Generating the image for the description</p>";
+
+            $image_generation_inputs = array(
+                array(
+                    "key" => "GENERATED_ARTICLE_DESCRIPTION",
+                    "value" => $generatedArticle->description,
+                ),
+                array(
+                    "key" => "GENERATED_ARTICLE_TITLE",
+                    "value" => $generatedArticle->title,
+                ),
+            );
+
+            $generatedImageData = $this->generate_and_save_image($image_generation_inputs);
+
+            return array(
+                "generatedArticle" => $generatedArticle,
+                "generatedImage" => $generatedImageData,
+            );
+        }
+    }
+
     /**
      * Returns the prompt with the occurrencies of the input parameters replaced with their values into the prompt text
      * $input_params is an array of dictionaries with key (the parameter name, i.e. "TOPIC"), and value (the parameter value, i.e. "A topic"). In this case all the occurrencies of %TOPIC% in the prompt are replaced with the parameter value: "A topic")
      */
-    function prompt_with_inputs($prompt, $input_params) {
+    private function prompt_with_inputs($prompt, $input_params) {
 
         //Replaces the parameters in the prompt with the input parameters values provided
         if(isset($input_params)) {
@@ -35,7 +112,7 @@ class ArticleGenerator {
      * @return GeneratedArticle the generated article data or null on error
      */
 
-    function generate_article($input_params = array(), $attached_image_url) {
+    private function generate_article($input_params = array(), $attached_image_url) {
 
         $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT); // Gets the prompt template from the plugin settings
         $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS; // Adds the structured json completion format instructions
@@ -68,7 +145,7 @@ class ArticleGenerator {
         }
     }
 
-    function generate_and_save_image($input_params = array()) {
+    private function generate_and_save_image($input_params = array()) {
         $prompt = get_option('image_generation_prompt'); // Get the image generation prompt set by the user
         $prompt = $this->prompt_with_inputs($prompt, $input_params);
 
