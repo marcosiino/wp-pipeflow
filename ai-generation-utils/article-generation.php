@@ -1,6 +1,6 @@
 <?php
+require_once(PLUGIN_PATH . 'classes/ArticleGenerator.php');
 require_once(PLUGIN_PATH . 'ai-generation-utils/image-generation.php');
-require_once(PLUGIN_PATH . 'ai-generation-utils/text-generation.php');
 require_once(PLUGIN_PATH . 'utils/utils.php');
 require_once(PLUGIN_PATH . 'utils/defaults.php');
 
@@ -30,11 +30,13 @@ function generateNewArticle($topic) {
 
     $result = generate_with_mode(get_option('image_first_flow', IMAGE_FIRST_DEFAULT), $input_params);
     $generatedImageData = $result['generatedImage'];
-    $generatedTextData = $result['generatedText'];
+    $generatedArticle = $result['generatedArticle'];
 
-    if (isset($generatedImageData) && isset($generatedTextData)) {
+    if (isset($generatedImageData) && isset($generatedArticle)) {
         echo "<p style='color: blue;'>Inserting the new post...</p>";
-        insert_post($generatedTextData['title'], $generatedTextData['description'], $generatedTextData['category_ids'], $generatedTextData['tag_ids'], $generatedImageData['image_id'], 'publish');
+        $category_ids = array(); //TODO
+        $tag_ids = array();
+        insert_post($generatedArticle->title, $generatedArticle->description, $category_ids, $tag_ids, $generatedImageData['image_id'], 'publish');
         echo "<p><strong>Post generated successful!</strong></p>";
     }
     else {
@@ -43,31 +45,32 @@ function generateNewArticle($topic) {
 }
 
 function generate_with_mode($image_first_mode, $input_params) {
+    $articleGenerator = new ArticleGenerator();
     if($image_first_mode) {
         echo "<p style='color: blue;'>Generating the image (image first mode = true)...</p>";
         $generatedImageData = generate_image($input_params);
         echo "<p style='color: blue;'>Generating the text description for the image...</p>";
-        $generatedTextData = generate_text(array(), $generatedImageData['image_url']);
+        $generatedArticle = $articleGenerator->generate_article(array(), $generatedImageData['image_url']);
 
         return array(
-            "generatedText" => $generatedTextData,
+            "generatedArticle" => $generatedArticle,
             "generatedImage" => $generatedImageData,
         );
     }
     else {
         echo "<p style='color: blue;'>Generating the text description (image first mode = false)...</p>";
-        $generatedTextData = generate_text($input_params, null);
+        $generatedArticle = $articleGenerator->generate_article($input_params, null);
 
         echo "<p style='color: blue;'>Generating the image for the description</p>";
 
         $image_generation_inputs = array(
             array(
                 "key" => "GENERATED_ARTICLE_DESCRIPTION",
-                "value" => $generatedTextData['description'],
+                "value" => $generatedArticle->description,
             ),
             array(
                 "key" => "GENERATED_ARTICLE_TITLE",
-                "value" => $generatedTextData['title'],
+                "value" => $generatedArticle->title,
             ),
         );
 
@@ -75,7 +78,7 @@ function generate_with_mode($image_first_mode, $input_params) {
 
 
         return array(
-            "generatedText" => $generatedTextData,
+            "generatedArticle" => $generatedArticle,
             "generatedImage" => $generatedImageData,
         );
     }

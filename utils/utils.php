@@ -98,7 +98,7 @@ function is_openai_response_error($response) {
     }
 }
 
-function insert_post($title, $content, $category_ids, $tags_ids, $thumbnail_image_id, $status = 'publish') {
+function insert_post(string $title, string $content, array $category_ids, array $tags_ids, $thumbnail_image_id, $status = 'publish') {
     // Prepara i dati del post
     $post_data = array(
         'post_title'    => $title, // Titolo dell'articolo
