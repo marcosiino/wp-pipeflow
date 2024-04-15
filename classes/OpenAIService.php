@@ -2,6 +2,23 @@
 require_once(PLUGIN_PATH . "classes/AICompletionErrors.php");
 require_once(PLUGIN_PATH . "classes/AICompletionServiceInterface.php");
 
+// The istructions for the text completion json return format
+define('AUTO_CATEGORIES_INSTRUCTIONS', "Following a list of categories and tags available, described with a json which contains id and name fields.   
+
+*AVAILABLE CATEGORIES:* 
+%CATEGORIES%
+
+*AVAILABLE TAGS*:
+%TAGS%
+
+*INSTRUCTIONS*
+You have to read the text provided after the *TEXT CONTENT* line, and return a minimum of 0 and a maximum of %N_MAX_CATEGORIES% categories and a minimum of 0 and a maximum of %N_MAX_TAGS% tags by choosing the most appropriate categories and tags for the text provided after the *TEXT CONTENT* line.
+You must return only a valid json, without backticks and without any other formatting. The json must contain a \"categories_ids\" fields which contains an array of ids of the choosen categories, and a field \"tags_ids\" which contains an array of the ids of the choosen tags. If you didn't find any appropriate category or tag, provide an empty array.
+
+*TEXT CONTENT*
+%TEXT%
+");
+
 /**
  * OpenAI Client
  */
@@ -142,6 +159,56 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
         }
     }
 
+    /**
+     * @param int $max_num_of_categories
+     * @param int $max_num_of_tags
+     * @return array|array[] array containing categories_ids and tags_ids keys, which contains a string with the appropriate categories ids and tags ids for the provided $content
+     * @throws AICompletionException
+     */
+    public function perform_categories_and_tags_assignment_completion(string $content, array $available_categories, array $available_tags, $max_categories_num, $max_tags_num) {
+        $params = array(
+            array(
+                "key" => "CATEGORIES",
+                "value" => json_encode($available_categories),
+            ),
+            array(
+                "key" => "TAGS",
+                "value" => json_encode($available_tags),
+            ),
+            array(
+                "key" => "N_MAX_CATEGORIES",
+                "value" => $max_categories_num,
+            ),
+            array(
+                "key" => "N_MAX_TAGS",
+                "value" => $max_tags_num,
+            ),
+            array(
+                "key" => "TEXT",
+                "value" => $content,
+            )
+        );
+        $prompt = $this->prompt_with_inputs(AUTO_CATEGORIES_INSTRUCTIONS, $params);
+        $completion = $this->perform_text_completion($prompt, null, 0.4, 200);
+
+        $decodedCompletion = json_decode($completion,true);
+        $categories_ids = $decodedCompletion['categories_ids'];
+        $tags_ids = $decodedCompletion['tags_ids'];
+
+        if(isset($categories_ids) && isset($tags_ids)) {
+            //SUCCESS
+            return array(
+                "categories_ids" => $categories_ids,
+                "tags_ids" => $tags_ids,
+            );
+        }
+        else {
+            return array(
+                "categoryIds" => array(), //array of appropriate category ids for the generated article
+                "tagIds" => array(),  //array of appropriate tags ids for the generated article
+            );
+        }
+    }
 
     /**
      * @param $response
@@ -167,6 +234,18 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
         else {
             return null;
         }
+    }
+
+    private function prompt_with_inputs($prompt, $input_params) {
+
+        //Replaces the parameters in the prompt with the input parameters values provided
+        if(isset($input_params)) {
+            foreach($input_params as $param) {
+                $prompt = str_replace("%" . strtoupper($param['key']) . "%", $param['value'], $prompt);
+            }
+        }
+
+        return $prompt;
     }
 }
 

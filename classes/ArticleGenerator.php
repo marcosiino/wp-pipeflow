@@ -47,8 +47,8 @@ class ArticleGenerator {
                 echo "<p style='color: blue;'>Detecting most appropriates categories and tags for the generated article...</p>";
                 $result = $generatedArticle->ask_appropriated_categories_and_tags_to_ai(1,2);
                 if(isset($result)) {
-                    $category_ids = $result['categoryIds'];
-                    $tag_ids = $result['categoryIds'];
+                    $category_ids = $result['categories_ids'];
+                    $tag_ids = $result['tags_ids'];
                 }
             }
 
@@ -103,7 +103,7 @@ class ArticleGenerator {
      * Returns the prompt with the occurrencies of the input parameters replaced with their values into the prompt text
      * $input_params is an array of dictionaries with key (the parameter name, i.e. "TOPIC"), and value (the parameter value, i.e. "A topic"). In this case all the occurrencies of %TOPIC% in the prompt are replaced with the parameter value: "A topic")
      */
-    private function prompt_with_inputs($prompt, $input_params) {
+    public static function prompt_with_inputs($prompt, $input_params) {
 
         //Replaces the parameters in the prompt with the input parameters values provided
         if(isset($input_params)) {
@@ -126,7 +126,7 @@ class ArticleGenerator {
 
         $prompt = Settings::get_article_generation_prompt(); // Gets the prompt template from the plugin settings
         $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS; // Adds the structured json completion format instructions
-        $prompt = $this->prompt_with_inputs($prompt, $input_params); // replaces the input_parameters in the prompt template
+        $prompt = ArticleGenerator::prompt_with_inputs($prompt, $input_params); // replaces the input_parameters in the prompt template
 
         echo "<p>Generating text completion with prompt: " . $prompt . "</p>";
         if(isset($attached_image_url)) {
@@ -157,7 +157,7 @@ class ArticleGenerator {
 
     private function generate_and_save_image($input_params = array()) {
         $prompt = Settings::get_image_generation_prompt(); // Get the image generation prompt set by the user
-        $prompt = $this->prompt_with_inputs($prompt, $input_params);
+        $prompt = ArticleGenerator::prompt_with_inputs($prompt, $input_params);
 
         echo "<p>Generating image with prompt: " . $prompt . "</p>";
 
@@ -205,13 +205,28 @@ class GeneratedArticle {
     public $title;
     public $description;
 
-    public function ask_appropriated_categories_and_tags_to_ai(int $max_num_of_categories, int $max_num_of_tags) {
-        //TODO: Ask the AI to return the most appropriate category (1?) and tags (1-2?) for the generated article passed as argument
+    /**
+     * @return array dictionary with categories_ids and tags_ids keys, which contains an array of categories and tags ids to assign to the generated article (empty arrays is returned if no appropriate categories found or in case of error)
+     */
+    public function ask_appropriated_categories_and_tags_to_ai(int $max_num_of_categories, int $max_num_of_tags): array
+    {
+        $aiService = Resolver::getAIService();
+        try {
+            echo "<p>Performing the automatic categories and tags assignment AI completion...</p>";
 
-        return array(
-            "categoryIds" => array(), //array of appropriate category ids for the generated article
-            "tagIds" => array(),  //array of appropriate tags ids for the generated article
-        );
+            $result = $aiService->perform_categories_and_tags_assignment_completion($this->description, get_available_categories(), get_available_tags(), $max_num_of_categories, $max_num_of_tags);
+            echo "<p>Automatic Categories and Tags assignment AI completion returned:";
+            echo "<pre>" . print_r($result) . "</pre>";
+            echo "</p>";
+
+            return $result;
+        } catch (AICompletionException $e) {
+            echo "<p style='color: red;'>Failed to perform the automatic categories and tags assignment AI text completion</p>";
+            return array(
+                "categoryIds" => array(), //array of appropriate category ids for the generated article
+                "tagIds" => array(),  //array of appropriate tags ids for the generated article
+            );
+        }
     }
 }
 

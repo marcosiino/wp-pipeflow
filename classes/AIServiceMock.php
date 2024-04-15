@@ -15,4 +15,12 @@ class AIServiceMock implements AITextCompletionServiceInterface, AIImageCompleti
     {
         return "https://fastly.picsum.photos/id/519/200/200.jpg?hmac=7MwcBjyXrRX5GB6GuDATVm_6MFDRmZaSK7r5-jqDNS0";
     }
+
+    public function perform_categories_and_tags_assignment_completion(string $content, array $available_categories, array $available_tags, $max_categories_num, $max_tags_num)
+    {
+        return array(
+            "categories_ids" => array(1),
+            "tags_ids" => array(1,2),
+        );
+    }
 }

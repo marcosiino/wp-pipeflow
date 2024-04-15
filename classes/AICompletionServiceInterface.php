@@ -7,5 +7,8 @@ interface AIImageCompletionServiceInterface {
     public function perform_image_completion(string $prompt);
 }
 
-interface AICompletionServiceInterface extends AITextCompletionServiceInterface, AIImageCompletionServiceInterface { }
+interface AICategoriesAndTagsCompletionServiceInterface {
+    public function perform_categories_and_tags_assignment_completion(string $content, array $available_categories, array $available_tags, $max_categories_num, $max_tags_num);
+}
+interface AICompletionServiceInterface extends AITextCompletionServiceInterface, AIImageCompletionServiceInterface, AICategoriesAndTagsCompletionServiceInterface { }
 ?>
