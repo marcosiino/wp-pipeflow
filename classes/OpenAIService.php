@@ -24,6 +24,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
 
     /**
      * Performs a text generation request to the AI, with an optional image attachment url
+     * @returns string containing the text completion
      * @throws AICompletionException
      */
     public function perform_text_completion(string $prompt, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
@@ -95,6 +96,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
 
     /**
      * Performs an image generation request to the AI
+     * @returns string the url of the generated image
      * @throws AICompletionException
      */
     public function perform_image_completion(string $prompt)

@@ -1,4 +1,5 @@
 <?php
+require_once(PLUGIN_PATH . "utils/settings.php");
 
 function register_general_settings() {
     register_setting('paginedacolorare_ai_general_options_group', 'openai_api_key');
@@ -19,7 +20,7 @@ function general_plugin_settings()
             <table class="form-table">
                 <tr valign="top">
                     <th scope="row">OpenAI API Key</th>
-                    <td><input type="text" name="openai_api_key" value="<?php echo esc_attr(get_option('openai_api_key')); ?>" /></td>
+                    <td><input type="text" name="openai_api_key" value="<?php echo Settings::get_openAI_api_key(); ?>" /></td>
                 </tr>
             </table>
             <?php submit_button(); ?>

@@ -1,6 +1,6 @@
 <?php
-require_once(PLUGIN_PATH . "utils/defaults.php");
-require_once(PLUGIN_PATH . "classes/OpenAIService.php");
+require_once(PLUGIN_PATH . "utils/settings.php");
+require_once(PLUGIN_PATH . "utils/Resolver.php");
 
 class ArticleGenerator {
 
@@ -8,11 +8,11 @@ class ArticleGenerator {
 
     public function __construct()
     {
-        $this->aiService = new OpenAIService(get_option('openai_api_key'), "gpt-4-turbo", "dall-e-3", "1024x1024", true);
+        $this->aiService = Resolver::getAIService();
     }
 
     static function get_random_topic() {
-        $topics_str = get_option('coloring_page_topics');
+        $topics_str = Settings::get_content_generation_topics();
         if(isset($topics_str) AND empty($topics_str) == false) {
             $topics_array = explode("\n", $topics_str);
             $random_index = random_int(0,count($topics_array)-1);
@@ -34,7 +34,7 @@ class ArticleGenerator {
             )
         );
 
-        $result = $this->generate_with_mode(get_option('image_first_flow', IMAGE_FIRST_DEFAULT), $input_params);
+        $result = $this->generate_with_mode(Settings::get_image_first_mode(), $input_params);
         $generatedImageData = $result['generatedImage'];
         $generatedArticle = $result['generatedArticle'];
 
@@ -42,10 +42,10 @@ class ArticleGenerator {
             $category_ids = array();
             $tag_ids = array();
 
-            $auto_categories_and_tags = get_option('automatic_categories_and_tags', AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT);
+            $auto_categories_and_tags = Settings::get_automatic_categories_and_tags();
             if($auto_categories_and_tags) {
                 echo "<p style='color: blue;'>Detecting most appropriates categories and tags for the generated article...</p>";
-                $result = $this->get_categories_and_tags($generatedArticle);
+                $result = $generatedArticle->ask_appropriated_categories_and_tags_to_ai(1,2);
                 if(isset($result)) {
                     $category_ids = $result['categoryIds'];
                     $tag_ids = $result['categoryIds'];
@@ -124,7 +124,7 @@ class ArticleGenerator {
 
     private function generate_article($input_params = array(), $attached_image_url) {
 
-        $prompt = get_option('article_generation_prompt', TEXT_DEFAULT_PROMPT); // Gets the prompt template from the plugin settings
+        $prompt = Settings::get_article_generation_prompt(); // Gets the prompt template from the plugin settings
         $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS; // Adds the structured json completion format instructions
         $prompt = $this->prompt_with_inputs($prompt, $input_params); // replaces the input_parameters in the prompt template
 
@@ -156,13 +156,15 @@ class ArticleGenerator {
     }
 
     private function generate_and_save_image($input_params = array()) {
-        $prompt = get_option('image_generation_prompt'); // Get the image generation prompt set by the user
+        $prompt = Settings::get_image_generation_prompt(); // Get the image generation prompt set by the user
         $prompt = $this->prompt_with_inputs($prompt, $input_params);
 
         echo "<p>Generating image with prompt: " . $prompt . "</p>";
 
         try {
             $generated_image_url = $this->aiService->perform_image_completion($prompt);
+            echo "<p>AI Generated image URL: " . $generated_image_url . "</p>";
+
             $imageDownloader = new ImageDownloader($generated_image_url);
             $saved_image_id = $imageDownloader->download_and_save();
 
@@ -191,15 +193,6 @@ class ArticleGenerator {
             echo "</textarea>";
         }
     }
-
-    private function get_categories_and_tags(GeneratedArticle $generatedArticle) {
-        //TODO: Ask the AI to return the most appropriate category (1?) and tags (1-2?) for the generated article passed as argument
-
-        return array(
-            "categoryIds" => array(), //array of appropriate category ids for the generated article
-            "tagIds" => array(),  //array of appropriate tags ids for the generated article
-        );
-    }
 }
 
 class GeneratedArticle {
@@ -211,6 +204,15 @@ class GeneratedArticle {
 
     public $title;
     public $description;
+
+    public function ask_appropriated_categories_and_tags_to_ai(int $max_num_of_categories, int $max_num_of_tags) {
+        //TODO: Ask the AI to return the most appropriate category (1?) and tags (1-2?) for the generated article passed as argument
+
+        return array(
+            "categoryIds" => array(), //array of appropriate category ids for the generated article
+            "tagIds" => array(),  //array of appropriate tags ids for the generated article
+        );
+    }
 }
 
 class GeneratedImage {

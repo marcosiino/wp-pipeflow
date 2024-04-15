@@ -1,5 +1,6 @@
 <?php
 require_once(PLUGIN_PATH . "classes/ArticleGenerator.php");
+require_once(PLUGIN_PATH . "utils/settings.php");
 
 /**
  * Launch the job to execute when cron job is triggered
@@ -11,8 +12,8 @@ function cron_exec() {
 
 function cron_interval( $schedules ) {
     $schedules['generate_content_interval'] = array(
-        'interval' => get_option('auto_generation_interval_secs', DEFAULT_AUTO_GENERATION_INTERVAL),
-        'display'  => esc_html__( 'Every ' . get_option('auto_generation_interval_secs', DEFAULT_AUTO_GENERATION_INTERVAL) . ' Seconds' ), );
+        'interval' => Settings::get_auto_generation_interval_secs(),
+        'display'  => esc_html__( 'Every ' . Settings::get_auto_generation_interval_secs() . ' Seconds' ), );
     return $schedules;
 }
 
