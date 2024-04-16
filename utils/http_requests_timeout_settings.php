@@ -1,15 +1,15 @@
 <?php
 function sar_custom_curl_timeout( $handle ){
-    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 60 );
-    curl_setopt( $handle, CURLOPT_TIMEOUT, 60 );
+    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 120 );
+    curl_setopt( $handle, CURLOPT_TIMEOUT, 120 );
 }
 
 function sar_custom_http_request_timeout( $timeout_value ) {
-    return 30; // 30 seconds.
+    return 120; // 30 seconds.
 }
 
 function sar_custom_http_request_args( $r ){
-    $r['timeout'] = 60;
+    $r['timeout'] = 120;
     return $r;
 }
 
