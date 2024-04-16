@@ -6,6 +6,11 @@ function register_content_generation_settings() {
     register_setting('postbrewer_content_options_group', 'article_generation_prompt');
     register_setting('postbrewer_content_options_group', 'image_first_flow');
     register_setting('postbrewer_content_options_group', 'automatic_categories_and_tags');
+    register_setting('postbrewer_content_options_group', 'image_generation_openai_model');
+    register_setting('postbrewer_content_options_group', 'image_generation_enable_hd');
+    register_setting('postbrewer_content_options_group', 'image_generation_size');
+    register_setting('postbrewer_content_options_group', 'text_generation_openai_model');
+    register_setting('postbrewer_content_options_group', 'text_generation_temperature');
 }
 function print_placeholders() {
     $imageFirst = Settings::get_image_first_mode();
@@ -22,6 +27,28 @@ function print_image_prompt_field() {
         <th scope="row">Image Generation Prompt</th>
         <td><textarea cols=80 rows=10 name="image_generation_prompt"><?php echo Settings::get_image_generation_prompt(); ?></textarea></td>
     </tr>
+
+    <tr valign="top">
+        <th scope="row">Image Generation OpenAI Model</th>
+        <td>
+            <input type="text" name="image_generation_openai_model" value="<?php echo Settings::get_image_generation_openai_model() ?>" />
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row">Use HD Quality for Image Generation*</th>
+        <td>
+            <input type="checkbox" name="image_generation_enable_hd" value="1" <?php checked("1", Settings::get_image_generation_enable_hd()); ?> />
+            <em>* If enabled, the generated image is more consistent, but are more expensive.</em>
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row">Image Generation Size</th>
+        <td>
+            <input type="text" name="image_generation_size" value="<?php echo Settings::get_image_generation_size() ?>" />
+        </td>
+    </tr>
     <?php
 }
 
@@ -30,6 +57,20 @@ function print_text_prompt_field() {
     <tr valign="top">
         <th scope="row">Content Generation AI Prompts</th>
         <td><textarea cols=80 rows=10 name="article_generation_prompt"><?php echo Settings::get_article_generation_prompt(); ?></textarea></td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row">Text Generation OpenAI Model *</th>
+        <td>
+            <input type="text" name="text_generation_openai_model" value="<?php echo Settings::get_text_generation_openai_model() ?>" />
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row">Text Generation Temperature</th>
+        <td>
+            <input type="text" name="text_generation_temperature" value="<?php echo Settings::get_text_generation_temperature() ?>" />
+        </td>
     </tr>
     <?php
 }

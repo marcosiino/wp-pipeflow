@@ -14,7 +14,7 @@ class Resolver
             return new AIServiceMock();
         }
         else {
-            return new OpenAIService(Settings::get_openAI_api_key(), "gpt-4-turbo", "dall-e-3", "1024x1024", true);
+            return new OpenAIService(Settings::get_openAI_api_key(), Settings::get_text_generation_openai_model(), Settings::get_image_generation_openai_model(), Settings::get_image_generation_size(), Settings::get_image_generation_enable_hd());
         }
     }
 }
