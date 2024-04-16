@@ -118,7 +118,7 @@ class ArticleGenerator {
     /**
      * Generate an article with AI and returns it
      *
-     * @param $topic: the coloring page image topic
+     * @param $topic: the image topic
      * @return GeneratedArticle the generated article data or null on error
      */
 

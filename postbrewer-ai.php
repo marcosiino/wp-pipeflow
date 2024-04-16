@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: PagineDaColorare.it AI Bot
- * Plugin URI: https://paginedacolorare.it
- * Description: Questo plugin genera disegni da colorare per il sito utilizzando l'intelligenza artificiale.
+ * Plugin Name: PostBrewer AI Assistant
+ * Plugin URI: https://marcosiino.it
+ * Description: Automatic post generator using the AI.
  * Version: 1.0
  * Author: Marco Siino
  * Author URI: http://marcosiino.it
  */
-// Prevenire l'accesso diretto al file del plugin.
+
 defined('ABSPATH') or die('Accesso non permesso.');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -68,9 +68,9 @@ function setup_admin_menu() {
     // Main Menu / General Settings
     add_menu_page(
         'General Settings', // Titolo della pagina
-        'AI Bot', // Titolo del menu
+        'PostBrewer', // Titolo del menu
         'manage_options', // Capability
-        'paginedacolorare-ai', // Slug del menu
+        'postbrewer', // Slug del menu
         'general_plugin_settings', // Funzione per visualizzare la pagina di impostazioni
         'dashicons-admin-customizer', // Icona del menu
         6 // Posizione nel menu
@@ -78,31 +78,31 @@ function setup_admin_menu() {
 
     // Content Generation Settings Menu Item
     add_submenu_page(
-        'paginedacolorare-ai', // Slug del menu principale
+        'postbrewer', // Slug del menu principale
         'Content Generation Settings', // Titolo della pagina
         'Content Generation Settings', // Titolo del menu
         'manage_options', // Capability
-        'paginedacolorare-ai-content-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'postbrewer-content-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
         'content_generation_settings_page' // Funzione per il contenuto della pagina
     );
 
     // Automatic Generation Settings Menu Item
     add_submenu_page(
-        'paginedacolorare-ai', // Slug del menu principale
+        'postbrewer', // Slug del menu principale
         'Auto Generation Settings', // Titolo della pagina
         'Auto Generation Settings', // Titolo del menu
         'manage_options', // Capability
-        'paginedacolorare-ai-auto-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'postbrewer-auto-generation-settings', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
         'automatic_generation_settings_page' // Funzione per il contenuto della pagina
     );
 
     // Manual Content Generation Menu Item
     add_submenu_page(
-        'paginedacolorare-ai', // Slug del menu principale
+        'postbrewer', // Slug del menu principale
         'Generate', // Titolo della pagina
         'Generate', // Titolo del menu
         'manage_options', // Capability
-        'paginedacolorare-ai-manual-generation', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'postbrewer-manual-generation', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
         'manual_generation_admin_page' // Funzione per il contenuto della pagina
     );
 }

@@ -2,10 +2,10 @@
 require_once(PLUGIN_PATH . "utils/settings.php");
 
 function register_content_generation_settings() {
-    register_setting('paginedacolorare_ai_content_options_group', 'image_generation_prompt');
-    register_setting('paginedacolorare_ai_content_options_group', 'article_generation_prompt');
-    register_setting('paginedacolorare_ai_content_options_group', 'image_first_flow');
-    register_setting('paginedacolorare_ai_content_options_group', 'automatic_categories_and_tags');
+    register_setting('postbrewer_content_options_group', 'image_generation_prompt');
+    register_setting('postbrewer_content_options_group', 'article_generation_prompt');
+    register_setting('postbrewer_content_options_group', 'image_first_flow');
+    register_setting('postbrewer_content_options_group', 'automatic_categories_and_tags');
 }
 function print_placeholders() {
     $imageFirst = Settings::get_image_first_mode();
@@ -28,7 +28,7 @@ function print_image_prompt_field() {
 function print_text_prompt_field() {
     ?>
     <tr valign="top">
-        <th scope="row">Coloring Page Article Title and Text Generation Prompt</th>
+        <th scope="row">Content Generation AI Prompts</th>
         <td><textarea cols=80 rows=10 name="article_generation_prompt"><?php echo Settings::get_article_generation_prompt(); ?></textarea></td>
     </tr>
     <?php
@@ -43,8 +43,8 @@ function content_generation_settings_page() {
 
         <form method="post" action="options.php">
             <?php
-            settings_fields('paginedacolorare_ai_content_options_group');
-            do_settings_sections('paginedacolorare_ai_content_options_group');
+            settings_fields('postbrewer_content_options_group');
+            do_settings_sections('postbrewer_content_options_group');
             ?>
             <table class="form-table">
                 <tr valign="top">
