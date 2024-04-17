@@ -1,6 +1,6 @@
 <?php
 interface AITextCompletionServiceInterface {
-    public function perform_text_completion(string $prompt, string $image_attachment_url = null);
+    public function perform_text_completion(string $prompt, bool $return_json_response, string $image_attachment_url = null, float $temperature, int $max_tokens);
 }
 
 interface AIImageCompletionServiceInterface {

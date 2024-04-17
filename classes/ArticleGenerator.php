@@ -11,6 +11,25 @@ class ArticleGenerator {
         $this->aiService = Resolver::getAIService();
     }
 
+    /**
+     * @return mixed|array Returns true if all the mandatory settings is configured in the plugin settings, otherwise returns an array of strings with the missing settings configurations.
+     */
+    static function check_settings() {
+        $missing_settings = array();
+
+        if(Settings::get_openAI_api_key() === null || empty(trim(Settings::get_openAI_api_key()))) {
+            $missing_settings[] = "OpenAI API Key";
+        }
+
+        if(count($missing_settings) == 0) {
+            return true;
+        }
+        else {
+            return $missing_settings;
+        }
+
+    }
+
     static function get_random_topic() {
         $topics_str = Settings::get_content_generation_topics();
         if(isset($topics_str) AND empty($topics_str) == false) {
@@ -134,7 +153,7 @@ class ArticleGenerator {
         }
 
         try {
-            $structured_completion = $this->aiService->perform_text_completion($prompt, $attached_image_url);
+            $structured_completion = $this->aiService->perform_text_completion($prompt, true, $attached_image_url, Settings::get_text_generation_temperature(), Settings::get_text_generation_max_tokens());
 
             $decoded_completion = json_decode($structured_completion, true);
             $article_title = $decoded_completion['title'];

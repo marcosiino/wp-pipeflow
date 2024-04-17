@@ -16,6 +16,7 @@ define('IMAGE_GENERATION_SIZE_DEFAULT', "512x512");
 define('IMAGE_GENERATION_OPENAI_MODEL_DEFAULT', "dall-e-3");
 define('TEXT_GENERATION_OPENAI_MODEL_DEFAULT', "gpt-4-turbo");
 define('TEXT_GENERATION_OPENAI_TEMPERATURE_DEFAULT', 0.7);
+define('TEXT_GENERATION_OPENAI_MAX_TOKENS_DEFAULT', 4096);
 
 class Settings {
 
@@ -27,7 +28,7 @@ class Settings {
      * @return string The topics to choose from for the generated content, separated by \n
      */
     public static function get_content_generation_topics() {
-        return esc_attr(get_option('postbrewer_content_topics'), "");
+        return esc_attr(get_option('postbrewer_content_topics', ""));
     }
 
     /**
@@ -55,48 +56,55 @@ class Settings {
      * @return string Whether the AI should choose the appropriate categories and tags to assign to the generated articles
      */
     public static function get_automatic_categories_and_tags() {
-        return esc_attr(get_option("automatic_categories_and_tags"), AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT);
+        return esc_attr(get_option("automatic_categories_and_tags", AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT));
     }
 
     /**
      * @return string The OpenAI api key
      */
     public static function get_openAI_api_key() {
-        return esc_attr(get_option('openai_api_key'), "");
+        return esc_attr(get_option('openai_api_key', ""));
     }
 
     /**
      * @return string The OpenAI api key
      */
     public static function get_image_generation_openai_model() {
-        return esc_attr(get_option('image_generation_openai_model'), IMAGE_GENERATION_OPENAI_MODEL_DEFAULT);
+        return esc_attr(get_option('image_generation_openai_model', IMAGE_GENERATION_OPENAI_MODEL_DEFAULT));
     }
 
     /**
      * @return boolean The OpenAI api key
      */
     public static function get_image_generation_enable_hd() {
-        return esc_attr(get_option('image_generation_enable_hd'), IMAGE_GENERATION_ENABLE_HD_DEFAULT);
+        return esc_attr(get_option('image_generation_enable_hd', IMAGE_GENERATION_ENABLE_HD_DEFAULT));
     }
 
     /**
-     * @return boolean The OpenAI api key
+     * @return string The Image Generation size
      */
     public static function get_image_generation_size() {
-        return esc_attr(get_option('image_generation_size'), IMAGE_GENERATION_SIZE_DEFAULT);
+        return esc_attr(get_option('image_generation_size', IMAGE_GENERATION_SIZE_DEFAULT));
     }
 
     /**
-     * @return boolean The OpenAI api key
+     * @return string The Text Generation OpenAI Model
      */
     public static function get_text_generation_openai_model() {
-        return esc_attr(get_option('text_generation_openai_model'), TEXT_GENERATION_OPENAI_MODEL_DEFAULT);
+        return esc_attr(get_option('text_generation_openai_model', TEXT_GENERATION_OPENAI_MODEL_DEFAULT));
     }
 
     /**
-     * @return float The OpenAI api key
+     * @return float The Text Generation Temperature
      */
     public static function get_text_generation_temperature() {
-        return esc_attr(get_option('text_generation_temperature'), TEXT_GENERATION_OPENAI_TEMPERATURE_DEFAULT);
+        return esc_attr(get_option('text_generation_temperature', TEXT_GENERATION_OPENAI_TEMPERATURE_DEFAULT));
+    }
+
+    /**
+     * @return int The Text Generation Max Number of Tokens
+     */
+    public static function get_text_generation_max_tokens() {
+        return esc_attr(get_option('text_generation_max_tokens', TEXT_GENERATION_OPENAI_MAX_TOKENS_DEFAULT));
     }
 }

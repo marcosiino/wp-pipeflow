@@ -11,6 +11,7 @@ function register_content_generation_settings() {
     register_setting('postbrewer_content_options_group', 'image_generation_size');
     register_setting('postbrewer_content_options_group', 'text_generation_openai_model');
     register_setting('postbrewer_content_options_group', 'text_generation_temperature');
+    register_setting('postbrewer_content_options_group', 'text_generation_max_tokens');
 }
 function print_placeholders() {
     $imageFirst = Settings::get_image_first_mode();
@@ -70,6 +71,13 @@ function print_text_prompt_field() {
         <th scope="row">Text Generation Temperature</th>
         <td>
             <input type="text" name="text_generation_temperature" value="<?php echo Settings::get_text_generation_temperature() ?>" />
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row">Text Generation Max Tokens</th>
+        <td>
+            <input type="text" name="text_generation_max_tokens" value="<?php echo Settings::get_text_generation_max_tokens() ?>" />
         </td>
     </tr>
     <?php

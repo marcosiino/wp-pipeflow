@@ -6,8 +6,10 @@ require_once(PLUGIN_PATH . "utils/settings.php");
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    $articleGenerator = new ArticleGenerator();
-    $articleGenerator->generate_new_article(); //generate a random topic article
+    if(ArticleGenerator::check_settings() === true) {
+        $articleGenerator = new ArticleGenerator();
+        $articleGenerator->generate_new_article(); //generate a random topic article
+    }
 }
 
 function cron_interval( $schedules ) {

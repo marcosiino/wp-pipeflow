@@ -44,7 +44,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
      * @returns string containing the text completion
      * @throws AICompletionException
      */
-    public function perform_text_completion(string $prompt, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
+    public function perform_text_completion(string $prompt, bool $return_json_response, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
     {
         if (!isset($this->apiKey)) {
             throw new AICompletionException("Api key not set");
@@ -78,6 +78,12 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
             "max_tokens" => $max_tokens,
         );
 
+        if($return_json_response) {
+            $body["response_format"] = array(
+                "type" => "json_object",
+            );
+        }
+
         $args = array(
             'headers' => array(
                 'Content-Type' => 'application/json',
@@ -101,7 +107,10 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
 
         $response_body = wp_remote_retrieve_body($response);
         $data = json_decode($response_body, true); // true converte l'oggetto in un array associativo
-
+        $finish_reason = $data["finish_reason"];
+        if($return_json_response && $finish_reason == "length") {
+            throw new AICompletionException("The completion took more than the max_tokens provided, and since return_json_response is true, the call is throwing because the returned json completion is not complete and will be not deserializable");
+        }
         $completion = $data['choices'][0]['message']['content'];
         if (isset($completion)) {
             return $completion; //Success
@@ -189,7 +198,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
             )
         );
         $prompt = $this->prompt_with_inputs(AUTO_CATEGORIES_INSTRUCTIONS, $params);
-        $completion = $this->perform_text_completion($prompt, null, 0.4, 200);
+        $completion = $this->perform_text_completion($prompt, true, null,0.4, 200);
 
         $decodedCompletion = json_decode($completion,true);
         $categories_ids = $decodedCompletion['categories_ids'];
