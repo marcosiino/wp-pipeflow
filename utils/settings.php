@@ -9,7 +9,7 @@ define('DEFAULT_AUTO_GENERATION_INTERVAL', 43512);
 define('AUTOMATIC_CATEGORIES_AND_TAGS_DEFAULT', false);
 
 // The istructions for the text completion json return format
-define('JSON_COMPLETION_FORMAT_INSTRUCTIONS', 'Istruzioni: Il formato della risposta deve rigorosamente essere un json valido, senza backticks ne altra formattazione, e con i campi title e description che indicano rispettivamente il titolo e la descrizione dell\'articolo.');
+define('JSON_COMPLETION_FORMAT_INSTRUCTIONS', 'Istruzioni: Il formato della risposta deve rigorosamente essere un json con il campo title e il campo description che indicano rispettivamente il titolo e la descrizione dell\'articolo. Ci sono solo questi due campi e nessun\'altro');
 
 define('IMAGE_GENERATION_ENABLE_HD_DEFAULT', false);
 define('IMAGE_GENERATION_SIZE_DEFAULT', "512x512");
