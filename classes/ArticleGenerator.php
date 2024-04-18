@@ -85,7 +85,7 @@ class ArticleGenerator {
             echo "<p style='color: blue;'>Generating the image (image first mode = true)...</p>";
             $generatedImageData = $this->generate_and_save_image($input_params);
             echo "<p style='color: blue;'>Generating the text description for the image...</p>";
-            $generatedArticle = $this->generate_article(array(), $generatedImageData->generatedImageExternalURL);
+            $generatedArticle = $this->generate_article($input_params, $generatedImageData->generatedImageExternalURL);
 
             return array(
                 "generatedArticle" => $generatedArticle,
@@ -108,6 +108,10 @@ class ArticleGenerator {
                     "value" => $generatedArticle->title,
                 ),
             );
+
+            foreach($input_params as $param) {
+                $image_generation_inputs[] = $param;
+            }
 
             $generatedImageData = $this->generate_and_save_image($image_generation_inputs);
 
