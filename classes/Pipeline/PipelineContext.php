@@ -1,6 +1,7 @@
 <?php
 
 namespace Pipeline;
+require_once "classes/Pipeline/ContextParameterValue.php";
 
 /**
  * A Pipeline Context, which represents the full state of a pipeline at a given moments, with all its parameters and values at that point.
@@ -20,10 +21,10 @@ class PipelineContext
      * @return void
      */
     public function setParameter(string $name, mixed $value): void {
-        $currentParameterValue = $this->context[$name];
-        if(isset($currentParameterValue)) {
+        if(array_key_exists($name, $this->context)) {
             // The parameter is already in the context, adding the value to it
-            $currentParameterValue->addValue($value);
+            $currentParameterValue = $this->context[$name];
+            $currentParameterValue->add($value);
         }
         else {
             // The parameter is new in the context, adding it with this value

@@ -1,6 +1,8 @@
 <?php
 
 namespace Pipeline;
+require_once "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;

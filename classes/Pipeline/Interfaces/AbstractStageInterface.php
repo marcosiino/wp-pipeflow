@@ -1,6 +1,8 @@
 <?php
 
 namespace Pipeline\Interfaces;
+require_once "classes/Pipeline/PipelineContext.php";
+require_once "classes/Pipeline/StageDescriptor.php";
 
 use Pipeline\PipelineContext;
 use Pipeline\StageDescriptor;
