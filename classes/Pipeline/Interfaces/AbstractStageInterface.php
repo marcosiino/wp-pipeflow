@@ -1,6 +1,9 @@
 <?php
 
-namespace Pipeline;
+namespace Pipeline\Interfaces;
+
+use Pipeline\PipelineContext;
+use Pipeline\StageDescriptor;
 
 /**
  * Represents an abstract PipelineStage

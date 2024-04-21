@@ -3,6 +3,7 @@
 namespace Pipeline;
 
 use DomainException;
+use Pipeline\Interfaces\AbstractPipelineStage;
 
 /**
  * Represents a Content Generation Pipeline
