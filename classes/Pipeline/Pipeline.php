@@ -2,7 +2,7 @@
 
 namespace Pipeline;
 
-use DomainException;
+use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 
 /**
@@ -24,7 +24,8 @@ class Pipeline
 
     /**
      * @param PipelineContext|null $initialContext
-     * @param string $jsonConfiguration - The json configuration used to setup the pipeline
+     * @param string $jsonConfiguration - The json configuration used to set up the pipeline
+     * @throws StageConfigurationException
      */
     public function __construct(?PipelineContext $initialContext, string $jsonConfiguration)
     {
@@ -83,20 +84,22 @@ class Pipeline
      *
      * @param string $jsonConfiguration
      * @return void
+     * @throws StageConfigurationException
      */
     private function setup(string $jsonConfiguration): void {
         $configuration = json_decode($jsonConfiguration, true);
         if(!isset($configuration)) {
-            throw new DomainException("Invalid json configuration provided: error decoding json.");
+            throw new StageConfigurationException("Invalid json configuration provided: error decoding json.");
         }
 
         $stages = $this->getField($configuration, "stages", true);
         if(!is_array($stages)) {
-            throw new DomainException("Invalid json configuration provided: expected an array as the root object.");
+            throw new StageConfigurationException("Invalid json configuration provided: expected an array as the root object.");
         }
 
         foreach($stages as $stageConfiguration) {
-            //TODO: instantiate the stage with $stageConfiguration using the StageFactory, then add it to the $this->stages array
+            $stage = StageFactory::instantiateStage($stageConfiguration);
+            $this->addStage($stage);
         }
     }
 
@@ -107,12 +110,12 @@ class Pipeline
      * @param string $fieldName - The field to get
      * @param bool $required - Default: false. Whether the field is required. If true, an exception is thrown if the field is not present
      * @return mixed
-     * @throws DomainException if field with $fieldName is not found in $array and $required is true
+     * @throws StageConfigurationException if field with $fieldName is not found in $array and $required is true
      */
     private function getField(array $array, string $fieldName, bool $required = false): mixed {
         $value = $array[$fieldName];
         if($required && !isset($value)) {
-            throw new DomainException("Invalid json configuration provided: expected field \"$fieldName\" not found");
+            throw new StageConfigurationException("Invalid json configuration provided: expected field \"$fieldName\" not found");
         }
         return $value;
     }
