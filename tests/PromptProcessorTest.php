@@ -23,4 +23,19 @@ class PromptProcessorTest extends TestCase
         $this->assertSame($result, "Take a pear and a tomato");
     }
 
+    public function testArrayPlaceholders(): void {
+        $context = new PipelineContext();
+        $context->setParameter("NUMBERS", "One");
+        $context->setParameter("NUMBERS", "Two");
+        $context->setParameter("NUMBERS", "Three");
+        $context->setParameter("NUMBERS", "Four");
+        $context->setParameter("NUMBERS", "Five");
+
+        $prompt = "I chose the number: %%NUMBERS[1]%%";
+
+        $promptProcessor = new PromptProcessor($context);
+        $result = $promptProcessor->process($prompt);
+        $this->assertSame($result, "I chose the number: Two");
+    }
+
 }

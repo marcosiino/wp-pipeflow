@@ -15,7 +15,7 @@ class PromptProcessor
     {
         $placeholders = $this->extractPlaceholders($prompt);
         foreach($placeholders as $placeholder) {
-            $placeholderName = $placeholder["placeholderName"];
+            $placeholderName = $placeholder["placeholder"];
             $value = $this->getValueForPlaceholder($placeholder);
 
             $prompt = str_replace($placeholderName, $value, $prompt);
@@ -52,7 +52,7 @@ class PromptProcessor
                 //Add it to the $placeholder array with both the name and the index and type = "array"
                 $placeholders[] = [
                     'parameterName' => $match[1],
-                    'placeholderName' => "%%" . $match[1] . "%%",
+                    'placeholder' => $match[0],
                     'type' => 'array',
                     'index' => trim($match[2], '[]')
                 ];
@@ -60,7 +60,7 @@ class PromptProcessor
                 //Add only the name to the placeholder index
                 $placeholders[] = [
                     'parameterName' => $match[1],
-                    'placeholderName' => "%%" . $match[1] . "%%",
+                    'placeholder' => $match[0],
                     'type' => 'variable',
                 ];
             }
