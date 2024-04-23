@@ -125,12 +125,12 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
      * @returns string the url of the generated image
      * @throws AICompletionException
      */
-    public function perform_image_completion(string $prompt)
+    public function perform_image_completion(string $prompt, int $count = 1)
     {
         $body = array(
             "model" => $this->imageCompletionsModel,
             "prompt" => $prompt,
-            "n" => 1,
+            "n" => $count,
             "size" => $this->imageCompletionSize,
         );
 
