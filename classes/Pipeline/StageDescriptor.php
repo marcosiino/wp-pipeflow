@@ -8,23 +8,49 @@ use InvalidArgumentException;
  */
 class StageDescriptor
 {
+    /**
+     * The stage identifier
+     * @var string
+     */
     private string $identifier;
+
+    /**
+     * The stage description
+     * @var string
+     */
     private string $stageDescription;
-    private array $inputs;
-    private array $outputs;
+
+    /**
+     * The stage setup parameters
+     * @var array
+     */
+    private array $setupParameters;
+
+    /**
+     * The parameters that the stage uses from the context
+     * @var array
+     */
+    private array $contextInputs;
+
+    /**
+     * The parameters that the stage outputs to the context
+     * @var array
+     */
+    private array $contextOutputs;
 
     /**
      * Constructor for StageDescriptor.
      * @param string $identifier An identifier for the stage.
      * @param string $stageDescription The description of the stage.
-     * @param array $inputs An associative array of string => string to be used as inputs.
-     * @param array $outputs An associative array of string => string to be used as outputs.
+     * @param array $contextInputs The parameters that the stage uses from the context and their description. An associative array of parameterName => description
+     * @param array $contextOutputs The parameters that the stage outputs to the context and their description. An associative array of parameterName => description
      */
-    public function __construct(string $identifier, string $stageDescription, array $inputs = array(), array $outputs = array()) {
+    public function __construct(string $identifier, string $stageDescription, array $setupParameters, array $contextInputs = array(), array $contextOutputs = array()) {
         $this->identifier = $identifier;
         $this->stageDescription = $stageDescription;
-        $this->setInputs($inputs);
-        $this->setOutputs($outputs);
+        $this->setSetupParameters($setupParameters);
+        $this->setContextInputs($contextInputs);
+        $this->setContextOutputs($contextOutputs);
     }
 
     /**
@@ -47,16 +73,16 @@ class StageDescriptor
      * Returns the stage inputs
      * @return array associative array of string (param name) => string (description)
      */
-    public function getInputs(): array {
-        return $this->inputs;
+    public function getContextInputs(): array {
+        return $this->contextInputs;
     }
 
     /**
      * Returns the outputs of the stage
      * @return array associative array of string (param name) => string (description)
      */
-    public function getOutputs(): array {
-        return $this->outputs;
+    public function getContextOutputs(): array {
+        return $this->contextOutputs;
     }
 
     private function validateDictionary(array $dictionary): bool {
@@ -68,19 +94,27 @@ class StageDescriptor
         return true;
     }
 
-    private function setInputs(array $inputs): void {
-        if ($this->validateDictionary($inputs)) {
-            $this->inputs = $inputs;
+    private function setSetupParameters(array $params): void {
+        if ($this->validateDictionary($params)) {
+            $this->setupParameters = $params;
         } else {
-            throw new InvalidArgumentException("Inputs must be an associative array of string => string.");
+            throw new InvalidArgumentException("Setup parameters must be an associative array of string => string.");
         }
     }
 
-    private function setOutputs(array $outputs): void {
-        if ($this->validateDictionary($outputs)) {
-            $this->outputs = $outputs;
+    private function setContextInputs(array $inputs): void {
+        if ($this->validateDictionary($inputs)) {
+            $this->contextInputs = $inputs;
         } else {
-            throw new InvalidArgumentException("Outputs must be an associative array of string => string.");
+            throw new InvalidArgumentException("Context Inputs must be an associative array of string => string.");
+        }
+    }
+
+    private function setContextOutputs(array $outputs): void {
+        if ($this->validateDictionary($outputs)) {
+            $this->contextOutputs = $outputs;
+        } else {
+            throw new InvalidArgumentException("Context Outputs must be an associative array of string => string.");
         }
     }
 }

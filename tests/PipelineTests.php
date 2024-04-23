@@ -4,7 +4,6 @@ namespace tests;
 require_once "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
 require_once "classes/Pipeline/Pipeline.php";
 require_once "classes/Pipeline/StageFactory.php";
-require_once "classes/Pipeline/Stages/TestStage/TestStageFactory.php";
 require_once "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 require_once "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
 
@@ -16,7 +15,6 @@ use Pipeline\StageFactory;
 use Pipeline\Stages\SetValue\SetValueStageFactory;
 use Pipeline\Stages\SumOperation\SumOperationStage;
 use Pipeline\Stages\SumOperation\SumOperationStageFactory;
-use Pipeline\Stages\TestStage\TestStageFactory;
 
 final class PipelineTests extends TestCase
 {
@@ -34,13 +32,14 @@ final class PipelineTests extends TestCase
 
     public function testPipelineValidConfiguration(): void
     {
-        StageFactory::registerFactory(new TestStageFactory());
+        StageFactory::registerFactory(new SetValueStageFactory());
 
         $configuration = "{
             \"stages\": [
                 {
-                    \"identifier\": \"TestStage\",            
-                    \"prompt\": \"Example prompt. Param1 = %%PARAM1%%, Param2[1] = %%PARAM2[1]%%;\"
+                    \"identifier\": \"SetValue\",
+                    \"parameterName\": \"PARAM_A\",
+                    \"parameterValue\": 2
                 }
             ]
         }";
@@ -53,13 +52,12 @@ final class PipelineTests extends TestCase
      */
     public function testPipelineValidConfigurationNotRegisteredStageIdentifier(): void
     {
-        //StageFactory::registerFactory(new TestStageFactory());
-
         $configuration = "{
             \"stages\": [
                 {
-                    \"identifier\": \"TestStage\",            
-                    \"prompt\": \"Example prompt. Param1 = %%PARAM1%%, Param2[1] = %%PARAM2[1]%%;\"
+                    \"identifier\": \"SetValue\",
+                    \"parameterName\": \"PARAM_A\",
+                    \"parameterValue\": 2
                 }
             ]
         }";
@@ -72,12 +70,13 @@ final class PipelineTests extends TestCase
 
     public function testPipelineStageIdNotSpecified(): void
     {
-        //StageFactory::registerFactory(new TestStageFactory());
+        StageFactory::registerFactory(new SetValueStageFactory());
 
         $configuration = "{
             \"stages\": [
-                {            
-                    \"prompt\": \"Example prompt. Param1 = %%PARAM1%%, Param2[1] = %%PARAM2[1]%%;\"
+                {
+                    \"parameterName\": \"PARAM_A\",
+                    \"parameterValue\": 2
                 }
             ]
         }";
@@ -90,12 +89,13 @@ final class PipelineTests extends TestCase
 
     public function testPipelineMissingRequiredStageParameter(): void
     {
-        StageFactory::registerFactory(new TestStageFactory());
+        StageFactory::registerFactory(new SetValueStageFactory());
 
         $configuration = "{
             \"stages\": [
                 {
-                    \"identifier\": \"TestStage\"
+                    \"identifier\": \"SetValue\",
+                    \"parameterName\": \"PARAM_A\"
                 }
             ]
         }";
@@ -108,8 +108,6 @@ final class PipelineTests extends TestCase
 
     public function testPipelineUnableToDecodeJSONException(): void
     {
-        //StageFactory::registerFactory(new TestStageFactory());
-
         $configuration = "
             \"stages\": [
         ";
