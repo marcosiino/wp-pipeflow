@@ -1,4 +1,8 @@
 <?php
+namespace AIServices;
+
+use Exception;
+
 class AICompletionException extends Exception {
     public function __construct($message = "", $request = null, $response = null, $code = 0, Throwable $previous = null)
     {

@@ -3,17 +3,17 @@
 namespace tests;
 require_once "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
 require_once "classes/Pipeline/Pipeline.php";
-require_once "classes/Pipeline/StageFactory.php";
 require_once "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 require_once "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
+require_once "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Exceptions\StageConfigurationExceptionCases;
 use Pipeline\Pipeline;
 use Pipeline\StageFactory;
+use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
 use Pipeline\Stages\SetValue\SetValueStageFactory;
-use Pipeline\Stages\SumOperation\SumOperationStage;
 use Pipeline\Stages\SumOperation\SumOperationStageFactory;
 
 final class PipelineTests extends TestCase
