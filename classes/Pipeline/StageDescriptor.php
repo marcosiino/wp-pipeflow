@@ -18,7 +18,7 @@ class StageDescriptor
      * @param array $inputs An associative array of string => string to be used as inputs.
      * @param array $outputs An associative array of string => string to be used as outputs.
      */
-    public function __construct(string $identifier, array $inputs, array $outputs) {
+    public function __construct(string $identifier, array $inputs = array(), array $outputs = array()) {
         $this->identifier = $identifier;
         $this->setInputs($inputs);
         $this->setOutputs($outputs);

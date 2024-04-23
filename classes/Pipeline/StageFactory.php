@@ -3,9 +3,11 @@
 namespace Pipeline;
 require_once "classes/Pipeline/Exceptions/StageConfigurationException.php";
 require_once "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once "classes/Pipeline/Interfaces/AbstractStageFactory.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
+use Pipeline\Interfaces\AbstractStageFactory;
 
 /**
  * A class which allows to instantiate Pipeline Stages given their configuration
@@ -17,11 +19,11 @@ class StageFactory
     /**
      * Register a StageFactory which manages the instantiation of a specific stage
      *
-     * @param AbstractPipelineStage $factory - The factory instance to register
+     * @param AbstractStageFactory $factory - The factory instance to register
      * @return void
      */
-    static public function registerFactory(AbstractPipelineStage $factory): void {
-        self::$factories[$factory->getDescriptor()->getIdentifier()] = $factory;
+    static public function registerFactory(AbstractStageFactory $factory): void {
+        self::$factories[$factory->getStageDescriptor()->getIdentifier()] = $factory;
     }
 
     /**
@@ -38,6 +40,14 @@ class StageFactory
     }
 
     /**
+     * Removes all the registered factories.
+     *
+     * @return void
+     */
+    static public function clearRegisteredFactories(): void {
+        self::$factories = array();
+    }
+    /**
      * Instantiates a stage given its configuration
      *
      * @param array $configuration - The stage configuration
@@ -46,16 +56,16 @@ class StageFactory
      * @throws StageConfigurationException
      */
     static public function instantiateStage(array $configuration): AbstractPipelineStage {
-        $configIdentifier = $configuration['identifier'];
-        if(!isset($configIdentifier)) {
-            throw new StageConfigurationException("identifier not found in stage configuration");
+        if(!array_key_exists('identifier', $configuration)) {
+            throw StageConfigurationException::stageIdentifierNotSpecified();
         }
-
+        $configIdentifier = $configuration['identifier'];
         foreach(self::$factories as $factoryIdentifier => $factory) {
             if($configIdentifier === $factoryIdentifier) {
                 return $factory->instantiate($configuration);
             }
         }
-        throw new StageConfigurationException("There isn't any factory registered for the stage identifier: \($configIdentifier)");
+
+        throw StageConfigurationException::invalidStageIdentifier($configIdentifier);
     }
 }

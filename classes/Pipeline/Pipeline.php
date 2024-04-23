@@ -2,10 +2,14 @@
 
 namespace Pipeline;
 require_once "classes/Pipeline/Exceptions/StageConfigurationException.php";
-require_once "classes/Interfaces/AbstractPipelineStage.php";
+require_once "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once "classes/Pipeline/Utils/Helpers.php";
+require_once "classes/Pipeline/StageFactory.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
+use Pipeline\Utils\Helpers;
+use Pipeline\StageFactory;
 
 /**
  * Represents a Content Generation Pipeline
@@ -22,21 +26,20 @@ class Pipeline
      * An array containing the stages of the pipelines
      * @var array|AbstractPipelineStage[]
      */
-    private array $stages;
+    public array $stages;
 
     /**
      * @param PipelineContext|null $initialContext
      * @param string $jsonConfiguration - The json configuration used to set up the pipeline
      * @throws StageConfigurationException
      */
-    public function __construct(?PipelineContext $initialContext, string $jsonConfiguration)
+    public function __construct(?PipelineContext $initialContext = null)
     {
         if(is_null($initialContext)) {
             $initialContext = new PipelineContext();
         }
         $this->contextHistory = array($initialContext);
         $this->stages = array();
-        $this->setup($jsonConfiguration);
     }
 
     /**
@@ -88,37 +91,23 @@ class Pipeline
      * @return void
      * @throws StageConfigurationException
      */
-    private function setup(string $jsonConfiguration): void {
+    public function setup(string $jsonConfiguration): void {
+        // Decode the configuration json
         $configuration = json_decode($jsonConfiguration, true);
-        if(!isset($configuration)) {
-            throw new StageConfigurationException("Invalid json configuration provided: error decoding json.");
+        if(!isset($configuration)) { // Checks if it is a valid json
+            throw StageConfigurationException::unableToDecodeJSONConfiguration();
         }
 
-        $stages = $this->getField($configuration, "stages", true);
+        // Gets the "stages" field in the root json object, and check if it is an array
+        $stages = Helpers::getField($configuration, "stages", true);
         if(!is_array($stages)) {
-            throw new StageConfigurationException("Invalid json configuration provided: expected an array as the root object.");
+            throw StageConfigurationException::invalidJSONConfiguration();
         }
 
+        // Instantiates each stage through the StageFactory and adds it to the pipeline stages
         foreach($stages as $stageConfiguration) {
             $stage = StageFactory::instantiateStage($stageConfiguration);
             $this->addStage($stage);
         }
-    }
-
-    /**
-     * Gets the specified field value from the provided associative array and checks that it is present in the array (if $required is true)
-     *
-     * @param array $array An associative array
-     * @param string $fieldName - The field to get
-     * @param bool $required - Default: false. Whether the field is required. If true, an exception is thrown if the field is not present
-     * @return mixed
-     * @throws StageConfigurationException if field with $fieldName is not found in $array and $required is true
-     */
-    private function getField(array $array, string $fieldName, bool $required = false): mixed {
-        $value = $array[$fieldName];
-        if($required && !isset($value)) {
-            throw new StageConfigurationException("Invalid json configuration provided: expected field \"$fieldName\" not found");
-        }
-        return $value;
     }
 }

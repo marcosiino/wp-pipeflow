@@ -23,5 +23,5 @@ interface AbstractStageFactory
      *
      * @return StageDescriptor
      */
-    public static function getStageDescription(): StageDescriptor;
+    public function getStageDescriptor(): StageDescriptor;
 }
