@@ -159,11 +159,17 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
         }
 
         $response_body = wp_remote_retrieve_body($response);
+        $decodedJSON = json_decode($response_body, true);
 
-        $data = json_decode($response_body, true); // true converte l'oggetto in un array associativo
-        if (isset($data['data'][0]['url'])) {
-            return $data['data'][0]['url'];
-        } else {
+        if(array_key_exists("data", $decodedJSON)) {
+            $data = $decodedJSON['data'];
+            $generatedImagesURLs = array();
+            foreach($data as $image) {
+                $generatedImagesURLs[] = $image['url'];
+            }
+            return $generatedImagesURLs;
+        }
+        else {
             throw new AICompletionException("Error decoding response from OpenAI api call");
         }
     }
