@@ -15,11 +15,12 @@ class TestStage implements AbstractPipelineStage
 
     static public function getDescriptor(): StageDescriptor
     {
+        $stageDescription = "Just a test stage using for test purposes.";
         $inputs = array();
         $outputs = array(
             "PROCESSED_PROMPT" => "The processed prompt is output in this parameter after the stage is executed",
         );
-        return new StageDescriptor("TestStage", $inputs, $outputs);
+        return new StageDescriptor("TestStage", $stageDescription, $inputs, $outputs);
     }
 
     public function __construct($prompt)

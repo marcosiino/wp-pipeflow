@@ -9,17 +9,20 @@ use InvalidArgumentException;
 class StageDescriptor
 {
     private string $identifier;
+    private string $stageDescription;
     private array $inputs;
     private array $outputs;
 
     /**
      * Constructor for StageDescriptor.
      * @param string $identifier An identifier for the stage.
+     * @param string $stageDescription The description of the stage.
      * @param array $inputs An associative array of string => string to be used as inputs.
      * @param array $outputs An associative array of string => string to be used as outputs.
      */
-    public function __construct(string $identifier, array $inputs = array(), array $outputs = array()) {
+    public function __construct(string $identifier, string $stageDescription, array $inputs = array(), array $outputs = array()) {
         $this->identifier = $identifier;
+        $this->stageDescription = $stageDescription;
         $this->setInputs($inputs);
         $this->setOutputs($outputs);
     }
@@ -30,6 +33,14 @@ class StageDescriptor
      */
     public function getIdentifier(): string {
         return $this->identifier;
+    }
+
+    /**
+     * The stage identifier
+     * @return string
+     */
+    public function getStageDescription(): string {
+        return $this->stageDescription;
     }
 
     /**

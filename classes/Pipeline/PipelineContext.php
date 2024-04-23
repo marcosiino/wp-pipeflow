@@ -21,6 +21,8 @@ class PipelineContext
      * @return void
      */
     public function setParameter(string $name, mixed $value): void {
+        $name = strtoupper($name);
+
         if(array_key_exists($name, $this->context)) {
             // The parameter is already in the context, adding the value to it
             $currentParameterValue = $this->context[$name];
@@ -39,6 +41,7 @@ class PipelineContext
      * @return void
      */
     public function deleteParameter(string $name): void {
+        $name = strtoupper($name);
         unset($this->context[$name]);
     }
 
@@ -48,8 +51,23 @@ class PipelineContext
      * @param string $name
      * @return ContextParameterValue
      */
-    public function getParameter(string $name): ContextParameterValue {
+    public function getParameter(string $name): ?ContextParameterValue {
+        $name = strtoupper($name);
+        if(!array_key_exists($name, $this->context)) {
+            return null;
+        }
         return $this->context[$name];
+    }
+
+    /**
+     * Checks if the given parameter exists in the context
+     *
+     * @param string $name
+     * @return bool Returns true if the parameter exists, false otherwise
+     */
+    public function checkParameterExists(string $name): bool {
+        $name = strtoupper($name);
+        return array_key_exists($name, $this->context);
     }
 
     /**
@@ -66,7 +84,7 @@ class PipelineContext
             //Parameter value column
             $html .= "<td><ul>";
             foreach($values->getAll() as $value) {
-                echo "<li>$value</li>";
+                $html .= "<li>$value</li>";
             }
             $html .= "</ul></td>";
             $html .= "</tr>";

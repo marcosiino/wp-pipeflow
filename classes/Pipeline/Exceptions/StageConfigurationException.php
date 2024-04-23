@@ -33,7 +33,7 @@ class StageConfigurationException extends Exception {
      * @return StageConfigurationException
      */
     public static function invalidStageIdentifier(string $identifier): StageConfigurationException {
-        $message = "Invalid stage identifier provided: there isn't any factory registered for a stage with the following identifier: \($identifier)";
+        $message = "Invalid stage identifier provided: there isn't any factory registered for a stage with the following identifier: $identifier";
         $code = StageConfigurationExceptionCases::InvalidStageIdentifier->value;
         return new StageConfigurationException($message, $code);
     }
