@@ -1,7 +1,18 @@
 <?php
 
 namespace Pipeline;
+
 require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Utils/Parser/InputParser.php";
+
+use Pipeline\Utils\Parser\InputParser;
+use Pipeline\Utils\Parser\ParsedElement;
+use Pipeline\Utils\Parser\ParsedElementSubType;
+use Pipeline\Utils\Parser\ParsedElementType;
+
+/**
+ * Process a string by replacing the placeholders with the context parameters values
+ */
 
 class PlaceholderProcessor
 {
@@ -13,24 +24,24 @@ class PlaceholderProcessor
 
     public function process(string $prompt): String
     {
-        $placeholders = $this->extractPlaceholders($prompt);
+        $placeholders = InputParser::extractElements($prompt);
         foreach($placeholders as $placeholder) {
-            $placeholderName = $placeholder["placeholder"];
-            $value = $this->getValueForPlaceholder($placeholder);
-
-            $prompt = str_replace($placeholderName, $value, $prompt);
+            if($placeholder->elementType == ParsedElementType::placeholder) {
+                $value = $this->getValueForPlaceholder($placeholder);
+                $prompt = str_replace($placeholder->fullElementMatch, $value, $prompt);
+            }
         }
 
         return $prompt;
     }
 
-    private function getValueForPlaceholder(array $placeholder): string {
-        switch($placeholder["type"]) {
-            case "variable":
-                return (string)$this->context->getParameter($placeholder["parameterName"])->getLast();
-            case "array":
-                $array = $this->context->getParameter($placeholder["parameterName"])->getAll();
-                $index = $placeholder["index"];
+    private function getValueForPlaceholder(ParsedElement $placeholder): string {
+        switch($placeholder->elementSubType) {
+            case ParsedElementSubType::plain:
+                return (string)$this->context->getParameter($placeholder->elementName)->getLast();
+            case ParsedElementSubType::indexed:
+                $array = $this->context->getParameter($placeholder->elementName)->getAll();
+                $index = $placeholder->index;
                 if($index >= 0 && $index < count($array)) {
                     return (string)$array[$index];
                 }
@@ -39,32 +50,5 @@ class PlaceholderProcessor
                 }
         }
         return "";
-    }
-
-    private function extractPlaceholders(string $prompt): array {
-        //Matches the placeholder of types %%NAME%% and %%NAME[index]%% where index is an integer >= 0 and extracts them in an array of $matches where each item is a match of a placeholder
-        preg_match_all('/%%([a-zA-Z_]+)(\[\d+\])?%%/', $prompt, $matches, PREG_SET_ORDER);
-
-        $placeholders = [];
-        foreach ($matches as $match) {
-            //The item 1 is the name of the placeholder (without %%), the item 2, if present, is the index within [].
-            if (isset($match[2])) { //If an index has been specified in the placeholder
-                //Add it to the $placeholder array with both the name and the index and type = "array"
-                $placeholders[] = [
-                    'parameterName' => $match[1],
-                    'placeholder' => $match[0],
-                    'type' => 'array',
-                    'index' => trim($match[2], '[]')
-                ];
-            } else { // If only the name of the placeholder is specified (without index) and type = "variable"
-                //Add only the name to the placeholder index
-                $placeholders[] = [
-                    'parameterName' => $match[1],
-                    'placeholder' => $match[0],
-                    'type' => 'variable',
-                ];
-            }
-        }
-        return $placeholders;
     }
 }
