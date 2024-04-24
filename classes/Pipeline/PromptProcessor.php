@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline;
-require_once "classes/Pipeline/PipelineContext.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
 
 class PromptProcessor
 {

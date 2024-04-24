@@ -1,9 +1,11 @@
 <?php
 
 namespace Pipeline\Stages\AIImageGeneration;
-require_once "classes/AIServices/OpenAIService.php";
-require_once "classes/Pipeline/PromptProcessor.php";
+require_once PLUGIN_PATH . "classes/AIServices/OpenAIService.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PromptProcessor.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
+use AIServices\AICompletionException;
 use AIServices\OpenAIService;
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Interfaces\AbstractPipelineStage;
@@ -14,14 +16,16 @@ use Pipeline\StageDescriptor;
 class AIImageGenerationStage implements AbstractPipelineStage
 {
     private string $prompt;
+    private string $outputParamName;
     private int $imageCount;
     private bool $hdQuality;
     private string $model;
     private string $imagesSize;
 
-    public function __construct(string $prompt, string $model, string $imagesSize, int $imageCount, bool $hdQuality)
+    public function __construct(string $prompt, string $outputParamName, string $model, string $imagesSize, int $imageCount, bool $hdQuality)
     {
         $this->prompt = $prompt;
+        $this->outputParamName = $outputParamName;
         $this->imageCount = $imageCount;
         $this->hdQuality = $hdQuality;
         $this->model = $model;
@@ -54,7 +58,7 @@ class AIImageGenerationStage implements AbstractPipelineStage
         }
 
         foreach($image_urls as $url) {
-            $context->setParameter("GENERATED_AI_IMAGES", $url);
+            $context->setParameter($this->outputParamName, $url);
         }
 
         return $context;

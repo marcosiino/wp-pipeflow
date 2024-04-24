@@ -1,6 +1,10 @@
 <?php
-require_once(PLUGIN_PATH . "classes/AIServiceMock.php");
-require_once(PLUGIN_PATH . "classes/OpenAIService.php");
+
+require_once(PLUGIN_PATH . "classes/AIServices/AIServiceMock.php");
+require_once(PLUGIN_PATH . "classes/AIServices/OpenAIService.php");
+
+use AIServices\AIServiceMock;
+use AIServices\OpenAIService;
 
 class Resolver
 {

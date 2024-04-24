@@ -2,9 +2,9 @@
 
 namespace Pipeline\Stages\SumOperation;
 
-require_once "classes/Pipeline/Interfaces/AbstractStageFactory.php";
-require_once "classes/Pipeline/Utils/Helpers.php";
-require_once "classes/Pipeline/Stages/SumOperation/SumOperationStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStage.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;

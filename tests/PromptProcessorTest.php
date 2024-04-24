@@ -1,8 +1,8 @@
 <?php
 
 namespace tests;
-require_once "classes/Pipeline/PipelineContext.php";
-require_once "classes/Pipeline/PromptProcessor.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PromptProcessor.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\PipelineContext;

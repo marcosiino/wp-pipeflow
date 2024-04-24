@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline;
-require_once "classes/Pipeline/ContextParameterValue.php";
+require_once PLUGIN_PATH . "classes/Pipeline/ContextParameterValue.php";
 
 /**
  * A Pipeline Context, which represents the full state of a pipeline at a given moments, with all its parameters and values at that point.

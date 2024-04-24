@@ -8,15 +8,20 @@
  * Author URI: http://marcosiino.it
  */
 
+use Pipeline\StagesRegistration;
+
 defined('ABSPATH') or die('Accesso non permesso.');
 
 define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+require_once PLUGIN_PATH . "classes/Pipeline/StagesRegistration.php";
 
 require_once(PLUGIN_PATH . 'utils/utils.php');
 require_once(PLUGIN_PATH . 'utils/cronjobs.php');
 require_once(PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
 
 require_once(PLUGIN_PATH . 'admin-pages/general-settings.php');
+require_once(PLUGIN_PATH . 'admin-pages/pipeline-configuration.php');
 require_once(PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
 require_once(PLUGIN_PATH . 'admin-pages/automatic-generation-settings.php');
 require_once(PLUGIN_PATH . 'admin-pages/manual-generation.php');
@@ -56,11 +61,20 @@ add_action('init', 'init');
  */
 function register_plugin_settings() {
     register_general_settings();
+    register_pipeline_configuration_setup_settings();
     register_content_generation_settings();
     register_automatic_generation_settings();
 }
 add_action('admin_init', 'register_plugin_settings');
 
+
+/**
+ * Registers all the available stages for the Generation Pipeline
+ */
+function register_pipeline_stages_factories() {
+    StagesRegistration::registerStages();
+}
+add_action('plugins_loaded', 'register_pipeline_stages_factories');
 /**
  * Setups the plugin admin menu
  */
@@ -74,6 +88,16 @@ function setup_admin_menu() {
         'general_plugin_settings', // Funzione per visualizzare la pagina di impostazioni
         'dashicons-admin-customizer', // Icona del menu
         6 // Posizione nel menu
+    );
+
+    // Content Generation Settings Menu Item
+    add_submenu_page(
+        'postbrewer', // Slug del menu principale
+        'Pipeline Configuration', // Titolo della pagina
+        'Pipeline Configuration', // Titolo del menu
+        'manage_options', // Capability
+        'postbrewer-pipeline-configuration', // Slug della pagina (deve corrispondere allo slug del menu principale per questa sottovoce)
+        'pipeline_configuration_page' // Funzione per il contenuto della pagina
     );
 
     // Content Generation Settings Menu Item

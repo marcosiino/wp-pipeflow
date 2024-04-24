@@ -1,11 +1,12 @@
 <?php
 
 namespace Pipeline;
-require_once "classes/Pipeline/Exceptions/StageConfigurationException.php";
-require_once "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
-require_once "classes/Pipeline/Utils/Helpers.php";
-require_once "classes/Pipeline/StageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageFactory.php";
 
+use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Utils\Helpers;
@@ -56,6 +57,7 @@ class Pipeline
      * Executes the pipeline and returns the resulting output context
      *
      * @return PipelineContext
+     * @throws PipelineExecutionException
      */
     public function execute(): PipelineContext
     {

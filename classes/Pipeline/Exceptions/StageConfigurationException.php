@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline\Exceptions;
-require_once "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
 use Exception;
 
 class StageConfigurationException extends Exception {

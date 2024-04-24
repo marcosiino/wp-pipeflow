@@ -2,7 +2,7 @@
 namespace Pipeline\Utils;
 
 use Pipeline\Exceptions\StageConfigurationException;
-require_once "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
 
 class Helpers
 {

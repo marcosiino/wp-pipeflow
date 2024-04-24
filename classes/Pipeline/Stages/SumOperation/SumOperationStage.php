@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline\Stages\SumOperation;
-require_once "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;

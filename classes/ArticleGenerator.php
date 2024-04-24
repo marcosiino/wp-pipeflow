@@ -85,7 +85,7 @@ class ArticleGenerator {
             echo "<p style='color: blue;'>Generating the image (image first mode = true)...</p>";
             $generatedImageData = $this->generate_and_save_image($input_params);
             echo "<p style='color: blue;'>Generating the text description for the image...</p>";
-            $generatedArticle = $this->generate_article($input_params, $generatedImageData->generatedImageExternalURL);
+            $generatedArticle = $this->generate_article($generatedImageData->generatedImageExternalURL, $input_params);
 
             return array(
                 "generatedArticle" => $generatedArticle,
@@ -94,7 +94,7 @@ class ArticleGenerator {
         }
         else {
             echo "<p style='color: blue;'>Generating the text description (image first mode = false)...</p>";
-            $generatedArticle = $this->generate_article($input_params, null);
+            $generatedArticle = $this->generate_article(null, $input_params);
 
             echo "<p style='color: blue;'>Generating the image for the description</p>";
 
@@ -145,7 +145,7 @@ class ArticleGenerator {
      * @return GeneratedArticle the generated article data or null on error
      */
 
-    private function generate_article($input_params = array(), $attached_image_url) {
+    private function generate_article($attached_image_url, $input_params = array()) {
 
         $prompt = Settings::get_article_generation_prompt(); // Gets the prompt template from the plugin settings
         $prompt .= JSON_COMPLETION_FORMAT_INSTRUCTIONS; // Adds the structured json completion format instructions

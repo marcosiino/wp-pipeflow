@@ -2,9 +2,9 @@
 
 namespace Pipeline\Stages\SetValue;
 
-require_once "classes/Pipeline/Interfaces/AbstractStageFactory.php";
-require_once "classes/Pipeline/Utils/Helpers.php";
-require_once "classes/Pipeline/Stages/SetValue/SetValueStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStage.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;

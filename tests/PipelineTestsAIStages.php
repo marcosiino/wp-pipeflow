@@ -1,9 +1,9 @@
 <?php
 
 namespace tests;
-require_once "classes/Pipeline/Pipeline.php";
-require_once "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
-require_once "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\Exceptions\StageConfigurationException;

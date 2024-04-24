@@ -18,6 +18,12 @@ define('TEXT_GENERATION_OPENAI_MODEL_DEFAULT', "gpt-4-turbo");
 define('TEXT_GENERATION_OPENAI_TEMPERATURE_DEFAULT', 0.7);
 define('TEXT_GENERATION_OPENAI_MAX_TOKENS_DEFAULT', 4096);
 
+const PIPELINE_CONFIGURATION_JSON_DEFAULT = "
+{
+    \"stages\": []
+}
+";
+
 class Settings {
 
     public static function get_auto_generation_interval_secs() {
@@ -106,5 +112,12 @@ class Settings {
      */
     public static function get_text_generation_max_tokens() {
         return esc_attr(get_option('text_generation_max_tokens', TEXT_GENERATION_OPENAI_MAX_TOKENS_DEFAULT));
+    }
+
+    /**
+     * @return int The Content Generation Pipeline configuration JSON
+     */
+    public static function get_pipeline_configuration_json() {
+        return get_option('pipeline_configuration_json', PIPELINE_CONFIGURATION_JSON_DEFAULT);
     }
 }
