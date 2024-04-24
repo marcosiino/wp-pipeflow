@@ -14,8 +14,11 @@ require_once(ABSPATH . 'wp-admin/includes/media.php');
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
+use Pipeline\Utils\Parser\InputParser;
+use Pipeline\Utils\Parser\ParsedElementSubType;
+use Pipeline\Utils\Parser\ParsedElementType;
 
-class SaveMediaStage implements AbstractPipelineStage
+class SaveMediaStage extends AbstractPipelineStage
 {
     /**
      * The name of the input context parameter from which the url of the medias to download are taken
@@ -42,10 +45,10 @@ class SaveMediaStage implements AbstractPipelineStage
      */
     public function execute(PipelineContext $context): PipelineContext
     {
-        $mediaURLsArray = $context->getParameter($this->urlsParamName)->getAll();
+        $mediaURLsArray = $this->getInputValue($this->srcMediaURLs, $context, true);
         foreach($mediaURLsArray as $mediaURL) {
             $savedMediaId = $this->save_image($mediaURL);
-            $context->setParameter($this->outputParamName, $savedMediaId);
+            $context->setParameter($this->resultTo, $savedMediaId);
         }
         return $context;
     }

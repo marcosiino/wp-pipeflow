@@ -14,15 +14,18 @@ class ContextParameterValue
         }
     }
 
-    public function add(mixed $value) {
+    public function add(mixed $value): void
+    {
         $this->value[] = $value;
     }
 
-    public function resetTo(mixed $value) {
+    public function resetTo(mixed $value): void
+    {
         $this->value = array($value);
     }
 
-    public function reset() {
+    public function reset(): void
+    {
         $this->value = array();
     }
 

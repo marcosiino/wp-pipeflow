@@ -6,7 +6,7 @@ use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;
 use Pipeline\StageDescriptor;
 
-class CreatePostFactory implements AbstractStageFactory
+class CreatePostFactory extends AbstractStageFactory
 {
     /**
      * @inheritDoc

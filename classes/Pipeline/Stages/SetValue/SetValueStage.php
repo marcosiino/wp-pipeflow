@@ -7,7 +7,7 @@ use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
 use Pipeline\StageDescriptor;
 
-class SetValueStage implements AbstractPipelineStage
+class SetValueStage extends AbstractPipelineStage
 {
     private string $parameterName;
     private mixed $parameterValue;

@@ -7,7 +7,7 @@ use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
 use Pipeline\StageDescriptor;
 
-class SumOperationStage implements AbstractPipelineStage
+class SumOperationStage extends AbstractPipelineStage
 {
 
     private string $parameterA;

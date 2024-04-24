@@ -13,7 +13,7 @@ use Pipeline\PipelineContext;
 use Pipeline\PlaceholderProcessor;
 use Pipeline\StageDescriptor;
 
-class AIImageGenerationStage implements AbstractPipelineStage
+class AIImageGenerationStage extends AbstractPipelineStage
 {
     private string $prompt;
     private string $outputParamName;

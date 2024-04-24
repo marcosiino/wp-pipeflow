@@ -30,7 +30,7 @@ class InputParser
         }
 
         // References
-        preg_match_all('/(%{([^}%]+)}%)/', $inputString, $matches, PREG_SET_ORDER);
+        preg_match_all('/(%{([^}%\[\]]+)}%)/', $inputString, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $elements[] = new ParsedElement($match[2], ParsedElementType::reference, ParsedElementSubType::plain, null, $match[1]);
         }
