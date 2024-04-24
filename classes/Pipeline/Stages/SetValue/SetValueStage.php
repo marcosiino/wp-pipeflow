@@ -20,7 +20,9 @@ class SetValueStage extends AbstractPipelineStage
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $context->setParameter($this->parameterName, $this->parameterValue);
+        $parameterName = $this->getInputValue($this->parameterName, $context, true);
+        $parameterValue = $this->getInputValue($this->parameterValue, $context, true);
+        $context->setParameter($parameterName[0], $parameterValue[0]);
         return $context;
     }
 }
