@@ -77,27 +77,6 @@ class SaveMediaStage implements AbstractPipelineStage
         }
     }
 
-
-    function getValueOrReference($parameter) {
-        // Controlla se il parametro corrisponde al formato "&&INNERTEXT&&"
-        if (preg_match('/^&&([^[\]&]+)&&$/', $parameter, $matches)) {
-            return contextParameterValue($matches[1]);
-        }
-
-        // Controlla se il parametro corrisponde al formato "&&INNERTEXT[index]&&"
-        if (preg_match('/^&&([^[\]&]+)\[(\d+)\]&&$/', $parameter, $matches)) {
-            return contextParameterValue($matches[1], $matches[2]);
-        }
-
-        // Controlla se il parametro corrisponde al formato "&&[INNERTEXT]&&"
-        if (preg_match('/^&&\[(.+)\]&&$/', $parameter, $matches)) {
-            return contextParameterArray($matches[1]);
-        }
-
-        // Se non ci sono corrispondenze, ritorna il parametro come è
-        return $parameter;
-    }
-
     /**
      * Download and save an image to the media library
      *
