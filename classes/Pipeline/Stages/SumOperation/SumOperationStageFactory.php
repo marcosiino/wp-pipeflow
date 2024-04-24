@@ -21,9 +21,9 @@ class SumOperationStageFactory implements AbstractStageFactory
 
         // Setup Parameters
         $setupParams = array(
-            "parameterA" => "The name of the context's parameter to be used as the first operand of the operation",
-            "parameterB" => "The name of the context's parameter to be used as the second operand of the operation",
-            "resultParameter" => "The name of the context's parameter to be used to store the result of the operation",
+            "operandA" => "The name of the context's parameter to be used as the first operand of the operation",
+            "operandB" => "The name of the context's parameter to be used as the second operand of the operation",
+            "resultTo" => "The name of the context's parameter to be used to store the result of the operation",
         );
 
         // Context inputs
@@ -42,9 +42,9 @@ class SumOperationStageFactory implements AbstractStageFactory
      */
     public function instantiate(array $configuration): AbstractPipelineStage
     {
-        $parameterA = Helpers::getField($configuration, "parameterA", true);
-        $parameterB = Helpers::getField($configuration, "parameterB", true);
-        $resultParameter = Helpers::getField($configuration, "resultParameter", true);
-        return new SumOperationStage($parameterA, $parameterB, $resultParameter);
+        $operandA = Helpers::getField($configuration, "operandA", true);
+        $operandB = Helpers::getField($configuration, "operandB", true);
+        $resultTo = Helpers::getField($configuration, "resultTo", true);
+        return new SumOperationStage($operandA, $operandB, $resultTo);
     }
 }
