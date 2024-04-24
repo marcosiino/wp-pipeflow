@@ -43,11 +43,13 @@ class AIImageGenerationStage extends AbstractPipelineStage
             throw new PipelineExecutionException("OpenAI API Key not set. Set the api key in the OPENAI_API_KEY context parameter of the pipeline");
         }
         $apiKey = $apiKeyContextParam->getLast();
+
+        $model = $this->getInputValue($this->model, $context);
+
         $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $this->model, $this->imagesSize, $this->hdQuality);
 
         $promptProcessor = new PlaceholderProcessor($context);
         $prompt = $promptProcessor->process($this->prompt);
-
         try
         {
             $image_urls = $openAIService->perform_image_completion($prompt, $this->imageCount);

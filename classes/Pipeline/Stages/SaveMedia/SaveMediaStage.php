@@ -45,7 +45,18 @@ class SaveMediaStage extends AbstractPipelineStage
      */
     public function execute(PipelineContext $context): PipelineContext
     {
-        $mediaURLsArray = $this->getInputValue($this->srcMediaURLs, $context, true);
+        $mediaURLsArray = array();
+        $value = $this->getInputValue($this->srcMediaURLs, $context, true);
+
+        // If the returned value is a single value
+        if(!is_array($value)) {
+            $mediaURLsArray[] = $value; //adds to the empty array
+        }
+        // If the returned value is already an array
+        else {
+            $mediaURLsArray = $value; //Assign that array to $mediaURLsArray
+        }
+
         foreach($mediaURLsArray as $mediaURL) {
             $savedMediaId = $this->save_image($mediaURL);
             $context->setParameter($this->resultTo, $savedMediaId);

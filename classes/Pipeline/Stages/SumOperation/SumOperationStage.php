@@ -23,9 +23,8 @@ class SumOperationStage extends AbstractPipelineStage
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $operandA = $this->getInputValue($this->parameterA, $context, true)[0];
-        $operandB = $this->getInputValue($this->parameterB, $context, true)[0];
-
+        $operandA = $this->getInputValue($this->parameterA, $context, true);
+        $operandB = $this->getInputValue($this->parameterB, $context, true);
         $context->setParameter($this->resultParameter, $operandA + $operandB);
         return $context;
     }
