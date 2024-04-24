@@ -50,33 +50,6 @@ class SaveMediaStage implements AbstractPipelineStage
         return $context;
     }
 
-    private function getParameterValue($param) {
-
-    }
-
-    private function isReference($param) {
-        if(preg_match('/$$([a-zA-Z_]+)(\[\d+\])?$$/', $param, $matches, PREG_SET_ORDER)) {}
-        foreach ($matches as $match) {
-            //The item 1 is the name of the placeholder (without $$), the item 2, if present, is the index within [].
-            if (isset($match[2])) { //If an index has been specified in the placeholder
-                //Add it to the $placeholder array with both the name and the index and type = "array"
-                $placeholders[] = [
-                    'parameterName' => $match[1],
-                    'placeholder' => $match[0],
-                    'type' => 'array',
-                    'index' => trim($match[2], '[]')
-                ];
-            } else { // If only the name of the placeholder is specified (without index) and type = "variable"
-                //Add only the name to the placeholder index
-                $placeholders[] = [
-                    'parameterName' => $match[1],
-                    'placeholder' => $match[0],
-                    'type' => 'variable',
-                ];
-            }
-        }
-    }
-
     /**
      * Download and save an image to the media library
      *
