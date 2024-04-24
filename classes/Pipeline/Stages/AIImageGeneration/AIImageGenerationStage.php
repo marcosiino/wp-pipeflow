@@ -2,7 +2,7 @@
 
 namespace Pipeline\Stages\AIImageGeneration;
 require_once PLUGIN_PATH . "classes/AIServices/OpenAIService.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PromptProcessor.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
 use AIServices\AICompletionException;
@@ -10,7 +10,7 @@ use AIServices\OpenAIService;
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
-use Pipeline\PromptProcessor;
+use Pipeline\PlaceholderProcessor;
 use Pipeline\StageDescriptor;
 
 class AIImageGenerationStage implements AbstractPipelineStage
@@ -45,7 +45,7 @@ class AIImageGenerationStage implements AbstractPipelineStage
         $apiKey = $apiKeyContextParam->getLast();
         $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $this->model, $this->imagesSize, $this->hdQuality);
 
-        $promptProcessor = new PromptProcessor($context);
+        $promptProcessor = new PlaceholderProcessor($context);
         $prompt = $promptProcessor->process($this->prompt);
 
         try

@@ -19,8 +19,8 @@ class SaveMediaStageFactory implements AbstractStageFactory
      */
     public function instantiate(array $configuration): AbstractPipelineStage
     {
-        $urlsParamName = Helpers::getField($configuration, "mediaURLsParamName", true);
-        $outputParamName = Helpers::getField($configuration, "outputParamName", true);
+        $urlsParamName = Helpers::getField($configuration, "mediaURLs", true);
+        $outputParamName = Helpers::getField($configuration, "resultTo", true);
         return new SaveMediaStage($urlsParamName, $outputParamName);
     }
 
@@ -29,15 +29,15 @@ class SaveMediaStageFactory implements AbstractStageFactory
      */
     public function getStageDescriptor(): StageDescriptor
     {
-        $description = "Downloads and save one or more media files into the Wordpress Media Gallery by taking the URLs from the specified src context parameter, and saving the wordpress attachment id of the saved medias into the specified dst context parameter.";
+        $description = "Downloads and save one or more media files into the Wordpress Media Library.";
         $setupParameters = array(
-            "mediaURLsParamName" => "The name of the context parameter where the media urls are stored.",
-            "outputParamName" => "The name of the context parameter where the saved media ids are stored.",
+            "mediaURLs" => "The URLs of the media to save into the wordpress media library.",
+            "resultTo" => "The name of the context parameter where the saved media ids are stored.",
         );
 
         $contextInputs = array();
         $contextOutputs = array(
-            "" => "A parameter named after the value specified in the `outputParamName` setup parameter, which will contains one or more attachment ids for the medias that has been saved into wordpress media gallery",
+            "" => "A parameter named after the value specified in the `resultTo` setup parameter, which will contains one or more attachment ids for the medias that has been saved into wordpress media gallery",
         );
 
         return new StageDescriptor("SaveMedia", $description, $setupParameters, $contextInputs, $contextOutputs);

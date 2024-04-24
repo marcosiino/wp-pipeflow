@@ -2,11 +2,11 @@
 
 namespace tests;
 require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PromptProcessor.php";
+require_once PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\PipelineContext;
-use Pipeline\PromptProcessor;
+use Pipeline\PlaceholderProcessor;
 
 class PromptProcessorTest extends TestCase
 {
@@ -18,7 +18,7 @@ class PromptProcessorTest extends TestCase
 
         $prompt = "Take a %%FRUITS%% and a %%VEGETABLES%%";
 
-        $promptProcessor = new PromptProcessor($context);
+        $promptProcessor = new PlaceholderProcessor($context);
         $result = $promptProcessor->process($prompt);
         $this->assertSame($result, "Take a pear and a tomato");
     }
@@ -33,7 +33,7 @@ class PromptProcessorTest extends TestCase
 
         $prompt = "I chose the number: %%NUMBERS[1]%%";
 
-        $promptProcessor = new PromptProcessor($context);
+        $promptProcessor = new PlaceholderProcessor($context);
         $result = $promptProcessor->process($prompt);
         $this->assertSame($result, "I chose the number: Two");
     }

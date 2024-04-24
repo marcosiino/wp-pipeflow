@@ -22,19 +22,19 @@ class SaveMediaStage implements AbstractPipelineStage
      *
      * @var string
      */
-    private string $urlsParamName;
+    private string $srcMediaURLs;
 
     /**
      * The name of the output context parameter to which the ids of the medias saved to the wp library after the download process is stored
      *
      * @var string
      */
-    private string $outputParamName;
+    private string $resultTo;
 
-    public function __construct(string $urlsParamName, string $outputParamName)
+    public function __construct(string $srcMediaURLs, string $resultTo)
     {
-        $this->urlsParamName = $urlsParamName;
-        $this->outputParamName = $outputParamName;
+        $this->srcMediaURLs = $srcMediaURLs;
+        $this->resultTo = $resultTo;
     }
 
     /**
@@ -48,6 +48,54 @@ class SaveMediaStage implements AbstractPipelineStage
             $context->setParameter($this->outputParamName, $savedMediaId);
         }
         return $context;
+    }
+
+    private function getParameterValue($param) {
+
+    }
+
+    private function isReference($param) {
+        if(preg_match('/$$([a-zA-Z_]+)(\[\d+\])?$$/', $param, $matches, PREG_SET_ORDER)) {}
+        foreach ($matches as $match) {
+            //The item 1 is the name of the placeholder (without $$), the item 2, if present, is the index within [].
+            if (isset($match[2])) { //If an index has been specified in the placeholder
+                //Add it to the $placeholder array with both the name and the index and type = "array"
+                $placeholders[] = [
+                    'parameterName' => $match[1],
+                    'placeholder' => $match[0],
+                    'type' => 'array',
+                    'index' => trim($match[2], '[]')
+                ];
+            } else { // If only the name of the placeholder is specified (without index) and type = "variable"
+                //Add only the name to the placeholder index
+                $placeholders[] = [
+                    'parameterName' => $match[1],
+                    'placeholder' => $match[0],
+                    'type' => 'variable',
+                ];
+            }
+        }
+    }
+
+
+    function getValueOrReference($parameter) {
+        // Controlla se il parametro corrisponde al formato "&&INNERTEXT&&"
+        if (preg_match('/^&&([^[\]&]+)&&$/', $parameter, $matches)) {
+            return contextParameterValue($matches[1]);
+        }
+
+        // Controlla se il parametro corrisponde al formato "&&INNERTEXT[index]&&"
+        if (preg_match('/^&&([^[\]&]+)\[(\d+)\]&&$/', $parameter, $matches)) {
+            return contextParameterValue($matches[1], $matches[2]);
+        }
+
+        // Controlla se il parametro corrisponde al formato "&&[INNERTEXT]&&"
+        if (preg_match('/^&&\[(.+)\]&&$/', $parameter, $matches)) {
+            return contextParameterArray($matches[1]);
+        }
+
+        // Se non ci sono corrispondenze, ritorna il parametro come è
+        return $parameter;
     }
 
     /**

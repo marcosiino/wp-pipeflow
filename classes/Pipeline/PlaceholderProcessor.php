@@ -3,7 +3,7 @@
 namespace Pipeline;
 require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
 
-class PromptProcessor
+class PlaceholderProcessor
 {
     private PipelineContext $context;
 
