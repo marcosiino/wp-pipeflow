@@ -5,12 +5,14 @@ require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationExcept
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
 require_once PLUGIN_PATH . "classes/Pipeline/StageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Utils/PipelineXMLConfigurator.php";
 
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Utils\Helpers;
 use Pipeline\StageFactory;
+use Pipeline\Utils\PipelineXMLConfigurator;
 
 /**
  * Represents a Content Generation Pipeline
@@ -111,5 +113,10 @@ class Pipeline
             $stage = StageFactory::instantiateStage($stageConfiguration);
             $this->addStage($stage);
         }
+    }
+
+    public function setupWithXML(string $xmlConfiguration): void {
+        $xmlConfigurator = new PipelineXMLConfigurator($this);
+        $xmlConfigurator->configure($xmlConfiguration);
     }
 }

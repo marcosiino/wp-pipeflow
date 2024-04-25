@@ -40,7 +40,8 @@ function launchPipeline($pipelineConfiguration) {
         $initialContext->setParameter("OPENAI_API_KEY", Settings::get_openAI_api_key());
 
         $pipeline = new Pipeline($initialContext);
-        $pipeline->setup($pipelineConfiguration);
+        //$pipeline->setup($pipelineConfiguration);
+        $pipeline->setupWithXML($pipelineConfiguration);
         $outputContext = $pipeline->execute();
 
         printContext($outputContext->getHTMLDescription());

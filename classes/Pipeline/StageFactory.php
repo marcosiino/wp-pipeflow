@@ -68,4 +68,23 @@ class StageFactory
 
         throw StageConfigurationException::invalidStageIdentifier($configIdentifier);
     }
+
+    /**
+     * Instantiates a stage given a stage type and a stage configuration
+     *
+     * @param string $stageType - The stage type
+     * @param array $configuration - The stage configuration
+     *
+     * @returns AbstractPipelineStage
+     * @throws StageConfigurationException
+     */
+    static public function instantiateStageOfType(string $stageType, array $configuration): AbstractPipelineStage {
+        foreach(self::$factories as $factoryIdentifier => $factory) {
+            if($stageType === $factoryIdentifier) {
+                return $factory->instantiate($configuration);
+            }
+        }
+
+        throw StageConfigurationException::invalidStageIdentifier($stageType);
+    }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<pipeline id="test-pipeline">
+    <stages>
+        <stage type="SetContextParam">
+            <settings>
+                <param name="contextParameter">IMAGES</param>
+                <param name="contextParameterValue">
+                    <item>image1.png</item>
+                    <item>image2.png</item>
+                </param>
+            </settings>
+        </stage>
+        <stage type="SetContextParam">
+            <settings>
+                <param name="contextParameter">IMAGES_URLS</param>
+                <param name="contextParameterValue" contextReference="indexed" index="0">IMAGES</param>
+            </settings>
+        </stage>
+    </stages>
+</pipeline>
