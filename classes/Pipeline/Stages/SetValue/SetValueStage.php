@@ -12,7 +12,7 @@ class SetValueStage extends AbstractPipelineStage
     private string $parameterName;
     private mixed $parameterValue;
 
-    public function __construct(string $parameterName, mixed $parameterValue)
+    public function __construct(mixed $parameterName, mixed $parameterValue)
     {
         $this->parameterName = $parameterName;
         $this->parameterValue = $parameterValue;
@@ -20,8 +20,8 @@ class SetValueStage extends AbstractPipelineStage
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $parameterName = $this->getInputValue($this->parameterName, $context, true);
-        $parameterValue = $this->getInputValue($this->parameterValue, $context, true);
+        $parameterName = $this->getInputValue($this->parameterName, $context);
+        $parameterValue = $this->getInputValue($this->parameterValue, $context);
         $context->setParameter($parameterName, $parameterValue);
         return $context;
     }

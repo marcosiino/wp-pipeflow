@@ -14,7 +14,7 @@ class SumOperationStage extends AbstractPipelineStage
     private string $parameterB;
     private string $resultParameter;
 
-    public function __construct(string $parameterA, string $parameterB, string $resultParameter)
+    public function __construct(mixed $parameterA, mixed $parameterB, mixed $resultParameter)
     {
         $this->parameterA = $parameterA;
         $this->parameterB = $parameterB;
@@ -23,9 +23,10 @@ class SumOperationStage extends AbstractPipelineStage
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $operandA = $this->getInputValue($this->parameterA, $context, true);
-        $operandB = $this->getInputValue($this->parameterB, $context, true);
-        $context->setParameter($this->resultParameter, $operandA + $operandB);
+        $operandA = $this->getInputValue($this->parameterA, $context);
+        $operandB = $this->getInputValue($this->parameterB, $context);
+        $resultParameter = $this->getInputValue($this->resultParameter, $context);
+        $context->setParameter($resultParameter, $operandA + $operandB);
         return $context;
     }
 }

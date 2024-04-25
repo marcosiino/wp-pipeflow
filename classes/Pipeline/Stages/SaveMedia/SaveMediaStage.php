@@ -34,7 +34,7 @@ class SaveMediaStage extends AbstractPipelineStage
      */
     private string $resultTo;
 
-    public function __construct(string $srcMediaURLs, string $resultTo)
+    public function __construct(mixed $srcMediaURLs, mixed $resultTo)
     {
         $this->srcMediaURLs = $srcMediaURLs;
         $this->resultTo = $resultTo;
@@ -46,8 +46,8 @@ class SaveMediaStage extends AbstractPipelineStage
     public function execute(PipelineContext $context): PipelineContext
     {
         $mediaURLsArray = array();
-        $value = $this->getInputValue($this->srcMediaURLs, $context, true);
-
+        $resultTo = $this->getInputValue($this->resultTo, $context);
+        $value = $this->getInputValue($this->srcMediaURLs, $context);
         // If the returned value is a single value
         if(!is_array($value)) {
             $mediaURLsArray[] = $value; //adds to the empty array
@@ -59,7 +59,7 @@ class SaveMediaStage extends AbstractPipelineStage
 
         foreach($mediaURLsArray as $mediaURL) {
             $savedMediaId = $this->save_image($mediaURL);
-            $context->setParameter($this->resultTo, $savedMediaId);
+            $context->setParameter($resultTo, $savedMediaId);
         }
         return $context;
     }

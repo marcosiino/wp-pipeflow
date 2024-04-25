@@ -95,7 +95,7 @@ class Pipeline
      */
     public function setup(string $jsonConfiguration): void {
         // Decode the configuration json
-        $configuration = json_decode($jsonConfiguration, true);
+        $configuration = json_decode($jsonConfiguration, true);;
         if(!isset($configuration)) { // Checks if it is a valid json
             throw StageConfigurationException::unableToDecodeJSONConfiguration();
         }

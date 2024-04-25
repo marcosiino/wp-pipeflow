@@ -92,7 +92,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
             "prompt" => $prompt,
             "n" => $count,
             "size" => $this->imageCompletionSize,
-            "quality" => $this->imageCompletionHDQuality ? "hd" : "standard"
+            "quality" => $this->imageCompletionHDQuality == true ? "hd" : "standard"
         );
 
         $response = $this->send_request('https://api.openai.com/v1/images/generations', 'POST', $body);

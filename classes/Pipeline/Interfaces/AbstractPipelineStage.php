@@ -29,14 +29,14 @@ abstract class AbstractPipelineStage
     abstract public function execute(PipelineContext $context): PipelineContext;
 
     /**
-     * If the provided parameter is a reference to a context parameter (like %{PARAM}%) or %{PARAM[1]}% or %{[PARAM]}%, this functions retrieve and gets the value/values of the context parameter to which it points,
-     * otherwise the value of the $inputParameter itself is returned. Please note that an array is returned in all cases, even if the values is a single one.
+     * If the provided parameter is a reference to a context parameter (like %{PARAM}%) or %{PARAM[1]}% or %{[PARAM]}%, this functions retrieve and gets the value/values of the context parameter to which it points (and that context parameter must exists and be valid otherwise an exception is thrown),
+     * otherwise the value of the $inputParameter itself is returned.
      * @param string $inputParameter - The input parameter
      * @param PipelineContext $context - The current context
      * @return mixed|array|null mixed value or array of mixed values or null if reference is not found or is invalid
      * @throws PipelineExecutionException
      */
-    public function getInputValue(string $inputParameter, PipelineContext $context, bool $required = false): mixed {
+    public function getInputValue(string $inputParameter, PipelineContext $context): mixed {
         $elements = InputParser::extractElements($inputParameter);
         if (count($elements) === 0) {
             //The $parameter doesn't contain any reference, so its content its returned as is.
@@ -52,53 +52,28 @@ abstract class AbstractPipelineStage
             case ParsedElementSubType::plain:
                 $contextParameter = $context->getParameter($reference->elementName);
                 if(is_null($contextParameter)) {
-                    if($required) {
-                        throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
-                    }
-                    else {
-                        return null;
-                    }
+                    throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
                 }
                 return $contextParameter->getLast();
             case ParsedElementSubType::indexed:
                 $contextParameter = $context->getParameter($reference->elementName);
                 if(is_null($contextParameter)) {
-                    if($required) {
-                        throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
-                    }
-                    else {
-                        return null;
-                    }
+                    throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
                 }
                 $array = $contextParameter->getAll();
                 if(array_key_exists($reference->index, $array)) {
                     return $array[$reference->index];
                 }
                 else {
-                    if($required) {
-                        throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter's index is out of bounds.");
-                    }
-                    else {
-                        return null;
-                    }
+                    throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter's index is out of bounds.");
                 }
             case ParsedElementSubType::array:
                 $contextParameter = $context->getParameter($reference->elementName);
                 if(is_null($contextParameter)) {
-                    if($required) {
-                        throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
-                    }
-                    else {
-                        return null;
-                    }
+                    throw new PipelineExecutionException("Invalid input parameter reference: $inputParameter. The input parameter is required but the referenced context parameter is not found.");
                 }
                 return $contextParameter->getAll();
         }
-        if($required) {
-            throw new PipelineExecutionException("Invalid input parameter: $inputParameter.");
-        }
-        else {
-            return null;
-        }
+        throw new PipelineExecutionException("Invalid input parameter: $inputParameter.");
     }
 }

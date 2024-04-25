@@ -17,12 +17,12 @@ class AIImageGenerationStage extends AbstractPipelineStage
 {
     private string $prompt;
     private string $outputParamName;
-    private int $imageCount;
-    private bool $hdQuality;
+    private string $imageCount;
+    private string $hdQuality;
     private string $model;
     private string $imagesSize;
 
-    public function __construct(string $prompt, string $outputParamName, string $model, string $imagesSize, int $imageCount, bool $hdQuality)
+    public function __construct(string $prompt, mixed $outputParamName, mixed $model, mixed $imagesSize, mixed $imageCount, mixed $hdQuality)
     {
         $this->prompt = $prompt;
         $this->outputParamName = $outputParamName;
@@ -45,14 +45,25 @@ class AIImageGenerationStage extends AbstractPipelineStage
         $apiKey = $apiKeyContextParam->getLast();
 
         $model = $this->getInputValue($this->model, $context);
+        $imagesSize = $this->getInputValue($this->imagesSize, $context);
+        $hdQuality = (bool)$this->getInputValue($this->hdQuality, $context);
+        $imageCount = (int)$this->getInputValue($this->imageCount, $context);
+        $outputParamName = $this->getInputValue($this->outputParamName, $context);
 
-        $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $this->model, $this->imagesSize, $this->hdQuality);
+        print("this->hdQuality: $this->hdQuality\n");
+        print("this->imageSize: $this->imagesSize\n");
+        print("this->model: $this->model\n");
+
+        print("hdQuality: $hdQuality\n");
+        print("imageSize: $imagesSize\n");
+        print("model: $model\n");
+        $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $model, $imagesSize, $hdQuality);
 
         $promptProcessor = new PlaceholderProcessor($context);
         $prompt = $promptProcessor->process($this->prompt);
         try
         {
-            $image_urls = $openAIService->perform_image_completion($prompt, $this->imageCount);
+            $image_urls = $openAIService->perform_image_completion($prompt, $imageCount);
         }
         catch (AICompletionException $e)
         {
@@ -60,7 +71,7 @@ class AIImageGenerationStage extends AbstractPipelineStage
         }
 
         foreach($image_urls as $url) {
-            $context->setParameter($this->outputParamName, $url);
+            $context->setParameter($outputParamName, $url);
         }
 
         return $context;

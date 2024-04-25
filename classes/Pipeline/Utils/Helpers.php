@@ -31,7 +31,7 @@ class Helpers
         $value = $array[$fieldName];
 
         // If it is required, and it is not set, throw an exception
-        if ($required && !isset($fieldName, $array)) {
+        if ($required && !isset($value)) {
             throw StageConfigurationException::expectedFieldNotFound($fieldName);
         }
         return $value;
