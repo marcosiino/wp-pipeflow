@@ -4,7 +4,7 @@ namespace Pipeline;
 use InvalidArgumentException;
 
 /**
- * Represents the description of a PipelineStage, with its identifier, inputs and outputs descriptions
+ * Represents the description of a specific pipeline stage type, with its identifier, inputs and outputs descriptions
  */
 class StageDescriptor
 {

@@ -78,9 +78,9 @@ class StageFactory
      * @returns AbstractPipelineStage
      * @throws StageConfigurationException
      */
-    static public function instantiateStageOfType(string $stageType, array $configuration): AbstractPipelineStage {
+    static public function instantiateStageOfType(string $stageTypeIdentifier, array $configuration): AbstractPipelineStage {
         foreach(self::$factories as $factoryIdentifier => $factory) {
-            if($stageType === $factoryIdentifier) {
+            if($stageTypeIdentifier === $factoryIdentifier) {
                 return $factory->instantiate($configuration);
             }
         }

@@ -7,6 +7,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMNodeList;
+use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Pipeline;
 use Pipeline\StageFactory;
 
@@ -20,6 +21,8 @@ class PipelineXMLConfigurator
     public function configure($xmlConfiguration): bool {
         $document = new DOMDocument();
         $document->loadXML($xmlConfiguration);
+
+        //Validates the xml configuration
         $errors = array();
         if($this->validateXMLConfiguration($document, $errors) === true) {
             $allStages = $document->documentElement->getElementsByTagName("stage");
@@ -27,7 +30,7 @@ class PipelineXMLConfigurator
                 $this->processStage($stage, $document);
             }
         } else {
-            //TODO: don't print errors, propagate them someway (exception?)
+            //TODO: don't print the errors, propagate them someway (exception?)
             print("XML Configuration Validation errors:");
             print_r($errors);
             return false;
@@ -35,7 +38,11 @@ class PipelineXMLConfigurator
         return true;
     }
 
-    private function processStage(DOMElement $stage, DOMDocument $document) {
+    /**
+     * @throws StageConfigurationException
+     */
+    private function processStage(DOMElement $stage, DOMDocument $document): void
+    {
         $stageType = $stage->getAttribute("type");
         $configuration = array();
         $params = $stage->getElementsByTagName("param");
@@ -60,6 +67,13 @@ class PipelineXMLConfigurator
         $this->pipeline->addStage($stage);
     }
 
+    /**
+     * Validates the loaded document xml content against the custom XML Schema Definition
+     *
+     * @param DOMDocument $document - The document, with the pipeline xml configuration loaded previously
+     * @param array $validationErrors output if validation errors occurs
+     * @return bool - Returns true if the document validates successfully, false otherwise
+     */
     private function validateXMLConfiguration(DOMDocument $document, array &$validationErrors): bool {
         libxml_use_internal_errors(true);
         $result = $document->schemaValidate(PLUGIN_PATH . 'classes/Pipeline/pipeline_schema_definition.xsd');
