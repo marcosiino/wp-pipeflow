@@ -84,7 +84,13 @@ class PipelineContext
             //Parameter value column
             $html .= "<td><ul>";
             foreach($values->getAll() as $value) {
-                $html .= "<li>$value</li>";
+                if(!is_array($value)) {
+                    $html .= "<li>$value</li>";
+                }
+                else {
+                    //Implode the array in a string (find a better visualization?)
+                    $html .= "<li>" . implode(",", $value). "</li>";
+                }
             }
             $html .= "</ul></td>";
             $html .= "</tr>";

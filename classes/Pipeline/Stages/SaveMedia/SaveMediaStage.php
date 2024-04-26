@@ -14,30 +14,18 @@ require_once(ABSPATH . 'wp-admin/includes/media.php');
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
+use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\Utils\Parser\InputParser;
 use Pipeline\Utils\Parser\ParsedElementSubType;
 use Pipeline\Utils\Parser\ParsedElementType;
 
 class SaveMediaStage extends AbstractPipelineStage
 {
-    /**
-     * The name of the input context parameter from which the url of the medias to download are taken
-     *
-     * @var string
-     */
-    private string $srcMediaURLs;
+    private StageConfiguration $stageConfiguration;
 
-    /**
-     * The name of the output context parameter to which the ids of the medias saved to the wp library after the download process is stored
-     *
-     * @var string
-     */
-    private string $resultTo;
-
-    public function __construct(mixed $srcMediaURLs, mixed $resultTo)
+    public function __construct(StageConfiguration $stageConfiguration)
     {
-        $this->srcMediaURLs = $srcMediaURLs;
-        $this->resultTo = $resultTo;
+        $this->stageConfiguration = $stageConfiguration;
     }
 
     /**
@@ -45,22 +33,24 @@ class SaveMediaStage extends AbstractPipelineStage
      */
     public function execute(PipelineContext $context): PipelineContext
     {
+
+        $inputMediaURLs = $this->stageConfiguration->getSettingValue("mediaURLs", $context, true);
+        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "SAVED_IMAGES_IDS");
+
+        //This allows the stage to work with both a single image url or an array of image urls as input
         $mediaURLsArray = array();
-        $resultTo = $this->getInputValue($this->resultTo, $context);
-        $value = $this->getInputValue($this->srcMediaURLs, $context);
-        // If the returned value is a single value
-        if(!is_array($value)) {
-            $mediaURLsArray[] = $value; //adds to the empty array
+        if(is_array($inputMediaURLs)) {
+            $mediaURLsArray = $inputMediaURLs;
         }
-        // If the returned value is already an array
         else {
-            $mediaURLsArray = $value; //Assign that array to $mediaURLsArray
+            $mediaURLsArray[] = $inputMediaURLs;
         }
 
+        $savedMediaIds = array();
         foreach($mediaURLsArray as $mediaURL) {
-            $savedMediaId = $this->save_image($mediaURL);
-            $context->setParameter($resultTo, $savedMediaId);
+            $savedMediaIds[] = $this->save_image($mediaURL);
         }
+        $context->setParameter($resultTo, $savedMediaIds);
         return $context;
     }
 

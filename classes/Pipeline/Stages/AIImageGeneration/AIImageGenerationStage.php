@@ -11,25 +11,16 @@ use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
 use Pipeline\PlaceholderProcessor;
+use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;
 
 class AIImageGenerationStage extends AbstractPipelineStage
 {
-    private string $prompt;
-    private string $outputParamName;
-    private string $imageCount;
-    private string $hdQuality;
-    private string $model;
-    private string $imagesSize;
+    private StageConfiguration $stageConfiguration;
 
-    public function __construct(string $prompt, mixed $outputParamName, mixed $model, mixed $imagesSize, mixed $imageCount, mixed $hdQuality)
+    public function __construct(StageConfiguration $stageConfiguration)
     {
-        $this->prompt = $prompt;
-        $this->outputParamName = $outputParamName;
-        $this->imageCount = $imageCount;
-        $this->hdQuality = $hdQuality;
-        $this->model = $model;
-        $this->imagesSize = $imagesSize;
+        $this->stageConfiguration = $stageConfiguration;
     }
 
     /**
@@ -44,23 +35,17 @@ class AIImageGenerationStage extends AbstractPipelineStage
         }
         $apiKey = $apiKeyContextParam->getLast();
 
-        $model = $this->getInputValue($this->model, $context);
-        $imagesSize = $this->getInputValue($this->imagesSize, $context);
-        $hdQuality = (bool)$this->getInputValue($this->hdQuality, $context);
-        $imageCount = (int)$this->getInputValue($this->imageCount, $context);
-        $outputParamName = $this->getInputValue($this->outputParamName, $context);
+        $prompt = (string)$this->stageConfiguration->getSettingValue("prompt", $context, true);
+        $model = (string)$this->stageConfiguration->getSettingValue("model", $context, false, "dall-e-2");
+        $imagesSize = (string)$this->stageConfiguration->getSettingValue("size", $context, false, "512x512");
+        $hdQuality = (bool)$this->stageConfiguration->getSettingValue("highFidelity", $context, false, false);
+        $imageCount = (int)$this->stageConfiguration->getSettingValue("count", $context, false, 1);
+        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "GENERATED_IMAGES_URL");
 
-        print("this->hdQuality: $this->hdQuality\n");
-        print("this->imageSize: $this->imagesSize\n");
-        print("this->model: $this->model\n");
-
-        print("hdQuality: $hdQuality\n");
-        print("imageSize: $imagesSize\n");
-        print("model: $model\n");
         $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $model, $imagesSize, $hdQuality);
 
         $promptProcessor = new PlaceholderProcessor($context);
-        $prompt = $promptProcessor->process($this->prompt);
+        $prompt = $promptProcessor->process($prompt);
         try
         {
             $image_urls = $openAIService->perform_image_completion($prompt, $imageCount);
@@ -70,10 +55,11 @@ class AIImageGenerationStage extends AbstractPipelineStage
             throw new PipelineExecutionException("An error occurred while performing the image completion: " . $e->getMessage());
         }
 
+        $generatedImageURLs = array();
         foreach($image_urls as $url) {
-            $context->setParameter($outputParamName, $url);
+            $generatedImageURLs[] = $url;
         }
-
+        $context->setParameter($resultTo, $generatedImageURLs);
         return $context;
     }
 }

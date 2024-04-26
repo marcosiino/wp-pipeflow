@@ -63,7 +63,7 @@ final class PipelineTests extends TestCase
         }";
 
         $this->expectException(StageConfigurationException::class);
-        $this->expectExceptionCode(StageConfigurationExceptionCases::InvalidStageIdentifier->value);
+        $this->expectExceptionCode(StageConfigurationExceptionCases::InvalidStageTypeIdentifier->value);
 
         $this->pipeline->setup($configuration);
     }

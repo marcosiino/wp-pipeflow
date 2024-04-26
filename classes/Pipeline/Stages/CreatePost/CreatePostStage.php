@@ -5,7 +5,7 @@ namespace Pipeline\Stages\CreatePost;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
 
-class CreatePostStage implements AbstractPipelineStage
+class CreatePostStage extends AbstractPipelineStage
 {
 
     private string $publishStatus;

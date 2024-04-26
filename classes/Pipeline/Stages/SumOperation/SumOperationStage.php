@@ -2,30 +2,27 @@
 
 namespace Pipeline\Stages\SumOperation;
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
+use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;
 
 class SumOperationStage extends AbstractPipelineStage
 {
+    private StageConfiguration $stageConfiguration;
 
-    private string $parameterA;
-    private string $parameterB;
-    private string $resultParameter;
-
-    public function __construct(mixed $parameterA, mixed $parameterB, mixed $resultParameter)
+    public function __construct(StageConfiguration $stageConfiguration)
     {
-        $this->parameterA = $parameterA;
-        $this->parameterB = $parameterB;
-        $this->resultParameter = $resultParameter;
+        $this->stageConfiguration = $stageConfiguration;
     }
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $operandA = $this->getInputValue($this->parameterA, $context);
-        $operandB = $this->getInputValue($this->parameterB, $context);
-        $resultParameter = $this->getInputValue($this->resultParameter, $context);
+        $operandA = $this->stageConfiguration->getSettingValue("operandA", $context, true);
+        $operandB = $this->stageConfiguration->getSettingValue("operandB", $context, true);
+        $resultParameter = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "SUM_RESULT");
         $context->setParameter($resultParameter, $operandA + $operandB);
         return $context;
     }

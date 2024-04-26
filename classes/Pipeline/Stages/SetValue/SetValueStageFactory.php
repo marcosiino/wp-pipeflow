@@ -5,6 +5,7 @@ namespace Pipeline\Stages\SetValue;
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
@@ -12,6 +13,7 @@ use Pipeline\Interfaces\AbstractStageFactory;
 use Pipeline\StageDescriptor;
 use Pipeline\Stages\SetValue\SetValueStage;
 use Pipeline\Utils\Helpers;
+use Pipeline\StageConfiguration\StageConfiguration;
 
 class SetValueStageFactory implements AbstractStageFactory
 {
@@ -39,10 +41,9 @@ class SetValueStageFactory implements AbstractStageFactory
     /**
      * @throws StageConfigurationException
      */
-    public function instantiate(array $configuration): AbstractPipelineStage
+    public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
-        $parameterName = Helpers::getField($configuration, "parameterName", true);
-        $parameterValue = Helpers::getField($configuration, "parameterValue", true);
-        return new SetValueStage($parameterName, $parameterValue);
+        // TODO validate $configuration to check if it contains all the required fields
+        return new SetValueStage($configuration);
     }
 }

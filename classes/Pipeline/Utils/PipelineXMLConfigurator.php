@@ -2,6 +2,8 @@
 
 namespace Pipeline\Utils;
 require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageSetting.php";
 
 use DOMDocument;
 use DOMElement;
@@ -9,6 +11,8 @@ use DOMNode;
 use DOMNodeList;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Pipeline;
+use Pipeline\StageConfiguration\StageConfiguration;
+use Pipeline\StageConfiguration\StageSetting;
 use Pipeline\StageFactory;
 
 class PipelineXMLConfigurator
@@ -43,8 +47,9 @@ class PipelineXMLConfigurator
      */
     private function processStage(DOMElement $stage, DOMDocument $document): void
     {
+        $stageConfiguration = new StageConfiguration();
+
         $stageType = $stage->getAttribute("type");
-        $configuration = array();
         $params = $stage->getElementsByTagName("param");
         foreach ($params as $param) {
             $paramName = $param->getAttribute("name");
@@ -55,15 +60,17 @@ class PipelineXMLConfigurator
                 foreach ($subItems as $item) {
                     $paramArray[] = $item->nodeValue;
                 }
-                $configuration[$paramName] = $paramArray;
+                $stageConfiguration->addSetting(new StageSetting($paramName, $paramArray));
             }
             // Otherwise it is a single value parameter
             else {
-                $configuration[$paramName] = $param->nodeValue;
+                $stageConfiguration->addSetting(new StageSetting($paramName, $param->nodeValue));
             }
+
+            //TODO: manage referenced context parameters settings
         }
 
-        $stage = StageFactory::instantiateStageOfType($stageType, $configuration);
+        $stage = StageFactory::instantiateStageOfType($stageType, $stageConfiguration);
         $this->pipeline->addStage($stage);
     }
 

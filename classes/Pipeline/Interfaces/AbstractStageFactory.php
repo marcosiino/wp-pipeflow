@@ -2,7 +2,9 @@
 
 namespace Pipeline\Interfaces;
 require_once PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
+use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;
 
 /**
@@ -11,12 +13,12 @@ use Pipeline\StageDescriptor;
 interface AbstractStageFactory
 {
     /**
-     * Instantiates a pipeline stage using the provided configuration
+     * Instantiates a pipeline stage with the provided configuration
      *
-     * @param array $configuration - an associative array used to instantiate and setup a stage, with at least an type field which identifies the stage type
+     * @param StageConfiguration $configuration - A configuration object which contains the input settings for the stage to instantiate
      * @return AbstractPipelineStage
      */
-    public function instantiate(array $configuration): AbstractPipelineStage;
+    public function instantiate(StageConfiguration $configuration): AbstractPipelineStage;
 
     /**
      * Returns the pipeline stage's description for the type of PipelineStages that a concrete StageFactory instantiates

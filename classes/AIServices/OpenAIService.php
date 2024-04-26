@@ -95,6 +95,7 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
             "quality" => $this->imageCompletionHDQuality == true ? "hd" : "standard"
         );
 
+        print_r($body);
         $response = $this->send_request('https://api.openai.com/v1/images/generations', 'POST', $body);
 
         if ($response['error']) {

@@ -4,10 +4,12 @@ namespace Pipeline;
 require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;
+use Pipeline\StageConfiguration\StageConfiguration;
 
 /**
  * A class which allows to instantiate Pipeline Stages given their configuration
@@ -47,44 +49,23 @@ class StageFactory
     static public function clearRegisteredFactories(): void {
         self::$factories = array();
     }
+
     /**
-     * Instantiates a stage given its configuration
+     * Instantiates a stage given a stage type identifier and a stage configuration
      *
-     * @param array $configuration - The stage configuration
+     * @param string $stageTypeIdentifier - The stage type identifier which identifies the type of stage to instantiate, must be previously registered in StagesRegistration
+     * @param StageConfiguration $configuration - The stage configuration
      *
      * @returns AbstractPipelineStage
      * @throws StageConfigurationException
      */
-    static public function instantiateStage(array $configuration): AbstractPipelineStage {
-        if(!array_key_exists('identifier', $configuration)) {
-            throw StageConfigurationException::stageIdentifierNotSpecified();
-        }
-        $configIdentifier = $configuration['identifier'];
-        foreach(self::$factories as $factoryIdentifier => $factory) {
-            if($configIdentifier === $factoryIdentifier) {
-                return $factory->instantiate($configuration);
-            }
-        }
-
-        throw StageConfigurationException::invalidStageIdentifier($configIdentifier);
-    }
-
-    /**
-     * Instantiates a stage given a stage type and a stage configuration
-     *
-     * @param string $stageType - The stage type
-     * @param array $configuration - The stage configuration
-     *
-     * @returns AbstractPipelineStage
-     * @throws StageConfigurationException
-     */
-    static public function instantiateStageOfType(string $stageTypeIdentifier, array $configuration): AbstractPipelineStage {
+    static public function instantiateStageOfType(string $stageTypeIdentifier, StageConfiguration $configuration): AbstractPipelineStage {
         foreach(self::$factories as $factoryIdentifier => $factory) {
             if($stageTypeIdentifier === $factoryIdentifier) {
                 return $factory->instantiate($configuration);
             }
         }
 
-        throw StageConfigurationException::invalidStageIdentifier($stageType);
+        throw StageConfigurationException::invalidStageTypeIdentifier($stageTypeIdentifier);
     }
 }

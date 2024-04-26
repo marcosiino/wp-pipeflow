@@ -6,22 +6,23 @@ require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php
 require_once PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;
 use Pipeline\StageDescriptor;
 use Pipeline\Utils\Helpers;
+use Pipeline\StageConfiguration\StageConfiguration;
 
 class SaveMediaStageFactory implements AbstractStageFactory
 {
     /**
      * @inheritDoc
      */
-    public function instantiate(array $configuration): AbstractPipelineStage
+    public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
-        $urlsParamName = Helpers::getField($configuration, "mediaURLs", true);
-        $outputParamName = Helpers::getField($configuration, "resultTo", true);
-        return new SaveMediaStage($urlsParamName, $outputParamName);
+        //TODO: validate $configuration
+        return new SaveMediaStage($configuration);
     }
 
     /**
@@ -37,7 +38,7 @@ class SaveMediaStageFactory implements AbstractStageFactory
 
         $contextInputs = array();
         $contextOutputs = array(
-            "" => "A parameter named after the value specified in the `resultTo` setup parameter, which will contains one or more attachment ids for the medias that has been saved into wordpress media gallery",
+            "SAVED_IMAGES_IDS" => "An array of one or more attachment ids for the medias that has been saved into wordpress media gallery. If resultTo input setting parameter is set, the saved media ids is output on the context parameter specified there instead.",
         );
 
         return new StageDescriptor("SaveMedia", $description, $setupParameters, $contextInputs, $contextOutputs);

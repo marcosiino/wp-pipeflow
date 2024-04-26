@@ -5,6 +5,7 @@ namespace Pipeline\Stages\SumOperation;
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStage.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;
@@ -12,6 +13,7 @@ use Pipeline\Interfaces\AbstractStageFactory;
 use Pipeline\StageDescriptor;
 use Pipeline\Stages\SumOperation\SumOperationStage;
 use Pipeline\Utils\Helpers;
+use Pipeline\StageConfiguration\StageConfiguration;
 
 class SumOperationStageFactory implements AbstractStageFactory
 {
@@ -31,7 +33,7 @@ class SumOperationStageFactory implements AbstractStageFactory
 
         // Context outputs
         $contextOutputs = array(
-            "" => "A parameter with the name specified in the *resultParameter* setup parameter which contains the result of the operation",
+            "SUM_RESULT" => "The result of the operation. If resultTo is set, the result of the operation is written in the context parameter specified in that setting instead.",
         );
 
         return new StageDescriptor("SumOperation", $stageDescription, $setupParams, $contextInputs, $contextOutputs);
@@ -40,11 +42,9 @@ class SumOperationStageFactory implements AbstractStageFactory
     /**
      * @throws StageConfigurationException
      */
-    public function instantiate(array $configuration): AbstractPipelineStage
+    public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
-        $operandA = Helpers::getField($configuration, "operandA", true);
-        $operandB = Helpers::getField($configuration, "operandB", true);
-        $resultTo = Helpers::getField($configuration, "resultTo", true);
-        return new SumOperationStage($operandA, $operandB, $resultTo);
+        //TODO: validate $configuration
+        return new SumOperationStage($configuration);
     }
 }

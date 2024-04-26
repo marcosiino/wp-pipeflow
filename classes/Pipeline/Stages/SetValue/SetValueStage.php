@@ -5,23 +5,25 @@ require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.ph
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\PipelineContext;
+use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;
 
 class SetValueStage extends AbstractPipelineStage
 {
-    private string $parameterName;
-    private mixed $parameterValue;
+    private StageConfiguration $stageConfiguration;
 
-    public function __construct(mixed $parameterName, mixed $parameterValue)
+    public function __construct($stageConfiguration)
     {
-        $this->parameterName = $parameterName;
-        $this->parameterValue = $parameterValue;
+        $this->stageConfiguration = $stageConfiguration;
     }
 
     public function execute(PipelineContext $context): PipelineContext
     {
-        $parameterName = $this->parameterName;
-        $parameterValue = $this->parameterValue;
+        //Inputs
+        $parameterName = $this->stageConfiguration->getSettingValue("parameterName", $context, true);
+        $parameterValue = $this->stageConfiguration->getSettingValue("parameterValue", $context, true);
+
+        //Output
         $context->setParameter($parameterName, $parameterValue);
         return $context;
     }

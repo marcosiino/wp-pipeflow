@@ -1,18 +1,21 @@
 <?php
 
 namespace Pipeline\Stages\CreatePost;
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;
 use Pipeline\StageDescriptor;
+use Pipeline\StageConfiguration\StageConfiguration;
 
 class CreatePostFactory implements AbstractStageFactory
 {
     /**
      * @inheritDoc
      */
-    public function instantiate(array $configuration): AbstractPipelineStage
+    public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
+        //TODO: validate $configuration
         return new CreatePostStage();
     }
 
