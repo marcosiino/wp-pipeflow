@@ -7,39 +7,21 @@ namespace Pipeline;
  */
 class ContextParameterValue
 {
-    private array $value = array();
-    public function __construct(mixed $value = null) {
-        if (!is_null($value)) {
-            $this->value[] = $value;
-        }
+    private mixed $value;
+    public function __construct(mixed $value) {
+        $this->value = $value;
     }
 
-    public function add(mixed $value): void
+    public function set(mixed $value): void
     {
-        $this->value[] = $value;
+        $this->value = $value;
     }
 
-    public function resetTo(mixed $value): void
-    {
-        $this->value = array($value);
+    public function isArray(): bool {
+        return is_array($this->value);
     }
 
-    public function reset(): void
-    {
-        $this->value = array();
-    }
-
-    public function getLast(): mixed
-    {
-        if (count($this->value) > 0) {
-            return end($this->value);
-        }
-        else {
-            return null;
-        }
-    }
-
-    public function getAll(): array {
+    public function get(): mixed {
         return $this->value;
     }
 }

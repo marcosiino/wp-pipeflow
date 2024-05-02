@@ -4,6 +4,7 @@ namespace Pipeline\Utils;
 require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
 require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageSetting.php";
+require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/ReferenceStageSetting.php";
 
 use DOMDocument;
 use DOMElement;
@@ -11,17 +12,34 @@ use DOMNode;
 use DOMNodeList;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Pipeline;
+use Pipeline\StageConfiguration\ReferenceStageSetting;
+use Pipeline\StageConfiguration\ReferenceStageSettingType;
 use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageConfiguration\StageSetting;
 use Pipeline\StageFactory;
 
+/**
+ *
+ */
 class PipelineXMLConfigurator
 {
+    /**
+     * @var Pipeline
+     */
     private Pipeline $pipeline;
+
+    /**
+     * @param Pipeline $pipeline
+     */
     public function __construct(Pipeline $pipeline) {
         $this->pipeline = $pipeline;
     }
 
+    /**
+     * @param $xmlConfiguration
+     * @return bool
+     * @throws StageConfigurationException
+     */
     public function configure($xmlConfiguration): bool {
         $document = new DOMDocument();
         $document->loadXML($xmlConfiguration);
@@ -54,20 +72,33 @@ class PipelineXMLConfigurator
         foreach ($params as $param) {
             $paramName = $param->getAttribute("name");
             $subItems = $param->getElementsByTagName("item");
-            //If the param element has <item> sub elements, it means it is an array parameter
-            if(count($subItems) > 0) {
-                $paramArray = array();
-                foreach ($subItems as $item) {
-                    $paramArray[] = $item->nodeValue;
-                }
-                $stageConfiguration->addSetting(new StageSetting($paramName, $paramArray));
-            }
-            // Otherwise it is a single value parameter
-            else {
-                $stageConfiguration->addSetting(new StageSetting($paramName, $param->nodeValue));
-            }
 
-            //TODO: manage referenced context parameters settings
+            // Setting Parameter which references to the value of a Context Parameter.
+            if($contextReferenceType = $param->getAttribute("contextReference"))
+            {
+                if(count($subItems) > 0) {
+                    throw new StageConfigurationException("reference parameters (param with contextReference attribute) cannot have <item></item> sub elements");
+                }
+                $index = $param->getAttribute("index");
+                $type = $this->getReferenceTypeFromTypeAttribute($contextReferenceType);
+
+                $stageConfiguration->addSetting(new ReferenceStageSetting($type, $paramName, $param->nodeValue, $index));
+            }
+            // Fixed Setting Parameter
+            else {
+                //If the param element has <item> sub elements, it means it is an array parameter
+                if(count($subItems) > 0) {
+                    $paramArray = array();
+                    foreach ($subItems as $item) {
+                        $paramArray[] = $item->nodeValue;
+                    }
+                    $stageConfiguration->addSetting(new StageSetting($paramName, $paramArray));
+                }
+                // Otherwise it is a single value parameter
+                else {
+                    $stageConfiguration->addSetting(new StageSetting($paramName, $param->nodeValue));
+                }
+            }
         }
 
         $stage = StageFactory::instantiateStageOfType($stageType, $stageConfiguration);
@@ -94,5 +125,21 @@ class PipelineXMLConfigurator
         libxml_use_internal_errors(false);
 
         return $result;
+    }
+
+    /**
+     * Returns the ReferenceStageSettingType associated with the specified type passed as argument or `plain` if there isn't a ReferenceStageSettingType which matches the given argument.
+     *
+     * @param string $typeAttributeValue - The type attribute value of a referenced param in the xml configuration
+     * @return ReferenceStageSettingType
+     */
+    private function getReferenceTypeFromTypeAttribute(string $typeAttributeValue): ReferenceStageSettingType {
+        foreach (ReferenceStageSettingType::cases() as $case) {
+            if($case->value == $typeAttributeValue) {
+                return $case;
+            }
+        }
+
+        return ReferenceStageSettingType::plain;
     }
 }

@@ -19,7 +19,7 @@ class SumOperationStageFactory implements AbstractStageFactory
 {
     public function getStageDescriptor(): StageDescriptor
     {
-        $stageDescription = "Sums two context's parameters and stores the result into the specified context's parameter";
+        $stageDescription = "Sums (scalars), merges (arrays or array+scalar), or concatenates (strings or strings+scalars) two context's parameters and stores the result into the specified context's parameter. Details about the operation: If both are scalars numbers, a simple sum between two scalars is performed, but if one of those is a string and the other one is a scalar, a concatenation is performed. If both are arrays, the two arrays are merged together. If one of the operand is an array and the other is a scalar, the scalar operand is added to the array.";
 
         // Setup Parameters
         $setupParams = array(
@@ -33,7 +33,7 @@ class SumOperationStageFactory implements AbstractStageFactory
 
         // Context outputs
         $contextOutputs = array(
-            "SUM_RESULT" => "The result of the operation. If resultTo is set, the result of the operation is written in the context parameter specified in that setting instead.",
+            "SUM_RESULT" => "The result of the operation. The returned type depends on the given operands types, for example, if one of them is an array, an array type is returned. If resultTo is set, the result of the operation is written in the context parameter specified in that setting instead.",
         );
 
         return new StageDescriptor("SumOperation", $stageDescription, $setupParams, $contextInputs, $contextOutputs);

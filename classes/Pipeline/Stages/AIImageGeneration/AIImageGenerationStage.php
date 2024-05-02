@@ -29,11 +29,10 @@ class AIImageGenerationStage extends AbstractPipelineStage
     public function execute(PipelineContext $context): PipelineContext
     {
         // Takes the OpenAI api key from the context
-        $apiKeyContextParam = $context->getParameter("OPENAI_API_KEY");
-        if(is_null($apiKeyContextParam)) {
+        $apiKey = $context->getParameter("OPENAI_API_KEY");
+        if(is_null($apiKey)) {
             throw new PipelineExecutionException("OpenAI API Key not set. Set the api key in the OPENAI_API_KEY context parameter of the pipeline");
         }
-        $apiKey = $apiKeyContextParam->getLast();
 
         $prompt = (string)$this->stageConfiguration->getSettingValue("prompt", $context, true);
         $model = (string)$this->stageConfiguration->getSettingValue("model", $context, false, "dall-e-2");

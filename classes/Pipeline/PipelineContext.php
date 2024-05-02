@@ -1,7 +1,6 @@
 <?php
 
 namespace Pipeline;
-require_once PLUGIN_PATH . "classes/Pipeline/ContextParameterValue.php";
 
 /**
  * A Pipeline Context, which represents the full state of a pipeline at a given moments, with all its parameters and values at that point.
@@ -9,12 +8,12 @@ require_once PLUGIN_PATH . "classes/Pipeline/ContextParameterValue.php";
 class PipelineContext
 {
     /**
-     * @var array an associative array of string => ContextParameterValue which maps parameters name to their ContextParameterValue
+     * @var array an associative array of string => mixed which maps parameters name to their values
      */
     private array $context = array();
 
     /**
-     * Sets the parameter with the given name. If a parameter with the given name already exists in the context, adds the value to its array
+     * Sets the parameter with the given name. If a parameter with the given name already exists in the context, its value is replaced
      *
      * @param string $name
      * @param mixed $value
@@ -22,16 +21,7 @@ class PipelineContext
      */
     public function setParameter(string $name, mixed $value): void {
         $name = strtoupper($name);
-
-        if(array_key_exists($name, $this->context)) {
-            // The parameter is already in the context, adding the value to it
-            $currentParameterValue = $this->context[$name];
-            $currentParameterValue->add($value);
-        }
-        else {
-            // The parameter is new in the context, adding it with this value
-            $this->context[$name] = new ContextParameterValue($value);
-        }
+        $this->context[$name] = $value;
     }
 
     /**
@@ -48,10 +38,10 @@ class PipelineContext
     /**
      * Gets the parameter with the given name.
      *
-     * @param string $name
-     * @return ContextParameterValue
+     * @param string $name - The name of the context parameter to be returned.
+     * @return mixed|null - Returns the context parameter's value or null if it doesn't exist in the context.
      */
-    public function getParameter(string $name): ?ContextParameterValue {
+    public function getParameter(string $name): mixed {
         $name = strtoupper($name);
         if(!array_key_exists($name, $this->context)) {
             return null;
@@ -77,20 +67,18 @@ class PipelineContext
     public function getHTMLDescription(): String {
         $html = "<div class=\"pipeline-context\">";
         $html .= "<table>";
-        foreach($this->context as $paramName => $values) {
+        foreach($this->context as $paramName => $value) {
             $html .= "<tr>";
             //Parameter name column
             $html .= "<td>$paramName</td>";
             //Parameter value column
             $html .= "<td><ul>";
-            foreach($values->getAll() as $value) {
-                if(!is_array($value)) {
-                    $html .= "<li>$value</li>";
-                }
-                else {
-                    //Implode the array in a string (find a better visualization?)
-                    $html .= "<li>" . implode(",", $value). "</li>";
-                }
+            if(!is_array($value)) {
+                $html .= "<li>$value</li>";
+            }
+            else {
+                //Implode the array in a string (find a better visualization?)
+                $html .= "<li>Array[" . implode(", ", $value). "]</li>";
             }
             $html .= "</ul></td>";
             $html .= "</tr>";

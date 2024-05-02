@@ -38,12 +38,15 @@ class PlaceholderProcessor
     private function getValueForPlaceholder(ParsedElement $placeholder): string {
         switch($placeholder->elementSubType) {
             case ParsedElementSubType::plain:
-                return (string)$this->context->getParameter($placeholder->elementName)->getLast();
+                return (string)$this->context->getParameter($placeholder->elementName);
             case ParsedElementSubType::indexed:
-                $array = $this->context->getParameter($placeholder->elementName)->getAll();
+                $param = $this->context->getParameter($placeholder->elementName);
+                if(!is_array($param)) {
+                    return "";
+                }
                 $index = $placeholder->index;
-                if($index >= 0 && $index < count($array)) {
-                    return (string)$array[$index];
+                if($index >= 0 && $index < count($param)) {
+                    return (string)$param[$index];
                 }
                 else {
                     return "";

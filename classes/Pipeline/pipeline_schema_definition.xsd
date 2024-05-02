@@ -2,10 +2,10 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <xsd:simpleType name="ContextReferenceType">
         <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="plain"/>
             <xsd:enumeration value="array"/>
-            <xsd:enumeration value="first"/>
-            <xsd:enumeration value="last"/>
             <xsd:enumeration value="indexed"/>
+            <xsd:enumeration value="last"/>
         </xsd:restriction>
     </xsd:simpleType>
 
