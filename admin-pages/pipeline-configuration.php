@@ -1,5 +1,10 @@
 <?php
 require_once(PLUGIN_PATH . "utils/settings.php");
+require_once(PLUGIN_PATH . "classes/Pipeline/StageFactory.php");
+require_once(PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php");
+
+use Pipeline\StageFactory;
+use Pipeline\Interfaces\AbstractPipelineStage;
 
 function register_pipeline_configuration_setup_settings() {
     register_setting('postbrewer_pipeline_setup_group', 'pipeline_configuration_json');
@@ -7,6 +12,17 @@ function register_pipeline_configuration_setup_settings() {
 function pipeline_configuration_page() {
     ?>
     <div class="wrap">
+        <h2>Content Generation Pipeline Setup</h2>
+
+        <h3>Available Stages</h3>
+        <div id="available-stages">
+        <?php
+            foreach (StageFactory::getRegisteredFactories() as $factory) {
+                echo $factory->getStageDescriptor()->getStageHTMLDescription();
+            }
+        ?>
+        </div>
+
         <h2>Content Generation Pipeline Setup</h2>
 
         <form method="post" action="options.php">

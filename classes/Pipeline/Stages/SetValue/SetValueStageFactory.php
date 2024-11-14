@@ -19,7 +19,7 @@ class SetValueStageFactory implements AbstractStageFactory
 {
     public function getStageDescriptor(): StageDescriptor
     {
-        $stageDescription = "Sets the specified context's parameter to the fixed value provided.";
+        $stageDescription = "Sets the specified value into a context's parameter with the specified name.";
 
         // Setup Parameters
         $setupParams = array(

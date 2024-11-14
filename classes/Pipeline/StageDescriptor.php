@@ -85,6 +85,27 @@ class StageDescriptor
         return $this->contextOutputs;
     }
 
+
+    /**
+     * Generates an HTML description of this StageDescriptor
+     * @return string
+     */
+    public function getStageHTMLDescription(): string {
+        $out = "";
+
+        $out .= "<div class='stage' style='background-color: #e5e5ff; border: solid 1px; border-color: #c5c5dd; padding: 1em; margin: 1em 0;'>";
+
+        $out .= "<p class='stage-identifier' style='font-size: 1.3em;'><strong>Stage Identifier:<br /></strong><span style='text-decoration: underline;'>$this->identifier</span></p>";
+        $out .= "<p></p><strong>Description:<br/></strong><em>$this->stageDescription</em></p>";
+
+        $out .= $this->getParamsArrayHTMLDescription($this->setupParameters, "Setup Parameters:", "stage-descriptor-setup-parameters", "This stage has not any setup parameters");
+        $out .= $this->getParamsArrayHTMLDescription($this->contextInputs, "Context Inputs:", "stage-descriptor-context-inputs", "This stage has not any context inputs");
+        $out .= $this->getParamsArrayHTMLDescription($this->contextOutputs, "Context Outputs:", "stage-descriptor-context-outputs", "This stage has not any context outputs");
+
+        $out .= "</div>";
+        return $out;
+    }
+
     private function validateDictionary(array $dictionary): bool {
         foreach ($dictionary as $key => $value) {
             if (!is_string($key) || !is_string($value)) {
@@ -116,5 +137,34 @@ class StageDescriptor
         } else {
             throw new InvalidArgumentException("Context Outputs must be an associative array of string => string.");
         }
+    }
+
+    /// Returns an html description for the parameters array provided, wrapping it in a div with the provided divId and title, with empty text if the array is empty
+    private function getParamsArrayHTMLDescription(array $paramsArray, string $title, string $divClass, string $emptyText): string {
+        $out = "";
+
+        $out .= "<div class='$divClass parameters'>";
+        $out .= "<strong class='title'>$title</strong><br />";
+        $out .= "<div style='padding-left: 2em;'>";
+        if (count($paramsArray) > 0) {
+            $out .= "<ul>";
+            foreach ($paramsArray as $key => $value) {
+                if ($key != "") {
+                    $out .= "<li><strong>" . $key . ":</strong> $value</li>";
+                }
+                else {
+                    $out .= "<li>$value</li>";
+                }
+
+            }
+            $out .= "</ul>";
+        }
+        else {
+            $out .= "<p><em>$emptyText</em></p>";
+        }
+        $out .= "</div>";
+        $out .= "</div>";
+
+        return $out;
     }
 }

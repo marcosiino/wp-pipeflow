@@ -33,7 +33,7 @@ class SaveMediaStageFactory implements AbstractStageFactory
         $description = "Downloads and save one or more media files into the Wordpress Media Library.";
         $setupParameters = array(
             "mediaURLs" => "The URLs of the media to save into the wordpress media library.",
-            "resultTo" => "The name of the context parameter where the saved media ids are stored.",
+            "resultTo" => "(optional) The name of the context parameter where the saved media ids are stored.",
         );
 
         $contextInputs = array();
