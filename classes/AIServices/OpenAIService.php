@@ -41,17 +41,19 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
         $this->imageCompletionHDQuality = $imageCompletionHDQuality;
     }
 
-    public function perform_text_completion(string $prompt, bool $return_json_response, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
+    public function perform_text_completion(string $prompt, bool $return_json_response, array $image_attachment_urls = null, float $temperature = 0.7, int $max_tokens = 4096)
     {
         $content = array(
             array("type" => "text", "text" => $prompt)
         );
 
-        if (isset($image_attachment_url)) {
-            $content[] = array(
-                "type" => "image_url",
-                "image_url" => array("url" => $image_attachment_url)
-            );
+        if (isset($image_attachment_urls)) {
+            foreach ($image_attachment_urls as $attachment) {
+                $content[] = array(
+                    "type" => "image_url",
+                    "image_url" => array("url" => $attachment)
+                );
+            }
         }
 
         $body = array(
@@ -64,7 +66,11 @@ class OpenAIService implements AITextCompletionServiceInterface, AIImageCompleti
         if ($return_json_response) {
             $body["response_format"] = array("type" => "json_object");
         }
-
+/*
+        echo "<pre>";
+        echo print_r($body, true);
+        echo "</pre>";
+*/
         $response = $this->send_request('https://api.openai.com/v1/chat/completions', 'POST', $body);
 
         if ($response['error']) {

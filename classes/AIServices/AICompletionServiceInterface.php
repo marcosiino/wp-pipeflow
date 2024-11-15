@@ -2,7 +2,7 @@
 namespace AIServices;
 
 interface AITextCompletionServiceInterface {
-    public function perform_text_completion(string $prompt, bool $return_json_response, string $image_attachment_url = null, float $temperature, int $max_tokens);
+    public function perform_text_completion(string $prompt, bool $return_json_response, array $image_attachment_urls = null, float $temperature, int $max_tokens);
 }
 
 interface AIImageCompletionServiceInterface {

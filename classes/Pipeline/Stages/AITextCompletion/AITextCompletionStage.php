@@ -1,6 +1,6 @@
 <?php
 
-namespace Pipeline\Stages\AIImageGeneration;
+namespace Pipeline\Stages\AITextCompletion;
 require_once PLUGIN_PATH . "classes/AIServices/OpenAIService.php";
 require_once PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
@@ -14,7 +14,7 @@ use Pipeline\PlaceholderProcessor;
 use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;
 
-class AIImageGenerationStage extends AbstractPipelineStage
+class AITextCompletionStage extends AbstractPipelineStage
 {
     private StageConfiguration $stageConfiguration;
 
@@ -35,30 +35,27 @@ class AIImageGenerationStage extends AbstractPipelineStage
         }
 
         $prompt = (string)$this->stageConfiguration->getSettingValue("prompt", $context, true);
-        $model = (string)$this->stageConfiguration->getSettingValue("model", $context, false, AIImageGenerationStageFactory::$defaultModel);
-        $imagesSize = (string)$this->stageConfiguration->getSettingValue("size", $context, false, AIImageGenerationStageFactory::$defaultSize);
-        $hdQuality = (bool)$this->stageConfiguration->getSettingValue("highFidelity", $context, false, AIImageGenerationStageFactory::$defaultHighFidelity);
-        $imageCount = (int)$this->stageConfiguration->getSettingValue("count", $context, false, AIImageGenerationStageFactory::$defaultImageCount);
-        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "GENERATED_IMAGE_URLS");
+        $attachedImageURLs = (array)$this->stageConfiguration->getSettingValue("attachedImageURLs", $context, false);
+        $model = (string)$this->stageConfiguration->getSettingValue("model", $context, false, AITextCompletionStageFactory::$defaultModel);
+        $temperature = (string)$this->stageConfiguration->getSettingValue("temperature", $context, false, AITextCompletionStageFactory::$defaultTemperature);
+        $maxTokens = (string)$this->stageConfiguration->getSettingValue("maxTokens", $context, false, AITextCompletionStageFactory::$defaultMaxTokens);
+        $outputJSON = (string)$this->stageConfiguration->getSettingValue("outputJSON", $context, false, AITextCompletionStageFactory::$defaultOutputJSON);
+        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "GENERATED_IMAGES_URL");
 
-        $openAIService = new OpenAIService($apiKey,"gpt-4-turbo", $model, $imagesSize, $hdQuality);
+        $openAIService = new OpenAIService($apiKey, $model);
 
         $promptProcessor = new PlaceholderProcessor($context);
         $prompt = $promptProcessor->process($prompt);
         try
         {
-            $image_urls = $openAIService->perform_image_completion($prompt, $imageCount);
+            $generatedOutput = $openAIService->perform_text_completion($prompt, $outputJSON, $attachedImageURLs, $temperature, $maxTokens);
         }
         catch (AICompletionException $e)
         {
             throw new PipelineExecutionException("An error occurred while performing the image completion: " . $e->getMessage());
         }
 
-        $generatedImageURLs = array();
-        foreach($image_urls as $url) {
-            $generatedImageURLs[] = $url;
-        }
-        $context->setParameter($resultTo, $generatedImageURLs);
+        $context->setParameter($resultTo, $generatedOutput);
         return $context;
     }
 }

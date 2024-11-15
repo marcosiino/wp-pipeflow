@@ -6,7 +6,7 @@ require_once PLUGIN_PATH . "classes/AIServices/AICompletionServiceInterface.php"
 class AIServiceMock implements AITextCompletionServiceInterface, AIImageCompletionServiceInterface
 {
 
-    public function perform_text_completion(string $prompt, bool $return_json_response, string $image_attachment_url = null, float $temperature = 0.7, int $max_tokens = 4096)
+    public function perform_text_completion(string $prompt, bool $return_json_response, array $image_attachment_urls = null, float $temperature = 0.7, int $max_tokens = 4096)
     {
         return json_encode(array(
             "title" => "A mock article",
