@@ -6,9 +6,11 @@ require_once PLUGIN_PATH . "classes/Pipeline/Stages/AITextCompletion/AITextCompl
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
 require_once PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
+require_once PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
 
 use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
 use Pipeline\Stages\AITextCompletion\AITextCompletionStageFactory;
+use Pipeline\Stages\CreatePost\CreatePostStageFactory;
 use Pipeline\Stages\SaveMedia\SaveMediaStageFactory;
 use Pipeline\Stages\SetValue\SetValueStageFactory;
 use Pipeline\Stages\SumOperation\SumOperationStageFactory;
@@ -24,5 +26,6 @@ class StagesRegistration
         StageFactory::registerFactory(new AIImageGenerationStageFactory());
         StageFactory::registerFactory(new AITextCompletionStageFactory());
         StageFactory::registerFactory(new SaveMediaStageFactory());
+        StageFactory::registerFactory(new CreatePostStageFactory());
     }
 }

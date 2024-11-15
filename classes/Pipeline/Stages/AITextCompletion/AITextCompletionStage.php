@@ -40,7 +40,7 @@ class AITextCompletionStage extends AbstractPipelineStage
         $temperature = (string)$this->stageConfiguration->getSettingValue("temperature", $context, false, AITextCompletionStageFactory::$defaultTemperature);
         $maxTokens = (string)$this->stageConfiguration->getSettingValue("maxTokens", $context, false, AITextCompletionStageFactory::$defaultMaxTokens);
         $outputJSON = (string)$this->stageConfiguration->getSettingValue("outputJSON", $context, false, AITextCompletionStageFactory::$defaultOutputJSON);
-        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "GENERATED_IMAGES_URL");
+        $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, false, "GENERATED_TEXT_COMPLETION");
 
         $openAIService = new OpenAIService($apiKey, $model);
 
