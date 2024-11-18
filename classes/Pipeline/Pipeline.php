@@ -1,11 +1,11 @@
 <?php
 
 namespace Pipeline;
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Utils/PipelineXMLConfigurator.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/PipelineXMLConfigurator.php";
 
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Exceptions\StageConfigurationException;

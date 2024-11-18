@@ -1,7 +1,7 @@
 <?php
 
-require_once(PLUGIN_PATH . "classes/AIServices/AIServiceMock.php");
-require_once(PLUGIN_PATH . "classes/AIServices/OpenAIService.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/AIServiceMock.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/OpenAIService.php");
 
 use AIServices\AIServiceMock;
 use AIServices\OpenAIService;

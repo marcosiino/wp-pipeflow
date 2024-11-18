@@ -1,8 +1,8 @@
 <?php
 
 namespace Pipeline\Interfaces;
-require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
 
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\PipelineContext;

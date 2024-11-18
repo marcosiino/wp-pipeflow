@@ -1,8 +1,8 @@
 <?php
 
 namespace Pipeline\Interfaces;
-require_once PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\StageConfiguration\StageConfiguration;
 use Pipeline\StageDescriptor;

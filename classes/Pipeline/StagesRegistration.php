@@ -1,12 +1,12 @@
 <?php
 
 namespace Pipeline;
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/AITextCompletion/AITextCompletionStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AITextCompletion/AITextCompletionStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
 
 use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
 use Pipeline\Stages\AITextCompletion\AITextCompletionStageFactory;

@@ -1,7 +1,7 @@
 // file: tests/bootstrap.php
 <?php
 
-// Definisce PLUGIN_PATH se non è già definito
-if (!defined('PLUGIN_PATH')) {
-    define('PLUGIN_PATH', realpath(__DIR__ . '/../') . '/');
+// Definisce WP_PIPEFLOW_PLUGIN_PATH se non è già definito
+if (!defined('WP_PIPEFLOW_PLUGIN_PATH')) {
+    define('WP_PIPEFLOW_PLUGIN_PATH', realpath(__DIR__ . '/../') . '/');
 }

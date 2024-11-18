@@ -1,7 +1,7 @@
 <?php
 
 namespace AIServices;
-require_once PLUGIN_PATH . "classes/AIServices/AICompletionServiceInterface.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/AICompletionServiceInterface.php";
 
 class AIServiceMock implements AITextCompletionServiceInterface, AIImageCompletionServiceInterface
 {

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
 namespace tests;
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\Exceptions\StageConfigurationException;

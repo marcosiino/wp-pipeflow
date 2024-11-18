@@ -1,5 +1,5 @@
 <?php
-require_once(PLUGIN_PATH . "utils/settings.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
 
 function register_automatic_generation_settings() {
     register_setting('postbrewer_automatic_generation_options_group', 'auto_generation_interval_secs');

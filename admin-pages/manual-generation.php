@@ -1,16 +1,16 @@
 <?php
 
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
 
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\Pipeline;
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\PipelineContext;
 
-require_once(PLUGIN_PATH . 'classes/ArticleGenerator.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'classes/ArticleGenerator.php');
 
 /**
  * Funzione per visualizzare la pagina di generazione dei contenuti

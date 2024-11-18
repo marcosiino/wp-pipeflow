@@ -1,5 +1,5 @@
 <?php
-require_once(PLUGIN_PATH . "utils/settings.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
 
 function register_content_generation_settings() {
     register_setting('postbrewer_content_options_group', 'image_generation_prompt');
@@ -16,9 +16,9 @@ function register_content_generation_settings() {
 function print_placeholders() {
     $imageFirst = Settings::get_image_first_mode();
     if($imageFirst == true) {
-        readfile(PLUGIN_PATH . "admin-pages/html/image_first_placeholders.inc.html");
+        readfile(WP_PIPEFLOW_PLUGIN_PATH . "admin-pages/html/image_first_placeholders.inc.html");
     } else {
-        readfile(PLUGIN_PATH . "admin-pages/html/text_first_placeholders.inc.html");
+        readfile(WP_PIPEFLOW_PLUGIN_PATH . "admin-pages/html/text_first_placeholders.inc.html");
     }
 }
 

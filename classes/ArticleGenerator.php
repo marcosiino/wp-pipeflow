@@ -1,6 +1,6 @@
 <?php
-require_once(PLUGIN_PATH . "utils/settings.php");
-require_once(PLUGIN_PATH . "utils/Resolver.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
+require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/Resolver.php");
 
 class ArticleGenerator {
 

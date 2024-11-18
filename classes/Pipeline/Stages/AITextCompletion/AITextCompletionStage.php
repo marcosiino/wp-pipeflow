@@ -1,9 +1,9 @@
 <?php
 
 namespace Pipeline\Stages\AITextCompletion;
-require_once PLUGIN_PATH . "classes/AIServices/OpenAIService.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/OpenAIService.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
 use AIServices\AICompletionException;
 use AIServices\OpenAIService;

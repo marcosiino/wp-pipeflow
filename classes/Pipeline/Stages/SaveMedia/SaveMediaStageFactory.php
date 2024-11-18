@@ -1,12 +1,12 @@
 <?php
 
 namespace Pipeline\Stages\SaveMedia;
-require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStage.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageDescriptor.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;

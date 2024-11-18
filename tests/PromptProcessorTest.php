@@ -1,8 +1,8 @@
 <?php
 
 namespace tests;
-require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PlaceholderProcessor.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\PipelineContext;

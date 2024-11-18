@@ -1,8 +1,8 @@
 <?php
 
 namespace Pipeline\Stages\CreatePost;
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStage.php";
 
 use Pipeline\Interfaces\AbstractPipelineStage;
 use Pipeline\Interfaces\AbstractStageFactory;

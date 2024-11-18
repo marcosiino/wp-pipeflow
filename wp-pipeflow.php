@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: PostBrewer AI Assistant
+ * Plugin Name: WP PipeFlow
  * Plugin URI: https://marcosiino.it
  * Description: Automatic post generator using the AI.
  * Version: 1.0
@@ -12,19 +12,19 @@ use Pipeline\StagesRegistration;
 
 defined('ABSPATH') or die('Accesso non permesso.');
 
-define('PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('WP_PIPEFLOW_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-require_once PLUGIN_PATH . "classes/Pipeline/StagesRegistration.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StagesRegistration.php";
 
-require_once(PLUGIN_PATH . 'utils/utils.php');
-require_once(PLUGIN_PATH . 'utils/cronjobs.php');
-require_once(PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/utils.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/cronjobs.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
 
-require_once(PLUGIN_PATH . 'admin-pages/general-settings.php');
-require_once(PLUGIN_PATH . 'admin-pages/pipeline-configuration.php');
-require_once(PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
-require_once(PLUGIN_PATH . 'admin-pages/automatic-generation-settings.php');
-require_once(PLUGIN_PATH . 'admin-pages/manual-generation.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/general-settings.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/pipeline-configuration.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/automatic-generation-settings.php');
+require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/manual-generation.php');
 
 setup_http_requests();
 setup_cronjobs();

@@ -1,10 +1,10 @@
 <?php
 
 namespace Pipeline\Utils;
-require_once PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageSetting.php";
-require_once PLUGIN_PATH . "classes/Pipeline/StageConfiguration/ReferenceStageSetting.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageSetting.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/ReferenceStageSetting.php";
 
 use DOMDocument;
 use DOMElement;
@@ -114,7 +114,7 @@ class PipelineXMLConfigurator
      */
     private function validateXMLConfiguration(DOMDocument $document, array &$validationErrors): bool {
         libxml_use_internal_errors(true);
-        $result = $document->schemaValidate(PLUGIN_PATH . 'classes/Pipeline/pipeline_schema_definition.xsd');
+        $result = $document->schemaValidate(WP_PIPEFLOW_PLUGIN_PATH . 'classes/Pipeline/pipeline_schema_definition.xsd');
         if($result === false) {
             $validationErrors = array();
             $errors = libxml_get_errors();

@@ -2,9 +2,9 @@
 
 namespace Pipeline\Stages\SaveMedia;
 
-require_once PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
-require_once PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
-require_once PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/PipelineExecutionException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractPipelineStage.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
 
 
 require_once(ABSPATH . 'wp-admin/includes/image.php');

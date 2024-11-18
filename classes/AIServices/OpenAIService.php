@@ -1,8 +1,8 @@
 <?php
 
 namespace AIServices;
-require_once PLUGIN_PATH . "classes/AIServices/AICompletionException.php";
-require_once PLUGIN_PATH . "classes/AIServices/AICompletionServiceInterface.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/AICompletionException.php";
+require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/AICompletionServiceInterface.php";
 
 // The istructions for the text completion json return format
 define('AUTO_CATEGORIES_INSTRUCTIONS', "Following a list of categories and tags available, described with a json which contains id and name fields.   
