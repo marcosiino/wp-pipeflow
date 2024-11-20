@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline\Exceptions;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Exceptions/StageConfigurationExceptionCases.php";
 use Exception;
 
 class StageConfigurationException extends Exception {

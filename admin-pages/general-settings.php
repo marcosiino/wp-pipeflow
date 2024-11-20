@@ -1,5 +1,5 @@
 <?php
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
 
 function register_general_settings() {
     register_setting('postbrewer_general_options_group', 'openai_api_key');

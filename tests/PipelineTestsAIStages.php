@@ -1,9 +1,9 @@
 <?php
 
 namespace tests;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Pipeline.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Pipeline.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
 use Pipeline\Exceptions\StageConfigurationException;

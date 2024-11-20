@@ -1,8 +1,8 @@
 <?php
 
 namespace Pipeline\Utils\Parser;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/ParsedElementType.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/ParsedElementSubType.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementType.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementSubType.php";
 
 use Pipeline\Utils\Parser\ParsedElementType;
 use Pipeline\Utils\Parser\ParsedElementSubType;

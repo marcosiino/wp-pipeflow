@@ -2,8 +2,8 @@
 
 namespace Pipeline;
 
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/PipelineContext.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/InputParser.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/PipelineContext.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/InputParser.php";
 
 use Pipeline\Utils\Parser\InputParser;
 use Pipeline\Utils\Parser\ParsedElement;

@@ -1,7 +1,7 @@
 <?php
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageFactory.php");
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageFactory.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php");
 
 use Pipeline\StageFactory;
 use Pipeline\Interfaces\AbstractPipelineStage;

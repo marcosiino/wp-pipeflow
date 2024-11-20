@@ -2,7 +2,7 @@
 namespace Pipeline\Utils;
 
 use Pipeline\Exceptions\StageConfigurationException;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Exceptions/StageConfigurationException.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Exceptions/StageConfigurationException.php";
 
 class Helpers
 {

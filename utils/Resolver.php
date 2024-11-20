@@ -1,7 +1,7 @@
 <?php
 
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/AIServiceMock.php");
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/AIServices/OpenAIService.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/AIServices/AIServiceMock.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/AIServices/OpenAIService.php");
 
 use AIServices\AIServiceMock;
 use AIServices\OpenAIService;

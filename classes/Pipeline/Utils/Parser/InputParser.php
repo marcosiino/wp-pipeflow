@@ -1,9 +1,9 @@
 <?php
 
 namespace Pipeline\Utils\Parser;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/ParsedElementType.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/ParsedElementSubType.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Parser/ParsedElement.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementType.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementSubType.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElement.php";
 
 /**
  * Parses the pipeline parameters inputs

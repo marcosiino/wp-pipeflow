@@ -2,10 +2,10 @@
 
 namespace Pipeline\Stages\SetValue;
 
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Interfaces/AbstractStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Utils/Helpers.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStage.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/StageConfiguration.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStage.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
 use Pipeline\Exceptions\StageConfigurationException;
 use Pipeline\Interfaces\AbstractPipelineStage;

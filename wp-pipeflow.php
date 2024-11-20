@@ -14,17 +14,17 @@ defined('ABSPATH') or die('Accesso non permesso.');
 
 define('WP_PIPEFLOW_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StagesRegistration.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StagesRegistration.php";
 
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/utils.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/cronjobs.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'utils/http_requests_timeout_settings.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/utils.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/cronjobs.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/http_requests_timeout_settings.php');
 
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/general-settings.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/pipeline-configuration.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/content-generation-settings.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/automatic-generation-settings.php');
-require_once(WP_PIPEFLOW_PLUGIN_PATH . 'admin-pages/manual-generation.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/general-settings.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/pipeline-configuration.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/content-generation-settings.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/automatic-generation-settings.php');
+require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/manual-generation.php');
 
 setup_http_requests();
 setup_cronjobs();

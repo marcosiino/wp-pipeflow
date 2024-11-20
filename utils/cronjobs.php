@@ -1,15 +1,11 @@
 <?php
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "classes/ArticleGenerator.php");
-require_once(WP_PIPEFLOW_PLUGIN_PATH . "utils/settings.php");
+require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
 
 /**
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    if(ArticleGenerator::check_settings() === true) {
-        $articleGenerator = new ArticleGenerator();
-        $articleGenerator->generate_new_article(); //generate a random topic article
-    }
+    //TODO: Launch the pipeline
 }
 
 function cron_interval( $schedules ) {

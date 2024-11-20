@@ -1,7 +1,7 @@
 <?php
 
 namespace Pipeline\StageConfiguration;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/StageConfiguration/ReferenceStageSettingType.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/ReferenceStageSettingType.php";
 
 use Pipeline\Exceptions\PipelineExecutionException;
 use Pipeline\PipelineContext;

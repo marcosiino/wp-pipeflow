@@ -1,15 +1,11 @@
 <?php
 
 namespace Pipeline;
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/AITextCompletion/AITextCompletionStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
-require_once WP_PIPEFLOW_PLUGIN_PATH . "classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
 
-use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
-use Pipeline\Stages\AITextCompletion\AITextCompletionStageFactory;
 use Pipeline\Stages\CreatePost\CreatePostStageFactory;
 use Pipeline\Stages\SaveMedia\SaveMediaStageFactory;
 use Pipeline\Stages\SetValue\SetValueStageFactory;
@@ -23,8 +19,6 @@ class StagesRegistration
     public static function registerStages() {
         StageFactory::registerFactory(new SetValueStageFactory());
         StageFactory::registerFactory(new SumOperationStageFactory());
-        StageFactory::registerFactory(new AIImageGenerationStageFactory());
-        StageFactory::registerFactory(new AITextCompletionStageFactory());
         StageFactory::registerFactory(new SaveMediaStageFactory());
         StageFactory::registerFactory(new CreatePostStageFactory());
     }
