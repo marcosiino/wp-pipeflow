@@ -15,17 +15,20 @@ class PlaceholderProcessor
         $this->context = $context;
     }
 
-    public function process(string $prompt): String
+    public function process(string $text): String
     {
-        $placeholders = InputParser::extractElements($prompt);
-        foreach($placeholders as $placeholder) {
-            if($placeholder->elementType == ParsedElementType::placeholder) {
-                $value = $this->getValueForPlaceholder($placeholder);
-                $prompt = str_replace($placeholder->fullElementMatch, $value, $prompt);
+        $placeholders = InputParser::extractElements($text);
+        do {
+            foreach ($placeholders as $placeholder) {
+                if ($placeholder->elementType == ParsedElementType::placeholder) {
+                    $value = $this->getValueForPlaceholder($placeholder);
+                    $text = str_replace($placeholder->fullElementMatch, $value, $text);
+                }
             }
-        }
+            $placeholders = InputParser::extractElements($text);
+        } while(count($placeholders) > 0); //Repeat until no more placeholder to replace
 
-        return $prompt;
+        return $text;
     }
 
     private function getValueForPlaceholder(ParsedElement $placeholder): string {

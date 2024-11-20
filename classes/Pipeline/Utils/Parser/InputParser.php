@@ -16,16 +16,16 @@ class InputParser
     public static function extractElements(string $inputString): array {
         $elements = [];
 
-        // Placeholders
-        preg_match_all('/(%%([^%[\]]+)%%)/', $inputString, $matches, PREG_SET_ORDER);
-        foreach ($matches as $match) {
-            $elements[] = new ParsedElement($match[2], ParsedElementType::placeholder, ParsedElementSubType::plain, null, $match[1]);
-        }
-
         // Indexed Placeholders
         preg_match_all('/(%%([^%[\]]+)\[(\d+)\]%%)/', $inputString, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $elements[] = new ParsedElement($match[2], ParsedElementType::placeholder, ParsedElementSubType::indexed, $match[3], $match[1]);
+        }
+
+        // Placeholders
+        preg_match_all('/(%%([^%[\]]+)%%)/', $inputString, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $elements[] = new ParsedElement($match[2], ParsedElementType::placeholder, ParsedElementSubType::plain, null, $match[1]);
         }
 
         // References

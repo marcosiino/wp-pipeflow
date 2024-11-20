@@ -1,5 +1,5 @@
 <?php
-
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/PlaceholderProcessor.php";
 class StageConfiguration
 {
     private array $configuration = array();
@@ -24,7 +24,8 @@ class StageConfiguration
 
         $setting = $this->configuration[$name];
         if($setting instanceof StageSetting) {
-            return $setting->getValue();
+            $value = $setting->getValue();
+            return $this->processPlaceholders($value, $context);
         }
         else if($setting instanceof ReferenceStageSetting) {
             $value = $setting->getValue($context);
@@ -37,10 +38,43 @@ class StageConfiguration
                 }
             }
             else {
-                return $value;
+                return $this->processPlaceholders($value, $context);
             }
         }
 
         return $defaultValue;
+    }
+
+    /**
+     *
+     * Replaces the placeholders (if any) with context parameters, but only if the passed value is a string, or an array (in this case only the array items which are strings are processed for placeholders)
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function processPlaceholders(mixed $value, $context)
+    {
+        if (is_string($value)) { //If string, replace the placeholders (if any) with referenced context parameters
+            $processor = new PlaceholderProcessor($context);
+            return $processor->process($value);
+        }
+        else if (is_array($value)) {
+            $processedArray = [];
+
+            $processor = new PlaceholderProcessor($context);
+            foreach($value as $arrayItem) {
+                //Placeholders is replaced only on strings items, while other items is left as is
+                if(is_string($arrayItem)) {
+                    $processedArray[] = $processor->process($arrayItem);
+                }
+                else {
+                    $processedArray[] = $arrayItem;
+                }
+                return $processedArray;
+            }
+        }
+        else { //For other types the value is not processed
+            return $value;
+        }
     }
 }
