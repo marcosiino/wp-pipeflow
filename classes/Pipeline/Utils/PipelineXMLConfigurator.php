@@ -1,22 +1,9 @@
 <?php
 
-namespace Pipeline\Utils;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Pipeline.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageSetting.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/ReferenceStageSetting.php";
-
-use DOMDocument;
-use DOMElement;
-use DOMNode;
-use DOMNodeList;
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Pipeline;
-use Pipeline\StageConfiguration\ReferenceStageSetting;
-use Pipeline\StageConfiguration\ReferenceStageSettingType;
-use Pipeline\StageConfiguration\StageConfiguration;
-use Pipeline\StageConfiguration\StageSetting;
-use Pipeline\StageFactory;
 
 /**
  *

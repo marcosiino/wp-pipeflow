@@ -1,12 +1,9 @@
 <?php
 
-namespace tests;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/PipelineContext.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/PlaceholderProcessor.php";
 
 use PHPUnit\Framework\TestCase;
-use Pipeline\PipelineContext;
-use Pipeline\PlaceholderProcessor;
 
 class PromptProcessorTest extends TestCase
 {

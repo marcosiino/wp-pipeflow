@@ -1,6 +1,5 @@
 <?php
 
-namespace Pipeline\Utils\Parser;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementType.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElementSubType.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/ParsedElement.php";

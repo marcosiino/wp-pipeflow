@@ -1,18 +1,11 @@
 <?php
 
-namespace Pipeline\Stages\SaveMedia;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageDescriptor.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SaveMedia/SaveMediaStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Interfaces\AbstractStageFactory;
-use Pipeline\StageDescriptor;
-use Pipeline\Utils\Helpers;
-use Pipeline\StageConfiguration\StageConfiguration;
 
 class SaveMediaStageFactory implements AbstractStageFactory
 {

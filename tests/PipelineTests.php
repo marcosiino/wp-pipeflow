@@ -8,13 +8,6 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/S
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/AIImageGeneration/AIImageGenerationStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Exceptions\StageConfigurationExceptionCases;
-use Pipeline\Pipeline;
-use Pipeline\StageFactory;
-use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
-use Pipeline\Stages\SetValue\SetValueStageFactory;
-use Pipeline\Stages\SumOperation\SumOperationStageFactory;
 
 final class PipelineTests extends TestCase
 {

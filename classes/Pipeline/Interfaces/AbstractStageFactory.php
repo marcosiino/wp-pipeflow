@@ -1,11 +1,7 @@
 <?php
 
-namespace Pipeline\Interfaces;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageDescriptor.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\StageConfiguration\StageConfiguration;
-use Pipeline\StageDescriptor;
 
 /**
  * Represents an abstract StageFactory

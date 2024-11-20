@@ -1,12 +1,5 @@
 <?php
 
-namespace Pipeline\Stages\CreatePost;
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\PipelineContext;
-use Pipeline\StageConfiguration\StageConfiguration;
-
 class CreatePostStage extends AbstractPipelineStage
 {
     private StageConfiguration $stageConfiguration;

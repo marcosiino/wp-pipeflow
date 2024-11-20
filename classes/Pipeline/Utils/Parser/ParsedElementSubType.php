@@ -1,7 +1,5 @@
 <?php
 
-namespace Pipeline\Utils\Parser;
-
 enum ParsedElementSubType
 {
     case plain;

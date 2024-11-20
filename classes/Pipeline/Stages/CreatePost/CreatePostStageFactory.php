@@ -1,13 +1,7 @@
 <?php
 
-namespace Pipeline\Stages\CreatePost;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/CreatePost/CreatePostStage.php";
-
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Interfaces\AbstractStageFactory;
-use Pipeline\StageDescriptor;
-use Pipeline\StageConfiguration\StageConfiguration;
 
 class CreatePostStageFactory implements AbstractStageFactory
 {

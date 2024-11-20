@@ -8,8 +8,6 @@
  * Author URI: http://marcosiino.it
  */
 
-use Pipeline\StagesRegistration;
-
 defined('ABSPATH') or die('Accesso non permesso.');
 
 define('WP_PIPEFLOW_PLUGIN_PATH', plugin_dir_path(__FILE__));

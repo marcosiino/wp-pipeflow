@@ -1,19 +1,9 @@
 <?php
 
-namespace Pipeline\Stages\SumOperation;
-
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SumOperation/SumOperationStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Interfaces\AbstractStageFactory;
-use Pipeline\StageDescriptor;
-use Pipeline\Stages\SumOperation\SumOperationStage;
-use Pipeline\Utils\Helpers;
-use Pipeline\StageConfiguration\StageConfiguration;
 
 class SumOperationStageFactory implements AbstractStageFactory
 {

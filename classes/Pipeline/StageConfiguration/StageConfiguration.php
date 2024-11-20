@@ -1,10 +1,5 @@
 <?php
 
-namespace Pipeline\StageConfiguration;
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\PipelineContext;
-
 class StageConfiguration
 {
     private array $configuration = array();

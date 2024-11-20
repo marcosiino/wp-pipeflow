@@ -1,6 +1,5 @@
 <?php
 
-namespace Pipeline\Stages\SaveMedia;
 
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Exceptions/PipelineExecutionException.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
@@ -10,14 +9,6 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Pipeline
 require_once(ABSPATH . 'wp-admin/includes/image.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
 require_once(ABSPATH . 'wp-admin/includes/media.php');
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\PipelineContext;
-use Pipeline\StageConfiguration\StageConfiguration;
-use Pipeline\Utils\Parser\InputParser;
-use Pipeline\Utils\Parser\ParsedElementSubType;
-use Pipeline\Utils\Parser\ParsedElementType;
 
 class SaveMediaStage extends AbstractPipelineStage
 {

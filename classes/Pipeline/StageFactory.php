@@ -1,15 +1,9 @@
 <?php
 
-namespace Pipeline;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Exceptions/StageConfigurationException.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Interfaces\AbstractStageFactory;
-use Pipeline\StageConfiguration\StageConfiguration;
 
 /**
  * A class which allows to instantiate Pipeline Stages given their configuration

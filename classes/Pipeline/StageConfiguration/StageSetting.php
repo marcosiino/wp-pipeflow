@@ -1,7 +1,5 @@
 <?php
 
-namespace Pipeline\StageConfiguration;
-
 /**
  * Represents a setting parameter for a stage with a fixed value
  */

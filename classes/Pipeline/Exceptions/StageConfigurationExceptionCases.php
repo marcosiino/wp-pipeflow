@@ -1,7 +1,5 @@
 <?php
 
-namespace Pipeline\Exceptions;
-
 enum StageConfigurationExceptionCases: int
 {
     case ExpectedFieldNotFound = 1001;

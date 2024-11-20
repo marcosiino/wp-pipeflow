@@ -6,11 +6,6 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/A
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 
 use PHPUnit\Framework\TestCase;
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Pipeline;
-use Pipeline\StageFactory;
-use Pipeline\Stages\AIImageGeneration\AIImageGenerationStageFactory;
-use Pipeline\Stages\SetValue\SetValueStageFactory;
 
 class PipelineTestsAIStages extends TestCase
 {

@@ -1,14 +1,7 @@
 <?php
 
-namespace Pipeline\Stages\SumOperation;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\PipelineContext;
-use Pipeline\StageConfiguration\StageConfiguration;
-use Pipeline\StageDescriptor;
 
 class SumOperationStage extends AbstractPipelineStage
 {

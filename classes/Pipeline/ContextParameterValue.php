@@ -1,7 +1,5 @@
 <?php
 
-namespace Pipeline;
-
 /**
  * Represents a context parameter's value
  */

@@ -1,19 +1,9 @@
 <?php
 
-namespace Pipeline\Stages\SetValue;
-
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Interfaces\AbstractStageFactory;
-use Pipeline\StageDescriptor;
-use Pipeline\Stages\SetValue\SetValueStage;
-use Pipeline\Utils\Helpers;
-use Pipeline\StageConfiguration\StageConfiguration;
 
 class SetValueStageFactory implements AbstractStageFactory
 {

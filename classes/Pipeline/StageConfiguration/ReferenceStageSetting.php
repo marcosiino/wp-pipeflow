@@ -1,10 +1,6 @@
 <?php
 
-namespace Pipeline\StageConfiguration;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/ReferenceStageSettingType.php";
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\PipelineContext;
 
 class ReferenceStageSetting
 {

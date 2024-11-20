@@ -1,8 +1,5 @@
 <?php
 
-namespace Pipeline;
-use InvalidArgumentException;
-
 /**
  * Represents the description of a specific pipeline stage type, with its identifier, inputs and outputs descriptions
  */

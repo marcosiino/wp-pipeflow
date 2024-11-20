@@ -1,18 +1,10 @@
 <?php
 
-namespace Pipeline;
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Exceptions/StageConfigurationException.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/PipelineXMLConfigurator.php";
-
-use Pipeline\Exceptions\PipelineExecutionException;
-use Pipeline\Exceptions\StageConfigurationException;
-use Pipeline\Interfaces\AbstractPipelineStage;
-use Pipeline\Utils\Helpers;
-use Pipeline\StageFactory;
-use Pipeline\Utils\PipelineXMLConfigurator;
 
 /**
  * Represents a Content Generation Pipeline

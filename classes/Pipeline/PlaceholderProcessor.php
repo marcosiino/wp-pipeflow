@@ -1,14 +1,7 @@
 <?php
 
-namespace Pipeline;
-
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/PipelineContext.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Parser/InputParser.php";
-
-use Pipeline\Utils\Parser\InputParser;
-use Pipeline\Utils\Parser\ParsedElement;
-use Pipeline\Utils\Parser\ParsedElementSubType;
-use Pipeline\Utils\Parser\ParsedElementType;
 
 /**
  * Process a string by replacing the placeholders with the context parameters values

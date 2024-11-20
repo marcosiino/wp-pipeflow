@@ -1,7 +1,5 @@
 <?php
 
-namespace Pipeline;
-
 /**
  * A Pipeline Context, which represents the full state of a pipeline at a given moments, with all its parameters and values at that point.
  */

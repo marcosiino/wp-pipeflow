@@ -1,5 +1,4 @@
 <?php
-namespace Pipeline\StageConfiguration;
 
 /**
  * Represents the type of reference setting

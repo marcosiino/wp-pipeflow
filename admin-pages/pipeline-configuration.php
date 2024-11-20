@@ -3,9 +3,6 @@ require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
 require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageFactory.php");
 require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php");
 
-use Pipeline\StageFactory;
-use Pipeline\Interfaces\AbstractPipelineStage;
-
 function register_pipeline_configuration_setup_settings() {
     register_setting('postbrewer_pipeline_setup_group', 'pipeline_configuration_json');
 }
