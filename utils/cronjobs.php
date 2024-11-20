@@ -1,11 +1,13 @@
 <?php
-require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/utils/utils.php";
 
 /**
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    //TODO: Launch the pipeline
+    $configuration = Settings::get_pipeline_configuration_json();
+    launchPipeline($configuration, false);
 }
 
 function cron_interval( $schedules ) {
