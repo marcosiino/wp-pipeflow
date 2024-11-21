@@ -18,9 +18,6 @@ class SetValueStage extends AbstractPipelineStage
         $parameterValue = $this->stageConfiguration->getSettingValue("parameterValue", $context, true);
 
         //Output
-        if (is_array($parameterValue)) {
-            print("Setting param value for $parameterName: count: " . count($parameterValue));
-        }
         $context->setParameter($parameterName, $parameterValue);
         return $context;
     }

@@ -19,7 +19,7 @@ class RandomValueStage extends AbstractPipelineStage
         $maxValue = $this->stageConfiguration->getSettingValue("maxValue", $context, false, getrandmax());
 
         //Output
-        $context->setParameter($parameterName, rand($minValue, $maxValue));
+        $context->setParameter($parameterName, rand($minValue, $maxValue - 1));
         return $context;
     }
 }

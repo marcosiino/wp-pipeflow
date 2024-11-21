@@ -2,6 +2,8 @@
 
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SetValue/SetValueStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/RandomValue/RandomValueStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/RandomArrayItem/RandomArrayItemStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/ArrayCount/ArrayCountStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
@@ -14,6 +16,8 @@ class StagesRegistration
     public static function registerStages() {
         StageFactory::registerFactory(new SetValueStageFactory());
         StageFactory::registerFactory(new RandomValueStageFactory());
+        StageFactory::registerFactory(new RandomArrayItemStageFactory());
+        StageFactory::registerFactory(new ArrayCountStageFactory());
         StageFactory::registerFactory(new SumOperationStageFactory());
         StageFactory::registerFactory(new SaveMediaStageFactory());
         StageFactory::registerFactory(new CreatePostStageFactory());
