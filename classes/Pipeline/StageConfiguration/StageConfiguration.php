@@ -70,8 +70,8 @@ class StageConfiguration
                 else {
                     $processedArray[] = $arrayItem;
                 }
-                return $processedArray;
             }
+            return $processedArray;
         }
         else { //For other types the value is not processed
             return $value;
