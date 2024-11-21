@@ -75,8 +75,9 @@ class PipelineContext
                 $html .= "<li>$value</li>";
             }
             else {
+
                 //Implode the array in a string (find a better visualization?)
-                $html .= "<li>Array[" . implode(", ", $value). "]</li>";
+                $html .= "<li>Array(" . count($value) . ") [" . implode(", ", $value). "]</li>";
             }
             $html .= "</ul></td>";
             $html .= "</tr>";

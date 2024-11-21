@@ -2,7 +2,7 @@
 
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
 
-class SetValueStage extends AbstractPipelineStage
+class RandomValueStage extends AbstractPipelineStage
 {
     private StageConfiguration $stageConfiguration;
 
@@ -15,13 +15,11 @@ class SetValueStage extends AbstractPipelineStage
     {
         //Inputs
         $parameterName = $this->stageConfiguration->getSettingValue("parameterName", $context, true);
-        $parameterValue = $this->stageConfiguration->getSettingValue("parameterValue", $context, true);
+        $minValue = $this->stageConfiguration->getSettingValue("minValue", $context, false, 0);
+        $maxValue = $this->stageConfiguration->getSettingValue("maxValue", $context, false, getrandmax());
 
         //Output
-        if (is_array($parameterValue)) {
-            print("Setting param value for $parameterName: count: " . count($parameterValue));
-        }
-        $context->setParameter($parameterName, $parameterValue);
+        $context->setParameter($parameterName, rand($minValue, $maxValue));
         return $context;
     }
 }
