@@ -31,7 +31,7 @@
                                                             </xsd:choice>
                                                             <xsd:attribute name="name" type="xsd:string"/>
                                                             <xsd:attribute name="contextReference" type="ContextReferenceType" use="optional" />
-                                                            <xsd:attribute name="index" type="xsd:integer" use="optional" />
+                                                            <xsd:attribute name="index" type="xsd:string" use="optional" />
                                                         </xsd:complexType>
                                                     </xsd:element>
                                                 </xsd:sequence>
