@@ -16,6 +16,7 @@ class CreatePostStage extends AbstractPipelineStage
     {
         $title = $this->stageConfiguration->getSettingValue("postTitle", $context, true);
         $content = $this->stageConfiguration->getSettingValue("postContent", $context, true);
+        $featuredImageId = $this->stageConfiguration->getSettingValue("featuredImageId", $context, false, null);
         $publishStatus = $this->stageConfiguration->getSettingValue("publishStatus", $context, false, 'draft');
         $authorId = $this->stageConfiguration->getSettingValue("authorId", $context, false, get_current_user());
         $categoriesIds = $this->stageConfiguration->getSettingValue("categoriesIds", $context, false, array());
@@ -38,7 +39,9 @@ class CreatePostStage extends AbstractPipelineStage
         if (is_wp_error($post_id)) {
             throw new PipelineExecutionException($post_id->get_error_message());
         } else {
-            error_log('Post creato con successo. ID: ' . $post_id);
+            if(isset($featuredImageId)) {
+                set_post_thumbnail($post_id, $featuredImageId);
+            }
             $context->setParameter($resultTo, $post_id);
         }
 

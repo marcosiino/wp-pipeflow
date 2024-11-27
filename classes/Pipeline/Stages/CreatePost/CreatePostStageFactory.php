@@ -23,7 +23,8 @@ class CreatePostStageFactory implements AbstractStageFactory
         $setupParameters = array(
             "postTitle" => "The title of the post",
             "postContent" => "The content of the post",
-            "publishStatus" => "The post publication status. Available values: `draft`, `publish`",
+            "featuredImageId" => "(optional) The media id of the featured image for this post. Must be a valid wordpress media id. You can use the SaveMedia stage to download an image from an URL and gets its media id.",
+            "publishStatus" => "(optional, default: draft) The post publication status. Available values: `draft`, `publish`",
             "authorId" => "(optional) If set, specifies the id of the author to assign to this post",
             "categoriesIds" => "(optional, array) If set, specifies an array with the ids of the categories to assign to this post",
             "tagsIds" => "(optional, array) If set, specifies an array with the ids of the tags to assign to this post",
