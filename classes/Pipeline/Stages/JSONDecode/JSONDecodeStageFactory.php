@@ -35,6 +35,6 @@ class JSONDecodeStageFactory implements AbstractStageFactory
     public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
         // TODO validate $configuration to check if it contains all the required fields
-        return new JSONEncodeStage($configuration);
+        return new JSONDecodeStage($configuration);
     }
 }
