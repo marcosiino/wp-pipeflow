@@ -6,9 +6,12 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/R
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/ArrayCount/ArrayCountStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/ExplodeString/ExplodeStringStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/JSONDecode/JSONDecodeStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/JSONEncode/JSONEncodeStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SumOperation/SumOperationStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SaveMedia/SaveMediaStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/CreatePost/CreatePostStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetCategories/WPGetCategoriesFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetTags/WPGetTagsFactory.php";
 
 class StagesRegistration
 {
@@ -21,9 +24,12 @@ class StagesRegistration
         StageFactory::registerFactory(new RandomArrayItemStageFactory());
         StageFactory::registerFactory(new ArrayCountStageFactory());
         StageFactory::registerFactory(new ExplodeStringStageFactory());
+        StageFactory::registerFactory(new JSONEncodeStageFactory());
         StageFactory::registerFactory(new JSONDecodeStageFactory());
         StageFactory::registerFactory(new SumOperationStageFactory());
         StageFactory::registerFactory(new SaveMediaStageFactory());
         StageFactory::registerFactory(new CreatePostStageFactory());
+        StageFactory::registerFactory(new WPGetCategoriesFactory());
+        StageFactory::registerFactory(new WPGetTagsFactory());
     }
 }

@@ -4,18 +4,18 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfac
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
-require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/JSONDecode/JSONDecodeStage.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/JSONEncode/JSONEncodeStage.php";
 
-class JSONDecodeStageFactory implements AbstractStageFactory
+class JSONEncodeStageFactory implements AbstractStageFactory
 {
     public function getStageDescriptor(): StageDescriptor
     {
-        $stageDescription = "Decodes a JSON encoded string into an associative array saved as context parameter.";
+        $stageDescription = "Encodes a JSON from an associative array saved in the given context parameter. The JSON is then saved a string in the context parameter specified in the resultTo setting.";
 
         // Setup Parameters
         $setupParams = array(
-            "jsonString" => "(required) The string containing the JSON to decode.",
-            "resultTo" => "(required, array) The output context parameter where the decoded associative array is saved",
+            "associativeArray" => "(required) the name of the context parameter containing the associative array to encode to JSON.",
+            "resultTo" => "(required) The output context parameter where the encoded JSON string is saved,"
         );
 
         // Context inputs
@@ -23,10 +23,10 @@ class JSONDecodeStageFactory implements AbstractStageFactory
 
         // Context outputs
         $contextOutputs = array(
-            "" => "The json decoded as associative array saved in the context parameter specified in resultTo.",
+            "" => "The encoded JSON string is saved in the context parameter specified in the resultTo setting",
         );
 
-        return new StageDescriptor("JSONDecode", $stageDescription, $setupParams, $contextInputs, $contextOutputs);
+        return new StageDescriptor("JSONEncode", $stageDescription, $setupParams, $contextInputs, $contextOutputs);
     }
 
     /**
