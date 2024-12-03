@@ -4,7 +4,7 @@ require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageFac
 require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php");
 
 function register_pipeline_configuration_setup_settings() {
-    register_setting('postbrewer_pipeline_setup_group', 'pipeline_configuration_json');
+    register_setting('pipeflow_pipeline_setup_group', 'pipeline_configuration_json');
 }
 function pipeline_configuration_page() {
     ?>
@@ -24,8 +24,8 @@ function pipeline_configuration_page() {
 
         <form method="post" action="options.php">
             <?php
-            settings_fields('postbrewer_pipeline_setup_group');
-            do_settings_sections('postbrewer_pipeline_setup_group');
+            settings_fields('pipeflow_pipeline_setup_group');
+            do_settings_sections('pipeflow_pipeline_setup_group');
             ?>
             <table class="form-table">
                 <tr valign="top">

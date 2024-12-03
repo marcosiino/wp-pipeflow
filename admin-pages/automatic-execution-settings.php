@@ -2,7 +2,7 @@
 require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/utils/settings.php");
 
 function register_automatic_execution_settings() {
-    register_setting('postbrewer_automatic_generation_options_group', 'auto_generation_interval_secs');
+    register_setting('pipeflow_automatic_generation_options_group', 'auto_generation_interval_secs');
 }
 
 function automatic_execution_settings_page() {
@@ -11,7 +11,7 @@ function automatic_execution_settings_page() {
         <h2>Automatic pipeline execution settings</h2>
 
         <?php
-        $next_scheduled = wp_next_scheduled( 'postbrewer_cron_hook' );
+        $next_scheduled = wp_next_scheduled( 'pipeflow_cron_hook' );
         echo "<h3>Next execution is scheduled on:</h3>";
         echo(date('Y-m-d H:i:s', $next_scheduled) . " - " . date_default_timezone_get());
         ?>
@@ -20,8 +20,8 @@ function automatic_execution_settings_page() {
             <h2>Auto execution Settings</h2>
             <form method="post" action="options.php">
                 <?php
-                settings_fields('postbrewer_automatic_generation_options_group');
-                do_settings_sections('postbrewer_automatic_generation_options_group');
+                settings_fields('pipeflow_automatic_generation_options_group');
+                do_settings_sections('pipeflow_automatic_generation_options_group');
                 ?>
                 <table class="form-table">
                     <tr valign="top">

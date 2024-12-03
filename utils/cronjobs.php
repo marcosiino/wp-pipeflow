@@ -18,18 +18,18 @@ function cron_interval( $schedules ) {
 }
 
 function schedule_cronjobs() {
-    if ( ! wp_next_scheduled( 'postbrewer_cron_hook' ) ) {
-        wp_schedule_event( time(), 'generate_content_interval', 'postbrewer_cron_hook' );
+    if ( ! wp_next_scheduled( 'pipeflow_cron_hook' ) ) {
+        wp_schedule_event( time(), 'generate_content_interval', 'pipeflow_cron_hook' );
     }
 }
 
 function unschedule_cronjobs() {
-    $timestamp = wp_next_scheduled( 'postbrewer_cron_hook' );
-    wp_unschedule_event( $timestamp, 'postbrewer_cron_hook' );
+    $timestamp = wp_next_scheduled( 'pipeflow_cron_hook' );
+    wp_unschedule_event( $timestamp, 'pipeflow_cron_hook' );
 }
 
 function setup_cronjobs() {
     // WP Cron
-    add_action( 'postbrewer_cron_hook', 'cron_exec' ); //Custom hook for cron job execution (cron_exec function is defined in cronjobs.php)
+    add_action( 'pipeflow_cron_hook', 'cron_exec' ); //Custom hook for cron job execution (cron_exec function is defined in cronjobs.php)
     add_filter( 'cron_schedules', 'cron_interval' ); // Defines the cron time interval
 }

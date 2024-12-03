@@ -18,7 +18,6 @@ require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/utils.php');
 require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/cronjobs.php');
 require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/utils/http_requests_timeout_settings.php');
 
-require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/general-settings.php');
 require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/pipeline-configuration.php');
 require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/automatic-execution-settings.php');
 require_once(ABSPATH . 'wp-content/plugins/wp-pipeflow/admin-pages/manual-execution.php');
@@ -57,7 +56,6 @@ add_action('init', 'init');
  * Register the plugin settings
  */
 function register_plugin_settings() {
-    register_general_settings();
     register_pipeline_configuration_setup_settings();
     register_automatic_execution_settings();
 }
