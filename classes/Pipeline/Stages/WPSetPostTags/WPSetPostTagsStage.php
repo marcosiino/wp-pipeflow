@@ -26,8 +26,8 @@ class WPSetPostTagsStage extends AbstractPipelineStage
             throw new PipelineExecutionException("tags parameter must be an array");
         }
 
+        // Converts to an array of integer to avoid issues with wp_set_post_taggs
         $intTagIds = array();
-
         foreach($tagsIds as $tagId) {
             if(!is_numeric($tagId)) {
                 throw new PipelineExecutionException("tags parameter must be an array of integer numeric values. Any other type is not admitted.");
