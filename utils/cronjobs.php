@@ -6,7 +6,7 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/utils/utils.php";
  * Launch the job to execute when cron job is triggered
  */
 function cron_exec() {
-    $configuration = Settings::get_pipeline_configuration_json();
+    $configuration = Settings::get_pipeline_configuration();
     launchPipeline($configuration, false);
 }
 

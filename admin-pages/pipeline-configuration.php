@@ -4,7 +4,7 @@ require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageFac
 require_once(ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php");
 
 function register_pipeline_configuration_setup_settings() {
-    register_setting('pipeflow_pipeline_setup_group', 'pipeline_configuration_json');
+    register_setting('pipeflow_pipeline_setup_group', 'pipeline_configuration');
 }
 function pipeline_configuration_page() {
     ?>
@@ -30,7 +30,7 @@ function pipeline_configuration_page() {
             <table class="form-table">
                 <tr valign="top">
                     <th scope="row">Pipeline Configuration JSON</th>
-                    <td><textarea cols=80 rows=10 name="pipeline_configuration_json"><?php echo Settings::get_pipeline_configuration_json(); ?></textarea></td>
+                    <td><textarea cols=80 rows=10 name="pipeline_configuration"><?php echo Settings::get_pipeline_configuration(); ?></textarea></td>
                 </tr>
             </table>
             <?php submit_button(); ?>
