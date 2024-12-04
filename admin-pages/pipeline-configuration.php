@@ -10,31 +10,26 @@ function pipeline_configuration_page() {
     ?>
     <div class="wrap">
         <h2>Content Generation Pipeline Setup</h2>
-
-        <h3>Available Stages</h3>
-        <div id="available-stages">
-        <?php
-            foreach (StageFactory::getRegisteredFactories() as $factory) {
-                echo $factory->getStageDescriptor()->getStageHTMLDescription();
-            }
-        ?>
-        </div>
-
-        <h2>Content Generation Pipeline Setup</h2>
-
         <form method="post" action="options.php">
             <?php
             settings_fields('pipeflow_pipeline_setup_group');
             do_settings_sections('pipeflow_pipeline_setup_group');
             ?>
-            <table class="form-table">
-                <tr valign="top">
-                    <th scope="row">Pipeline Configuration JSON</th>
-                    <td><textarea cols=80 rows=10 name="pipeline_configuration"><?php echo Settings::get_pipeline_configuration(); ?></textarea></td>
-                </tr>
-            </table>
+            <h3>Pipeline Configuration JSON</h3>
+            <textarea id="pipeflow-configuration-editor" name="pipeline_configuration"><?php echo Settings::get_pipeline_configuration(); ?></textarea>
+
             <?php submit_button(); ?>
         </form>
+
+        <h3>Available Stages</h3>
+        <div id="available-stages">
+            <?php
+            foreach (StageFactory::getRegisteredFactories() as $factory) {
+                echo $factory->getStageDescriptor()->getStageHTMLDescription();
+            }
+            ?>
+        </div>
+
     </div>
     <?php
 }

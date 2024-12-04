@@ -1,0 +1,11 @@
+.CodeMirror {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow-x: scroll;
+    padding: 0;
+}
+
+#pipeflow-configuration-editor-container {
+    overflow-x: scroll;
+    margin: 0 20px;
+}

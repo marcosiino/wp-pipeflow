@@ -43,6 +43,8 @@ function deactivation() {
 }
 register_deactivation_hook(__FILE__, 'deactivation');
 
+
+
 /**
  * Plugin initialization
  */
@@ -61,6 +63,61 @@ function register_plugin_settings() {
 }
 add_action('admin_init', 'register_plugin_settings');
 
+function pipeflow_enqueue_admin_css($hook) {
+    if (!str_contains($hook, "wp-pipeflow")) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'pipeflow-admin-css', // Handle unico
+        plugin_dir_url(__FILE__) . 'css/pipeflow-admin.css',
+        [], // Dependencies
+        '1.0', // Version
+        'all' // Media (all, screen, print, ecc.)
+    );
+}
+add_action('admin_enqueue_scripts', 'pipeflow_enqueue_admin_css');
+
+/**
+ * Enqueue CodeMirror code editor
+ */
+function pipeflow_enqueue_codemirror($hook) {
+    //Enqueue only if the hook is one of the plugin's admin pages specified above (to avoid loading the codemirror script in other places)
+    if (!str_contains($hook, "wp-pipeflow")) {
+        return;
+    }
+
+    // Check if CodeMirror is available WordPress
+    if (wp_script_is('code-editor', 'registered')) {
+        wp_enqueue_script('code-editor');
+        wp_enqueue_style('code-editor');
+    } else {
+        // Fallback: Carica CodeMirror from a CDN
+        wp_enqueue_style('codemirror-css', 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css');
+        wp_enqueue_script('codemirror-js', 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js', [], null, true);
+        wp_enqueue_script('codemirror-mode-xml', 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js', ['codemirror-js'], null, true);
+    }
+
+    // Inizializzazione personalizzata
+    wp_add_inline_script(
+        'code-editor',
+        'jQuery(function($) {
+        var editorSettings = {
+            lineNumbers: true,
+            mode: "xml",
+            indentUnit: 14,
+            matchBrackets: true,
+            autoCloseTags: true,
+            lineWrapping: true,
+        };
+
+        var editor = wp.codeEditor.initialize($("#pipeflow-configuration-editor"), editorSettings);
+        console.log("Editor settings:", editorSettings);
+        console.log("CodeMirror instance:", editor.codemirror);
+        });'
+    );
+}
+add_action('admin_enqueue_scripts', 'pipeflow_enqueue_codemirror');
 
 /**
  * Registers all the available stages for the Generation Pipeline

@@ -9,7 +9,7 @@ function manual_execution_admin_page() {
     echo '<div class="wrap"><h2>Manual Pipeline execution</h2>';
     echo '<form method="post">';
     echo '<label for=\"pipelineConfiguration\">Enter the pipeline configuration below:</label><br/>';
-    echo '<textarea name="pipelineConfiguration" rows="10" cols="70">' . Settings::get_pipeline_configuration() . '</textarea>';
+    echo '<textarea id="pipeflow-configuration-editor" name="pipelineConfiguration">' . Settings::get_pipeline_configuration() . '</textarea>';
     echo '<input type="hidden" name="action" value="launchPipeline">';
     submit_button('Execute the Pipeline');
     echo '</form>';
