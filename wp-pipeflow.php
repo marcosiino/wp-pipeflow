@@ -3,7 +3,7 @@
  * Plugin Name: WP-PipeFlow
  * Plugin URI: https://marcosiino.it
  * Description: Create your pipelines to automatize wordpress tasks by concatenating the available core stages, third-party stages or your own custom stages.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Marco Siino
  * Author URI: http://marcosiino.it
  */
