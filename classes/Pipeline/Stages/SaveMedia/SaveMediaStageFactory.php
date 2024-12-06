@@ -26,6 +26,8 @@ class SaveMediaStageFactory implements AbstractStageFactory
         $description = "Downloads and save one or more media files into the Wordpress Media Library.";
         $setupParameters = array(
             "mediaURLs" => "The URLs of the media to save into the wordpress media library.",
+            "convertToFormat" => "(optional, default: jpeg) The format of the saved image. Possible values: `png` or `jpeg`",
+            "compression" => "(optional, default: 65) The image compression. Only valid when convertToFormat is `jpeg`. Possible values: 0-100",
             "resultTo" => "(optional) The name of the context parameter where the saved media ids are stored.",
         );
 
