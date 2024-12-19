@@ -1,9 +1,9 @@
 <?php
 
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
-require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/CreatePost/CreatePostStage.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPCreatePost/WPCreatePostStage.php";
 
-class CreatePostStageFactory implements AbstractStageFactory
+class WPCreatePostStageFactory implements AbstractStageFactory
 {
     /**
      * @inheritDoc
@@ -11,7 +11,7 @@ class CreatePostStageFactory implements AbstractStageFactory
     public function instantiate(StageConfiguration $configuration): AbstractPipelineStage
     {
         //TODO: validate $configuration
-        return new CreatePostStage($configuration);
+        return new WPCreatePostStage($configuration);
     }
 
     /**
@@ -36,6 +36,6 @@ class CreatePostStageFactory implements AbstractStageFactory
             "CREATED_POST_ID" => "If resultTo setup parameter is not set, the id of the created post is stored in this context parameter, otherwise it is stored in the context parameter specified in the `resultTo` field",
         );
 
-        return new StageDescriptor("CreatePost", $description, $setupParameters, $contextInputs, $contextOutputs);
+        return new StageDescriptor("WPCreatePost", $description, $setupParameters, $contextInputs, $contextOutputs);
     }
 }

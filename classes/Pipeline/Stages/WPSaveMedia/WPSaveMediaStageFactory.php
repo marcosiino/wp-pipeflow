@@ -4,10 +4,10 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfac
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageDescriptor.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
-require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/SaveMedia/SaveMediaStage.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSaveMedia/WPSaveMediaStage.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/StageConfiguration/StageConfiguration.php";
 
-class SaveMediaStageFactory implements AbstractStageFactory
+class WPSaveMediaStageFactory implements AbstractStageFactory
 {
     /**
      * @inheritDoc
@@ -36,6 +36,6 @@ class SaveMediaStageFactory implements AbstractStageFactory
             "SAVED_IMAGES_IDS" => "An array of one or more attachment ids for the medias that has been saved into wordpress media gallery. If resultTo input setting parameter is set, the saved media ids is output on the context parameter specified there instead.",
         );
 
-        return new StageDescriptor("SaveMedia", $description, $setupParameters, $contextInputs, $contextOutputs);
+        return new StageDescriptor("WPSaveMedia", $description, $setupParameters, $contextInputs, $contextOutputs);
     }
 }

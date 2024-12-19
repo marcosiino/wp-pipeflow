@@ -1,6 +1,6 @@
 <?php
 
-class CreatePostStage extends AbstractPipelineStage
+class WPCreatePostStage extends AbstractPipelineStage
 {
     private StageConfiguration $stageConfiguration;
 
