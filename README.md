@@ -48,15 +48,27 @@ To set up a pipeline, create an XML configuration file with the following struct
 </pipeline>
 ```
 
+For more informations on the available XML elements, see [XML Configuration Elements](#xml-configuration-elements).
+
+## The Pipeline Context
+
+The context is a mechanism that keeps track of parameters (variables) that are output by each executed stage. This context allows these parameters to be used as inputs for subsequent stages, enabling data to flow through the pipeline seamlessly.
+
+When a stage completes its execution, it can produce output parameters (usally you specify the result of the operation into the resultTo settings param, which is the name of the Context Parameter which the stage will save into the context with the result of his work). These parameters might include strings, numbers, arrays (even associative arrays, which can be traversed using the [ArrayPath](#arraypath) stage, or encoded / decoded from JSON using [JSONEncode](#jsonencode) and [JSONDecode](#jsondecode) stages), or any other data generated during the stage.
+
+Referencing Parameters: Subsequent stages in the pipeline can reference these stored parameters. This allows them to use the data produced by previous stages as their input. See [Referencing Context Parameters](#referencing-context-parameters) for more info.
+
+
 ## XML Configuration Elements
 
 - `<pipeline>`: The root element that contains all stages.
 - `<stage>`: Defines a stage in the pipeline. The `name` attribute specifies the stage type.
-- `<param>`: Defines a parameter for a stage. The `name` attribute specifies the parameter name. You can reference values of other context parameters (See [Referencing Context Parameters](#referencing-context-parameters))
+- `<settings>`: Sets the stage input parameters using `<param>` elements. The `name` attribute of `<param>` nodes specifies the parameter name. You can reference values of other existing [Context Parameter](#the-pipeline-execution-context) (See [Referencing Context Parameters](#referencing-context-parameters))
+
 
 ## Setting Up Stages Using Param Nodes
 
-Each stage can have multiple `<param>` nodes to configure its behavior. For example:
+Each stage can have multiple inputs. You can setup them by using `<param>` nodes inside the `<settings>` node of each stage. For example:
 
 ```xml
 <stage name="ExampleStage">
@@ -66,6 +78,7 @@ Each stage can have multiple `<param>` nodes to configure its behavior. For exam
     </settings>
 </stage>
 ```
+
 
 ## Referencing Context Parameters
 
