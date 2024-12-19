@@ -11,12 +11,13 @@ You can, for example, create pipelines which creates wordpress post with data co
 ## Table of Contents
 - [Installation](#installation)
 - [Setup Pipelines with XML](#setup-pipelines-with-xml)
+- [The Pipeline Context](#the-pipeline-context)
 - [XML Configuration Elements](#xml-configuration-elements)
 - [Setting Up Stages Using Param Nodes](#setting-up-stages-using-param-nodes)
 - [Referencing Context Parameters](#referencing-context-parameters)
     - [Plain Reference](#plain-reference)
     - [Keypath Reference](#keypath-reference)
-    - [Last Reference](#last-reference)
+    - [Last element Reference Type](#last-element-reference-type)
 - [Available Stages](#available-stages)
     - [Wordpress Related Stages](#wordpress-related-stages)
         - [WPCreatePost](#wpcreatepost)
@@ -38,6 +39,8 @@ You can, for example, create pipelines which creates wordpress post with data co
         - [RandomValue](#randomvalue)
         - [SetValue](#setvalue)
         - [SumOperation](#sumoperation)
+- [Creating Custom Stages](#creating-custom-stages)
+- [Contributing](#contributing)
 
 ## Installation
 
