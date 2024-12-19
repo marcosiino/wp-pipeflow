@@ -16,6 +16,7 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/W
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSetPostCategories/WPSetPostCategoriesFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetPosts/WPGetPostsStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSetPostCustomField/WPSetPostCustomFieldStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetPostCustomField/WPGetPostCustomFieldStageFactory.php";
 
 class StagesRegistration
 {
@@ -23,21 +24,22 @@ class StagesRegistration
      * Registers all the available stages for usage in the plugin
      */
     public static function registerStages() {
-        StageFactory::registerFactory(new SetValueStageFactory());
-        StageFactory::registerFactory(new RandomValueStageFactory());
-        StageFactory::registerFactory(new RandomArrayItemStageFactory());
         StageFactory::registerFactory(new ArrayCountStageFactory());
-        StageFactory::registerFactory(new ExplodeStringStageFactory());
-        StageFactory::registerFactory(new JSONEncodeStageFactory());
-        StageFactory::registerFactory(new JSONDecodeStageFactory());
-        StageFactory::registerFactory(new SumOperationStageFactory());
-        StageFactory::registerFactory(new SaveMediaStageFactory());
         StageFactory::registerFactory(new CreatePostStageFactory());
+        StageFactory::registerFactory(new ExplodeStringStageFactory());
+        StageFactory::registerFactory(new JSONDecodeStageFactory());
+        StageFactory::registerFactory(new JSONEncodeStageFactory());
+        StageFactory::registerFactory(new RandomArrayItemStageFactory());
+        StageFactory::registerFactory(new RandomValueStageFactory());
+        StageFactory::registerFactory(new SaveMediaStageFactory());
+        StageFactory::registerFactory(new SetValueStageFactory());
+        StageFactory::registerFactory(new SumOperationStageFactory());
         StageFactory::registerFactory(new WPGetCategoriesFactory());
-        StageFactory::registerFactory(new WPGetTagsFactory());
-        StageFactory::registerFactory(new WPSetPostTagsFactory());
-        StageFactory::registerFactory(new WPSetPostCategoriesFactory());
+        StageFactory::registerFactory(new WPGetPostCustomFieldStageFactory());
         StageFactory::registerFactory(new WPGetPostsStageFactory());
+        StageFactory::registerFactory(new WPGetTagsFactory());
+        StageFactory::registerFactory(new WPSetPostCategoriesFactory());
         StageFactory::registerFactory(new WPSetPostCustomFieldStageFactory());
+        StageFactory::registerFactory(new WPSetPostTagsFactory());
     }
 }
