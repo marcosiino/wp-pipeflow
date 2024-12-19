@@ -467,7 +467,11 @@ Sums (scalars), merges (arrays or array+scalar), or concatenates (strings or str
 
 ## Creating Custom Stages
 
-You can create your custom stages and publish them as an external WordPress plugin. This allows you to extend the functionality of WP-PipeFlow with your own custom logic, and if you want publish them for the public or keep it private for your own use.
+You can create your custom stages and publish them as an external WordPress plugin: this allows you to extend the functionality of WP-PipeFlow with your own custom logic: for example you can create custom stages to retrieve data from external websites or services via REST API calls. If you want you can then make the plugin with its stages available to the community or keep it private for your own use.
+
+See the [OpenAI for WP-PipeFlow plugin repository](https://github.com/marcosiino/wp-pipeflow-openai) for reference on how to make custom stages in an external plugin or read the following instructions.
+
+Each stage must have a StageFactory (a class that implements AbstractStageFactory) which describes the stage metadata and instantiates the stage, and a Stage class (which extends AbstractPipelineStage) which actually implements the Stage logic and uses the $stageConfiguration to retrieve the inputs passed to the stage. See the following paragraphs for more info. Conventionally, these files should be named FooFactory.php and FooStage.php if the stage name is Foo.
 
 ### Steps to Create a Custom Stage
 
@@ -483,6 +487,7 @@ You can create your custom stages and publish them as an external WordPress plug
         * Plugin Name: My Custom Stages
         * Description: Custom stages for WP-PipeFlow.
         * Version: 1.0.0
+        * Requires Plugins: wp-pipeflow
         * Author: Your Name
         */
       ```
@@ -494,12 +499,15 @@ You can create your custom stages and publish them as an external WordPress plug
       ```
 
 4. **Create Your Custom Stage:**
-    - Create a new PHP file for your custom stage, e.g., `MyCustomStage.php`.
+Let's create a stage named Foo:
+
+    - Create a new PHP file for your custom stage, e.g., `FooStage.php`.
     - Define your custom stage class by extending `AbstractPipelineStage`:
+
       ```php
       <?php
 
-      class MyCustomStage extends AbstractPipelineStage {
+      class Foo extends AbstractPipelineStage {
             private StageConfiguration $stageConfiguration;
 
             public function __construct(StageConfiguration $stageConfiguration) {
@@ -513,25 +521,27 @@ You can create your custom stages and publish them as an external WordPress plug
       }
       ```
 
-5. **Create a Factory for Your Custom Stage:**
-    - Create a factory class for your custom stage, e.g., `MyCustomStageFactory.php`:
+5. **Create a Factory for the Foo Stage:**
+    - Create the file FooFactory.php
+    - Define the factory class for your custom stage, which defines the stage metadata (including its identifier, in this case "MyCustomStage", along with a description, the input parameters, etc...).
       ```php
       <?php
 
-      class MyCustomStageFactory implements AbstractStageFactory {
+      class FooFactory implements AbstractStageFactory {
             public function instantiate(StageConfiguration $configuration): AbstractPipelineStage {
                  return new MyCustomStage($configuration);
             }
 
             public function getStageDescriptor(): StageDescriptor {
-                 $description = "Description of your custom stage.";
+                 $description = "Description of your Foo custom stage.";
                  $setupParameters = array(
                       "paramName" => "Description of the parameter.",
+                      "anotherParamName" => "(Optional) Description of the parameter. This is optional, default is: ...",
                  );
                  $contextInputs = array();
                  $contextOutputs = array();
 
-                 return new StageDescriptor("MyCustomStage", $description, $setupParameters, $contextInputs, $contextOutputs);
+                 return new StageDescriptor("Foo", $description, $setupParameters, $contextInputs, $contextOutputs);
             }
       }
       ```
@@ -540,18 +550,19 @@ You can create your custom stages and publish them as an external WordPress plug
     - In your main plugin file, register your custom stage factory:
       ```php
       add_action('plugins_loaded', function() {
-            StageFactory::registerFactory(new MyCustomStageFactory());
+            StageFactory::registerFactory(new FooFactory());
       });
       ```
 
 7. **Activate Your Plugin:**
-    - Go to the WordPress admin panel and activate your plugin from the 'Plugins' menu.
 
-By following these steps, you can create and publish custom stages for WP-PipeFlow as an external WordPress plugin. This allows you to extend the pipeline functionality with your own custom logic and share it with others.
+    - Go to the WordPress admin panel and activate your plugin from the 'Plugins' menu. The stage should now be available in your WP-PipeFlow installation to be used with your pipelines.
+
+By following these steps, you can create and publish custom stages for WP-PipeFlow as an external WordPress plugin. This allows you to extend the pipeline functionality with your own custom logic and, if you want, share them with others. I can't wait to see custom stages implemented by the community!
 
 ## Contributing
 
-We welcome contributions to the WP-PipeFlow project! You can contribute by implementing new core stages to be added to the core WP-PipeFlow plugin or by improving the existing functionality. Your work could be part of the upcoming updates of WP-PipeFlow!
+Apart from creating your custom stage for private use or publish them as third party stages, we welcome contributions to the WP-PipeFlow core project! You can contribute by implementing new core stages to be added to the core WP-PipeFlow plugin or by improving the existing functionality. Your work could be part of the upcoming updates of WP-PipeFlow!
 
 ### How to Contribute
 
