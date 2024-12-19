@@ -58,21 +58,6 @@ class StageConfiguration
             $processor = new PlaceholderProcessor($context);
             return $processor->process($value);
         }
-        else if (is_array($value)) {
-            $processedArray = [];
-
-            $processor = new PlaceholderProcessor($context);
-            foreach($value as $arrayItem) {
-                //Placeholders is replaced only on strings items, while other items is left as is
-                if(is_string($arrayItem)) {
-                    $processedArray[] = $processor->process($arrayItem);
-                }
-                else {
-                    $processedArray[] = $arrayItem;
-                }
-            }
-            return $processedArray;
-        }
         else { //For other types the value is not processed
             return $value;
         }

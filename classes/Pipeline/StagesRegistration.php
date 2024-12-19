@@ -17,6 +17,7 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/W
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetPosts/WPGetPostsStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSetPostCustomField/WPSetPostCustomFieldStageFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetPostCustomField/WPGetPostCustomFieldStageFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/ArrayPath/ArrayPathStageFactory.php";
 
 class StagesRegistration
 {
@@ -25,6 +26,7 @@ class StagesRegistration
      */
     public static function registerStages() {
         StageFactory::registerFactory(new ArrayCountStageFactory());
+        StageFactory::registerFactory(new ArrayPathStageFactory());
         StageFactory::registerFactory(new CreatePostStageFactory());
         StageFactory::registerFactory(new ExplodeStringStageFactory());
         StageFactory::registerFactory(new JSONDecodeStageFactory());
