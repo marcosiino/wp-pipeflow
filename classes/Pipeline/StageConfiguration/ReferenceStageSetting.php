@@ -7,13 +7,13 @@ class ReferenceStageSetting
     private ReferenceStageSettingType $type;
     private string $name;
     private string $referencedContextParam;
-    private int|String|null $referencedKey;
+    private int|String|null $referencedKeyPath;
 
-    public function __construct(ReferenceStageSettingType $type, string $name, string $referencedContextParam, int|String|null $referencedKey = null) {
+    public function __construct(ReferenceStageSettingType $type, string $name, string $referencedContextParam, int|String|null $referencedKeyPath = null) {
         $this->type = $type;
         $this->name = $name;
         $this->referencedContextParam = $referencedContextParam;
-        $this->referencedKey = $referencedKey;
+        $this->referencedKeyPath = $referencedKeyPath;
     }
 
     public function getName(): string {
@@ -39,27 +39,27 @@ class ReferenceStageSetting
         switch($this->type) {
             case ReferenceStageSettingType::plain:
                 return $contextParam;
-            case ReferenceStageSettingType::indexed:
+            case ReferenceStageSettingType::keypath:
                 if(!is_array($contextParam)) {
-                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has an `indexed` reference to the context parameter named `$this->referencedContextParam` but it is not an array.");
+                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has a `keypath` reference to the context parameter named `$this->referencedContextParam` but it is not an array.");
                 }
 
-                if(is_null($this->referencedKey)) {
-                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has an `indexed` reference to the context parameter named `$this->referencedContextParam` but the referencedKey (index attribute of the param in the xml configuration) is null.");
+                if(is_null($this->referencedKeyPath)) {
+                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has an `keypath` reference to the context parameter named `$this->referencedContextParam` but the keypath is null.");
                 }
 
-                $value = Helpers::getArrayItemAtPath($contextParam, $this->referencedKey);
+                $value = Helpers::getArrayItemAtPath($contextParam, $this->referencedKeyPath);
                 echo "<p><strong>getValue: $value</strong></p>";
                 print_r($value);
                 if(!is_null($value)) {
                     return $value;
                 }
                 else {
-                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` is referencing a keypath which doesn't exists on context parameter named: `$this->referencedContextParam`. Key: `$this->referencedKey` doesn't exists");
+                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` is referencing a keypath which doesn't exists on context parameter named: `$this->referencedContextParam`. Keypath: `$this->referencedKeyPath` doesn't exists");
                 }
             case ReferenceStageSettingType::last:
                 if(!is_array($contextParam)) {
-                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has an `indexed` reference to the context parameter named `$this->referencedContextParam` but it is not an array.");
+                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has a `keypath` reference to the context parameter named `$this->referencedContextParam` but it is not an array.");
                 }
                 return end($contextParam);
         }

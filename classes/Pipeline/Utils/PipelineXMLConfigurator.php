@@ -66,10 +66,10 @@ class PipelineXMLConfigurator
                 if(count($subItems) > 0) {
                     throw new StageConfigurationException("reference parameters (param with contextReference attribute) cannot have <item></item> sub elements");
                 }
-                $index = $param->getAttribute("index");
+                $keypath = $param->getAttribute("keypath");
                 $type = $this->getReferenceTypeFromTypeAttribute($contextReferenceType);
 
-                $stageConfiguration->addSetting(new ReferenceStageSetting($type, $paramName, $param->nodeValue, $index));
+                $stageConfiguration->addSetting(new ReferenceStageSetting($type, $paramName, $param->nodeValue, $keypath));
             }
             // Fixed Setting Parameter
             else {

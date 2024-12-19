@@ -3,8 +3,7 @@
     <xsd:simpleType name="ContextReferenceType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="plain"/>
-            <xsd:enumeration value="array"/>
-            <xsd:enumeration value="indexed"/>
+            <xsd:enumeration value="keypath"/>
             <xsd:enumeration value="last"/>
         </xsd:restriction>
     </xsd:simpleType>
@@ -31,7 +30,7 @@
                                                             </xsd:choice>
                                                             <xsd:attribute name="name" type="xsd:string"/>
                                                             <xsd:attribute name="contextReference" type="ContextReferenceType" use="optional" />
-                                                            <xsd:attribute name="index" type="xsd:string" use="optional" />
+                                                            <xsd:attribute name="keypath" type="xsd:string" use="optional" />
                                                         </xsd:complexType>
                                                     </xsd:element>
                                                 </xsd:sequence>

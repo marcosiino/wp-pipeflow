@@ -12,7 +12,7 @@ enum ReferenceStageSettingType: string {
     /*
      * An indexed reference to the value of the element at a specific key/index of a referenced context parameter which has an array as its value.
      */
-    case indexed = "indexed";
+    case keypath = "keypath";
 
     /*
      * An reference to the value of the last element of a referenced context parameter which has an array as its value.
