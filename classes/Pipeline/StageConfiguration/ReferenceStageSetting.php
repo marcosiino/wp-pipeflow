@@ -49,8 +49,6 @@ class ReferenceStageSetting
                 }
 
                 $value = Helpers::getArrayItemAtPath($contextParam, $this->referencedKeyPath);
-                echo "<p><strong>getValue: $value</strong></p>";
-                print_r($value);
                 if(!is_null($value)) {
                     return $value;
                 }
