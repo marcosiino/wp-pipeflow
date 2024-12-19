@@ -14,6 +14,7 @@ require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/W
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetTags/WPGetTagsFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSetPostTags/WPSetPostTagsFactory.php";
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPSetPostCategories/WPSetPostCategoriesFactory.php";
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Stages/WPGetPosts/WPGetPostsStageFactory.php";
 
 class StagesRegistration
 {
@@ -35,5 +36,6 @@ class StagesRegistration
         StageFactory::registerFactory(new WPGetTagsFactory());
         StageFactory::registerFactory(new WPSetPostTagsFactory());
         StageFactory::registerFactory(new WPSetPostCategoriesFactory());
+        StageFactory::registerFactory(new WPGetPostsStageFactory());
     }
 }
