@@ -1,7 +1,7 @@
 <?php
 
 require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Interfaces/AbstractPipelineStage.php";
-
+require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/Utils/Helpers.php";
 class ArrayPathStage extends AbstractPipelineStage
 {
     private StageConfiguration $stageConfiguration;
@@ -21,7 +21,7 @@ class ArrayPathStage extends AbstractPipelineStage
         $defaultValue = $this->stageConfiguration->getSettingValue("defaultPath", $context, false, null);
         $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, true);
 
-        $value = $this->getArrayItemAtPath($array, $path);
+        $value = Helpers::getArrayItemAtPath($array, $path);
         if(is_null($value)) {
             if(!is_null($defaultValue)) {
                 return $defaultValue;
@@ -33,21 +33,5 @@ class ArrayPathStage extends AbstractPipelineStage
 
         $context->setParameter($resultTo, $value);
         return $context;
-    }
-
-    private function getArrayItemAtPath($array, $path)
-    {
-        //print_r($array);
-        $keys = explode('.', $path);
-        foreach ($keys as $key) {
-            if (is_array($array) && array_key_exists($key, $array)) {
-                //print("key $key: $array[$key]\n");
-                $array = $array[$key];
-            } else {
-                //print("key $key: null\n");
-                return null;
-            }
-        }
-        return $array;
     }
 }

@@ -48,11 +48,14 @@ class ReferenceStageSetting
                     throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` has an `indexed` reference to the context parameter named `$this->referencedContextParam` but the referencedKey (index attribute of the param in the xml configuration) is null.");
                 }
 
-                if(array_key_exists($this->referencedKey, $contextParam)) {
-                    return $contextParam[$this->referencedKey];
+                $value = Helpers::getArrayItemAtPath($contextParam, $this->referencedKey);
+                echo "<p><strong>getValue: $value</strong></p>";
+                print_r($value);
+                if(!is_null($value)) {
+                    return $value;
                 }
                 else {
-                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` is referencing a key which doesn't exists on context parameter named: `$this->referencedContextParam`. Key: `$this->referencedKey` doesn't exists");
+                    throw new PipelineExecutionException("ReferenceStageSetting with name `$this->name` is referencing a keypath which doesn't exists on context parameter named: `$this->referencedContextParam`. Key: `$this->referencedKey` doesn't exists");
                 }
             case ReferenceStageSettingType::last:
                 if(!is_array($contextParam)) {
