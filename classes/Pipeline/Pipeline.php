@@ -80,33 +80,6 @@ class Pipeline
         $this->contextHistory = array(new PipelineContext());
     }
 
-    /**
-     * Builds the pipeline's stages using the given json configuration
-     *
-     * @param string $jsonConfiguration
-     * @return void
-     * @throws StageConfigurationException
-     */
-    public function setup(string $jsonConfiguration): void {
-        // Decode the configuration json
-        $configuration = json_decode($jsonConfiguration, true);;
-        if(!isset($configuration)) { // Checks if it is a valid json
-            throw StageConfigurationException::unableToDecodeJSONConfiguration();
-        }
-
-        // Gets the "stages" field in the root json object, and check if it is an array
-        $stages = Helpers::getField($configuration, "stages", true);
-        if(!is_array($stages)) {
-            throw StageConfigurationException::invalidJSONConfiguration();
-        }
-
-        // Instantiates each stage through the StageFactory and adds it to the pipeline stages
-        foreach($stages as $stageConfiguration) {
-            $stage = StageFactory::instantiateStage($stageConfiguration);
-            $this->addStage($stage);
-        }
-    }
-
     public function setupWithXML(string $xmlConfiguration): void {
         $xmlConfigurator = new PipelineXMLConfigurator($this);
         $xmlConfigurator->configure($xmlConfiguration);
