@@ -1,4 +1,4 @@
-# DATE - NEXT VERSION #
+# 2024-12-19 - 1.2.0 #
 
 ## New features ##
 
@@ -46,4 +46,3 @@ Plus now you can also do something like this to reference to ```arrayParameter['
 ```xml
     <param name="parameterName" contextReference="keypath" keypath="nestedArray.2.scores.1.value">arrayParameter</param>
 ```
-
