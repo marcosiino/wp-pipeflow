@@ -44,7 +44,7 @@ You can, for example, create pipelines which creates wordpress post with data co
 
 ## Installation
 
-1. Download the WP-PipeFlow plugin from plugins folder.
+1. Download the WP-PipeFlow plugin.
 2. Upload the plugin files to the `/wp-content/plugins/wp-pipeflow` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 
