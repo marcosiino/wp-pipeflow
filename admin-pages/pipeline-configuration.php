@@ -25,7 +25,7 @@ function pipeline_configuration_page() {
         <div id="available-stages">
             <?php
             foreach (StageFactory::getRegisteredFactories() as $factory) {
-                echo $factory->getStageDescriptor()->getStageHTMLDescription();
+                echo "<pre>" . $factory->getStageDescriptor()->getStageHTMLDescription() . "</pre>";
             }
             ?>
         </div>

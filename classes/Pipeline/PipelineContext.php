@@ -18,7 +18,6 @@ class PipelineContext
      * @return void
      */
     public function setParameter(string $name, mixed $value): void {
-        $name = strtoupper($name);
         $this->context[$name] = $value;
     }
 
@@ -29,7 +28,6 @@ class PipelineContext
      * @return void
      */
     public function deleteParameter(string $name): void {
-        $name = strtoupper($name);
         unset($this->context[$name]);
     }
 
@@ -40,7 +38,6 @@ class PipelineContext
      * @return mixed|null - Returns the context parameter's value or null if it doesn't exist in the context.
      */
     public function getParameter(string $name): mixed {
-        $name = strtoupper($name);
         if(!array_key_exists($name, $this->context)) {
             return null;
         }
@@ -54,7 +51,6 @@ class PipelineContext
      * @return bool Returns true if the parameter exists, false otherwise
      */
     public function checkParameterExists(string $name): bool {
-        $name = strtoupper($name);
         return array_key_exists($name, $this->context);
     }
 
@@ -64,20 +60,19 @@ class PipelineContext
      */
     public function getHTMLDescription(): String {
         $html = "<div class=\"pipeline-context\">";
-        $html .= "<table>";
+        $html .= "<table style='border: 1px solid black;'>";
         foreach($this->context as $paramName => $value) {
-            $html .= "<tr>";
+            $html .= "<tr style='border: 1px solid black;'>";
             //Parameter name column
-            $html .= "<td>$paramName</td>";
+            $html .= "<td style='border: 1px solid black;padding: 1em;'><pre><strong><span style='text-decoration: underline;'>$paramName<span></strong></pre></td>";
             //Parameter value column
-            $html .= "<td><ul>";
+            $html .= "<td style='border: 1px solid black;padding: 1em;'><ul>";
             if(!is_array($value)) {
-                $html .= "<li>$value</li>";
+                $html .= "<li><pre>" . htmlspecialchars($value) . "</pre></li>";
             }
             else {
-
-                //Implode the array in a string (find a better visualization?)
-                $html .= "<li>Array(" . count($value) . ") [" . implode(", ", $value). "]</li>";
+                //Format the array
+                $html .= "<li><pre>" . htmlspecialchars(json_encode($value, JSON_PRETTY_PRINT)) . "</pre></li>";
             }
             $html .= "</ul></td>";
             $html .= "</tr>";
