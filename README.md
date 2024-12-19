@@ -467,9 +467,15 @@ Sums (scalars), merges (arrays or array+scalar), or concatenates (strings or str
 
 ## Creating Custom Stages
 
-You can create your custom stages and publish them as an external WordPress plugin. This allows you to extend the functionality of WP-PipeFlow with your own custom logic, and if you want publish them for the public or keep it private for your own use.
+You can create your custom stages and publish them as an external WordPress plugin: this allows you to extend the functionality of WP-PipeFlow with your own custom logic: for example you can create custom stages to retrieve data from external websites or services via REST API calls. If you want you can then make the plugin with its stages available to the community or keep it private for your own use.
+
+See the [OpenAI for WP-PipeFlow plugin repository](https://github.com/marcosiino/wp-pipeflow-openai) for reference on how to make custom stages in an external plugin or read the following instructions.
+
+Each stage must have a StageFactory (a class that implements AbstractStageFactory) which describes the stage metadata and instantiates the stage, and a Stage class (which extends AbstractPipelineStage) which actually implements the Stage logic and uses the $stageConfiguration to retrieve the inputs passed to the stage. See the following paragraphs for more info. Conventionally, these files should be named FooFactory.php and FooStage.php if the stage name is Foo.
 
 ### Steps to Create a Custom Stage
+
+Let's create a wordpress plugin which provide the Foo stage to WP-PipeFlow!
 
 1. **Create a New Plugin:**
     - Create a new folder in the `wp-content/plugins` directory.
@@ -483,9 +489,12 @@ You can create your custom stages and publish them as an external WordPress plug
         * Plugin Name: My Custom Stages
         * Description: Custom stages for WP-PipeFlow.
         * Version: 1.0.0
+        * Requires Plugins: wp-pipeflow
         * Author: Your Name
         */
       ```
+
+    Note the: ```Requires Plugins: wp-pipeflow```
 
 3. **Include Required Files:**
     - Include the necessary WP-PipeFlow files:
@@ -493,45 +502,88 @@ You can create your custom stages and publish them as an external WordPress plug
       require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
       ```
 
-4. **Create Your Custom Stage:**
-    - Create a new PHP file for your custom stage, e.g., `MyCustomStage.php`.
-    - Define your custom stage class by extending `AbstractPipelineStage`:
+4. **Create a Factory for the Foo Stage:**
+    - Create the file FooFactory.php
+    - Define the factory class for your custom stage, which defines the stage metadata (including its identifier, in this case "MyCustomStage", along with a description, the input parameters, etc...).
       ```php
       <?php
 
-      class MyCustomStage extends AbstractPipelineStage {
-            private StageConfiguration $stageConfiguration;
+      require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
+      require_once ABSPATH . "wp-content/plugins/your-plugin-name/FooStage/FooStage.php";
 
-            public function __construct(StageConfiguration $stageConfiguration) {
-                 $this->stageConfiguration = $stageConfiguration;
+      class FooFactory implements AbstractStageFactory {
+            public function instantiate(StageConfiguration $configuration): AbstractPipelineStage {
+                return new FooStage($configuration);
             }
 
-            public function execute(PipelineContext $context): PipelineContext {
-                 // Your custom logic here
-                 return $context;
+            public function getStageDescriptor(): StageDescriptor {
+                $description = "Description of your Foo custom stage.";
+                $setupParameters = array(
+                     "paramName" => "Description of the parameter.",
+                     "anotherParamName" => "(Optional) Description of the parameter. This is optional, default is: ...",
+                );
+                
+                $contextInputs = array();
+
+                // Context outputs
+                $contextOutputs = array(
+                    "" => "The json decoded as associative array saved in the context parameter specified in resultTo.",
+                );
+
+                return new StageDescriptor("Foo", $description, $setupParameters, $contextInputs, $contextOutputs);
             }
       }
       ```
 
-5. **Create a Factory for Your Custom Stage:**
-    - Create a factory class for your custom stage, e.g., `MyCustomStageFactory.php`:
+5. **Create Your Custom Stage:**
+
+    - Create a new PHP file for your custom stage, e.g., `FooStage.php`.
+    - Define your custom stage class by extending `AbstractPipelineStage`:
+
       ```php
       <?php
+      require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
 
-      class MyCustomStageFactory implements AbstractStageFactory {
-            public function instantiate(StageConfiguration $configuration): AbstractPipelineStage {
-                 return new MyCustomStage($configuration);
+      class FooStage extends AbstractPipelineStage {
+            private StageConfiguration $stageConfiguration;
+
+            public function __construct(StageConfiguration $stageConfiguration) {
+                $this->stageConfiguration = $stageConfiguration;
             }
 
-            public function getStageDescriptor(): StageDescriptor {
-                 $description = "Description of your custom stage.";
-                 $setupParameters = array(
-                      "paramName" => "Description of the parameter.",
-                 );
-                 $contextInputs = array();
-                 $contextOutputs = array();
+            // This function is called when the stage is executed. The $context parameters contains the current context, which the stage can manipulate and return. After returning the manipulated context, the next stages will receive it.
+            public function execute(PipelineContext $context): PipelineContext {
 
-                 return new StageDescriptor("MyCustomStage", $description, $setupParameters, $contextInputs, $contextOutputs);
+                // *** Get the inputs ***
+
+                // The getSettingValue allows to get the stage input and automatically manages contextReference attribute of input parameters, this means that if the pipeline configuration specifies a context reference for an input parameter, the value is automatically taken from the referenced context parameter and returned by the getSettingValue function:
+
+                // Get the paramName mandatory input parameter (true indicates that it is mandatory).
+                $paramName = $this->stageConfiguration->getSettingValue("paramName", $context, true);
+
+                // Get the anotherParamName not mandatory param (false indicate not mandatory), which defaults to 123
+                $anotherParamName = $this->stageConfiguration->getSettingValue("anotherParamName", $context, false, 123);
+
+                //Get the name of the context parameter where to store the output of the stage
+                $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, true);
+
+                // *** Processing ***
+
+                $result = "Hello Foo";
+
+                if(false) {
+                    // Note you can throw pipeline execution error this way:
+                    throw new PipelineExecutionException("Foo Stage error: .....");
+                }
+                
+                // *** Output to the Context
+                // Please note that a stage can also not output anything into the context, in that case the $context is returned as it is, without setting any parameter in it. In this example we are saving the parameter specified in the resultTo input parameter.
+
+                // Sets the context parameter specified in $resultTo, to the $result of the processing.
+                $context->setParameter($resultTo, $result);
+
+                
+                return $context;
             }
       }
       ```
@@ -540,18 +592,19 @@ You can create your custom stages and publish them as an external WordPress plug
     - In your main plugin file, register your custom stage factory:
       ```php
       add_action('plugins_loaded', function() {
-            StageFactory::registerFactory(new MyCustomStageFactory());
+            StageFactory::registerFactory(new FooFactory());
       });
       ```
 
 7. **Activate Your Plugin:**
-    - Go to the WordPress admin panel and activate your plugin from the 'Plugins' menu.
 
-By following these steps, you can create and publish custom stages for WP-PipeFlow as an external WordPress plugin. This allows you to extend the pipeline functionality with your own custom logic and share it with others.
+    - Go to the WordPress admin panel and activate your plugin from the 'Plugins' menu. The stage should now be available in your WP-PipeFlow installation to be used with your pipelines.
+
+By following these steps, you can create and publish custom stages for WP-PipeFlow as an external WordPress plugin. This allows you to extend the pipeline functionality with your own custom logic and, if you want, share them with others. I can't wait to see custom stages implemented by the community!
 
 ## Contributing
 
-We welcome contributions to the WP-PipeFlow project! You can contribute by implementing new core stages to be added to the core WP-PipeFlow plugin or by improving the existing functionality. Your work could be part of the upcoming updates of WP-PipeFlow!
+Apart from creating your custom stage for private use or publish them as third party stages, we welcome contributions to the WP-PipeFlow core project! You can contribute by implementing new core stages to be added to the core WP-PipeFlow plugin or by improving the existing functionality. Your work could be part of the upcoming updates of WP-PipeFlow!
 
 ### How to Contribute
 
