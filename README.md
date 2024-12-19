@@ -475,6 +475,8 @@ Each stage must have a StageFactory (a class that implements AbstractStageFactor
 
 ### Steps to Create a Custom Stage
 
+Let's create a wordpress plugin which provide the Foo stage to WP-PipeFlow!
+
 1. **Create a New Plugin:**
     - Create a new folder in the `wp-content/plugins` directory.
     - Inside this folder, create a PHP file for your plugin, e.g., `my-custom-stages.php`.
@@ -492,56 +494,96 @@ Each stage must have a StageFactory (a class that implements AbstractStageFactor
         */
       ```
 
+    Note the: ```Requires Plugins: wp-pipeflow```
+
 3. **Include Required Files:**
     - Include the necessary WP-PipeFlow files:
       ```php
       require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
       ```
 
-4. **Create Your Custom Stage:**
-Let's create a stage named Foo:
+4. **Create a Factory for the Foo Stage:**
+    - Create the file FooFactory.php
+    - Define the factory class for your custom stage, which defines the stage metadata (including its identifier, in this case "MyCustomStage", along with a description, the input parameters, etc...).
+      ```php
+      <?php
+
+      require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
+      require_once ABSPATH . "wp-content/plugins/your-plugin-name/FooStage/FooStage.php";
+
+      class FooFactory implements AbstractStageFactory {
+            public function instantiate(StageConfiguration $configuration): AbstractPipelineStage {
+                return new FooStage($configuration);
+            }
+
+            public function getStageDescriptor(): StageDescriptor {
+                $description = "Description of your Foo custom stage.";
+                $setupParameters = array(
+                     "paramName" => "Description of the parameter.",
+                     "anotherParamName" => "(Optional) Description of the parameter. This is optional, default is: ...",
+                );
+                
+                $contextInputs = array();
+
+                // Context outputs
+                $contextOutputs = array(
+                    "" => "The json decoded as associative array saved in the context parameter specified in resultTo.",
+                );
+
+                return new StageDescriptor("Foo", $description, $setupParameters, $contextInputs, $contextOutputs);
+            }
+      }
+      ```
+
+5. **Create Your Custom Stage:**
 
     - Create a new PHP file for your custom stage, e.g., `FooStage.php`.
     - Define your custom stage class by extending `AbstractPipelineStage`:
 
       ```php
       <?php
+      require_once ABSPATH . "wp-content/plugins/wp-pipeflow/classes/Pipeline/CorePipeFlow.php";
 
-      class Foo extends AbstractPipelineStage {
+      class FooStage extends AbstractPipelineStage {
             private StageConfiguration $stageConfiguration;
 
             public function __construct(StageConfiguration $stageConfiguration) {
-                 $this->stageConfiguration = $stageConfiguration;
+                $this->stageConfiguration = $stageConfiguration;
             }
 
+            // This function is called when the stage is executed. The $context parameters contains the current context, which the stage can manipulate and return. After returning the manipulated context, the next stages will receive it.
             public function execute(PipelineContext $context): PipelineContext {
-                 // Your custom logic here
-                 return $context;
-            }
-      }
-      ```
 
-5. **Create a Factory for the Foo Stage:**
-    - Create the file FooFactory.php
-    - Define the factory class for your custom stage, which defines the stage metadata (including its identifier, in this case "MyCustomStage", along with a description, the input parameters, etc...).
-      ```php
-      <?php
+                // *** Get the inputs ***
 
-      class FooFactory implements AbstractStageFactory {
-            public function instantiate(StageConfiguration $configuration): AbstractPipelineStage {
-                 return new MyCustomStage($configuration);
-            }
+                // The getSettingValue allows to get the stage input and automatically manages contextReference attribute of input parameters, this means that if the pipeline configuration specifies a context reference for an input parameter, the value is automatically taken from the referenced context parameter and returned by the getSettingValue function:
 
-            public function getStageDescriptor(): StageDescriptor {
-                 $description = "Description of your Foo custom stage.";
-                 $setupParameters = array(
-                      "paramName" => "Description of the parameter.",
-                      "anotherParamName" => "(Optional) Description of the parameter. This is optional, default is: ...",
-                 );
-                 $contextInputs = array();
-                 $contextOutputs = array();
+                // Get the paramName mandatory input parameter (true indicates that it is mandatory).
+                $paramName = $this->stageConfiguration->getSettingValue("paramName", $context, true);
 
-                 return new StageDescriptor("Foo", $description, $setupParameters, $contextInputs, $contextOutputs);
+                // Get the anotherParamName not mandatory param (false indicate not mandatory), which defaults to 123
+                $anotherParamName = $this->stageConfiguration->getSettingValue("anotherParamName", $context, false, 123);
+
+                //Get the name of the context parameter where to store the output of the stage
+                $resultTo = $this->stageConfiguration->getSettingValue("resultTo", $context, true);
+
+                // *** Processing ***
+
+                $result = "Hello Foo";
+
+                if(false) {
+                    // Note you can throw pipeline execution error this way:
+                    throw new PipelineExecutionException("Foo Stage error: .....");
+                }
+                
+                // *** Output to the Context
+                // Please note that a stage can also not output anything into the context, in that case the $context is returned as it is, without setting any parameter in it. In this example we are saving the parameter specified in the resultTo input parameter.
+
+                // Sets the context parameter specified in $resultTo, to the $result of the processing.
+                $context->setParameter($resultTo, $result);
+
+                
+                return $context;
             }
       }
       ```
