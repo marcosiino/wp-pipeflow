@@ -545,9 +545,6 @@ You can create your custom stages and publish them as an external WordPress plug
     - Go to the WordPress admin panel and activate your plugin from the 'Plugins' menu.
 
 By following these steps, you can create and publish custom stages for WP-PipeFlow as an external WordPress plugin. This allows you to extend the pipeline functionality with your own custom logic and share it with others.
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contributing
 

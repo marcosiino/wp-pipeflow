@@ -6,6 +6,8 @@
  * Version: 1.2.0
  * Author: Marco Siino
  * Author URI: http://marcosiino.it
+ * License: GPL v3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  */
 
 defined('ABSPATH') or die('Accesso non permesso.');
